@@ -100,6 +100,7 @@ def get_inpainted_img(img, mask0, mask1, mask2):
     lama_config = args.lama_config
     device = "cuda" if torch.cuda.is_available() else "cpu"
     out = []
+    print(mask)
     for mask in [mask0, mask1, mask2]:
         if len(mask.shape)==3:
             mask = mask[:,:,0]
