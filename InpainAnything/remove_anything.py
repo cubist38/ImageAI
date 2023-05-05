@@ -93,6 +93,7 @@ if __name__ == "__main__":
     )
     masks = masks.astype(np.uint8) * 255
     print(scores)
+    print(logits)
     # dilate mask to avoid unmasked edge effect
     if args.dilate_kernel_size is not None:
         masks = [dilate_mask(mask, args.dilate_kernel_size) for mask in masks]
