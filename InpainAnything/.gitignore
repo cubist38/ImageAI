@@ -1,37 +1,15 @@
-.nfs*
+# Python byte code, etc.
+__pycache__/
 
-# compilation and distribution
-__pycache__
-_ext
-*.pyc
-*.pyd
+# C/C++ object files/libraries
+*.o
 *.so
-*.dll
-*.egg-info/
-build/
-dist/
-wheels/
 
-# pytorch/python/numpy formats
-*.pth
-*.pkl
-*.npy
-*.ts
-model_ts*.txt
+# macOS
+**/.DS_Store
 
-# onnx models
-*.onnx
+# tmp
+~*
 
-# ipython/jupyter notebooks
-**/.ipynb_checkpoints/
-
-# Editor temporaries
-*.swn
-*.swo
-*.swp
-*~
-
-# editor settings
-.idea
-.vscode
-_darcs
+# pretrained_models
+pretrained_models/

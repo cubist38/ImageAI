@@ -1,163 +1,391 @@
-# Segment Anything
-
-**[Meta AI Research, FAIR](https://ai.facebook.com/research/)**
-
-[Alexander Kirillov](https://alexander-kirillov.github.io/), [Eric Mintun](https://ericmintun.github.io/), [Nikhila Ravi](https://nikhilaravi.com/), [Hanzi Mao](https://hanzimao.me/), Chloe Rolland, Laura Gustafson, [Tete Xiao](https://tetexiao.com), [Spencer Whitehead](https://www.spencerwhitehead.com/), Alex Berg, Wan-Yen Lo, [Piotr Dollar](https://pdollar.github.io/), [Ross Girshick](https://www.rossgirshick.info/)
-
-[[`Paper`](https://ai.facebook.com/research/publications/segment-anything/)] [[`Project`](https://segment-anything.com/)] [[`Demo`](https://segment-anything.com/demo)] [[`Dataset`](https://segment-anything.com/dataset/index.html)] [[`Blog`](https://ai.facebook.com/blog/segment-anything-foundation-model-image-segmentation/)] [[`BibTeX`](#citing-segment-anything)]
-
-![SAM design](assets/model_diagram.png?raw=true)
-
-The **Segment Anything Model (SAM)** produces high quality object masks from input prompts such as points or boxes, and it can be used to generate masks for all objects in an image. It has been trained on a [dataset](https://segment-anything.com/dataset/index.html) of 11 million images and 1.1 billion masks, and has strong zero-shot performance on a variety of segmentation tasks.
-
-<p float="left">
-  <img src="assets/masks1.png?raw=true" width="37.25%" />
-  <img src="assets/masks2.jpg?raw=true" width="61.5%" /> 
+<p align="center">
+  <img src="./example/IAM.png">
 </p>
 
-## Installation
-
-The code requires `python>=3.8`, as well as `pytorch>=1.7` and `torchvision>=0.8`. Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install both PyTorch and TorchVision dependencies. Installing both PyTorch and TorchVision with CUDA support is strongly recommended.
-
-Install Segment Anything:
-
-```
-pip install git+https://github.com/facebookresearch/segment-anything.git
-```
-
-or clone the repository locally and install with
-
-```
-git clone git@github.com:facebookresearch/segment-anything.git
-cd segment-anything; pip install -e .
-```
-
-The following optional dependencies are necessary for mask post-processing, saving masks in COCO format, the example notebooks, and exporting the model in ONNX format. `jupyter` is also required to run the example notebooks.
-```
-pip install opencv-python pycocotools matplotlib onnxruntime onnx
-```
-
-
-## <a name="GettingStarted"></a>Getting Started
-
-First download a [model checkpoint](#model-checkpoints). Then the model can be used in just a few lines to get masks from a given prompt:
-
-```
-from segment_anything import SamPredictor, sam_model_registry
-sam = sam_model_registry["<model_type>"](checkpoint="<path/to/checkpoint>")
-predictor = SamPredictor(sam)
-predictor.set_image(<your_image>)
-masks, _, _ = predictor.predict(<input_prompts>)
-```
-
-or generate masks for an entire image:
-
-```
-from segment_anything import SamAutomaticMaskGenerator, sam_model_registry
-sam = sam_model_registry["<model_type>"](checkpoint="<path/to/checkpoint>")
-mask_generator = SamAutomaticMaskGenerator(sam)
-masks = mask_generator.generate(<your_image>)
-```
-
-Additionally, masks can be generated for images from the command line:
-
-```
-python scripts/amg.py --checkpoint <path/to/checkpoint> --model-type <model_type> --input <image_or_folder> --output <path/to/output>
-```
-
-See the examples notebooks on [using SAM with prompts](/notebooks/predictor_example.ipynb) and [automatically generating masks](/notebooks/automatic_mask_generator_example.ipynb) for more details.
-
-<p float="left">
-  <img src="assets/notebook1.png?raw=true" width="49.1%" />
-  <img src="assets/notebook2.png?raw=true" width="48.9%" />
+# Inpaint Anything: Segment Anything Meets Image Inpainting
+Inpaint Anything can inpaint anything in **images**, **videos** and **3D scenes**!
+- Authors: Tao Yu, Runseng Feng, Ruoyu Feng, Jinming Liu, Xin Jin, Wenjun Zeng and Zhibo Chen.
+- Institutes: University of Science and Technology of China; Eastern Institute for Advanced Study.
+- [[Paper](https://arxiv.org/abs/2304.06790)] [[Website](https://huggingface.co/spaces/InpaintAI/Inpaint-Anything)] [[Hugging Face Homepage](https://huggingface.co/InpaintAI)]
+<p align="center">
+  <img src="./example/MainFramework.png" width="100%">
 </p>
 
-## ONNX Export
+TL; DR: Users can select any object in an image by clicking on it. With powerful vision models, e.g., [SAM](https://arxiv.org/abs/2304.02643), [LaMa](https://arxiv.org/abs/2109.07161) and [Stable Diffusion (SD)](https://arxiv.org/abs/2112.10752), **Inpaint Anything** is able to remove the object smoothly (i.e., *Remove Anything*). Further, prompted by user input text, Inpaint Anything can fill the object with any desired content (i.e., *Fill Anything*) or replace the background of it arbitrarily (i.e., *Replace Anything*).
 
-SAM's lightweight mask decoder can be exported to ONNX format so that it can be run in any environment that supports ONNX runtime, such as in-browser as showcased in the [demo](https://segment-anything.com/demo). Export the model with
+## 📜 News
+[2023/4/30] [Remove Anything Video](#remove-anything-video) available! You can remove any object from a video!\
+[2023/4/24] [Local web UI](./app) supported! You can run the demo website locally!\
+[2023/4/22] [Website](https://huggingface.co/spaces/InpaintAI/Inpaint-Anything) available! You can experience Inpaint Anything through the interface!\
+[2023/4/22] [Remove Anything 3D](#remove-anything-3d) available! You can remove any 3D object from a 3D scene!\
+[2023/4/13] [Technical report on arXiv](https://arxiv.org/abs/2304.06790) available!
 
+## 🌟 Features
+- [x] [**Remove** Anything](#remove-anything)
+- [x] [**Fill** Anything](#fill-anything)
+- [x] [**Replace** Anything](#replace-anything)
+- [x] [Remove Anything **3D**](#remove-anything-3d) (<span style="color:red">🔥NEW</span>)
+- [ ] Fill Anything **3D**
+- [ ] Replace Anything **3D**
+- [x] [Remove Anything **Video**](#remove-anything-video) (<span style="color:red">🔥NEW</span>)
+- [ ] Fill Anything **Video**
+- [ ] Replace Anything **Video**
+
+
+## 💡 Highlights
+- [x] Any aspect ratio supported
+- [x] 2K resolution supported
+- [x] [Technical report on arXiv](https://arxiv.org/abs/2304.06790) available (<span style="color:red">🔥NEW</span>)
+- [x] [Website](https://huggingface.co/spaces/InpaintAI/Inpaint-Anything) available (<span style="color:red">🔥NEW</span>)
+- [x] [Local web UI](./app) available (<span style="color:red">🔥NEW</span>)
+- [x] Multiple modalities (i.e., image, video and 3D scene) supported (<span style="color:red">🔥NEW</span>)
+
+<!-- ## Updates
+| Date | News |
+| ------ | --------
+| 2023-04-12 | Release the Fill Anything feature | 
+| 2023-04-10 | Release the Remove Anything feature |
+| 2023-04-10 | Release the first version of Inpaint Anything | -->
+
+## <span id="remove-anything">📌 Remove Anything</span>
+
+
+<!-- <table>
+  <tr>
+    <td><img src="./example/remove-anything/dog/with_points.png" width="100%"></td>
+    <td><img src="./example/remove-anything/dog/with_mask.png" width="100%"></td>
+    <td><img src="./example/remove-anything/dog/inpainted_with_mask.png" width="100%"></td>
+  </tr>
+</table> -->
+
+<p align="center">
+    <img src="./example/GIF/Remove-dog.gif"  alt="image" style="width:400px;">
+</p>
+
+
+**Click** on an object in the image, and Inpainting Anything will **remove** it instantly!
+- Click on an object;
+- [Segment Anything Model](https://segment-anything.com/) (SAM) segments the object out;
+- Inpainting models (e.g., [LaMa](https://advimman.github.io/lama-project/)) fill the "hole".
+
+### Installation
+Requires `python>=3.8`
+```bash
+python -m pip install torch torchvision torchaudio
+python -m pip install -e segment_anything
+python -m pip install -r lama/requirements.txt 
 ```
-python scripts/export_onnx_model.py --checkpoint <path/to/checkpoint> --model-type <model_type> --output <path/to/output>
+In Windows, we recommend you to first install [miniconda](https://docs.conda.io/en/latest/miniconda.html) and 
+open `Anaconda Powershell Prompt (miniconda3)` as administrator.
+Then pip install [./lama_requirements_windows.txt](lama_requirements_windows.txt) instead of 
+[./lama/requirements.txt](lama%2Frequirements.txt).
+
+### Usage
+Download the model checkpoints provided in [segment_anything](./segment_anything/README.md) 
+and [lama](./lama/README.md) (e.g. [sam_vit_h_4b8939.pth](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth) 
+and [big-lama](https://disk.yandex.ru/d/ouP6l8VJ0HpMZg)), and put them into `./pretrained_models`.
+
+Specify an image and a point, and Inpaint-Anything will remove the object at the point.
+```bash
+python remove_anything.py \
+    --input_img ./example/remove-anything/dog.jpg \
+    --coords_type key_in \
+    --point_coords 200 450 \
+    --point_labels 1 \
+    --dilate_kernel_size 15 \
+    --output_dir ./results \
+    --sam_model_type "vit_h" \
+    --sam_ckpt ./pretrained_models/sam_vit_h_4b8939.pth \
+    --lama_config ./lama/configs/prediction/default.yaml \
+    --lama_ckpt ./pretrained_models/big-lama
+```
+You can change `--coords_type key_in` to `--coords_type click` if your machine has a display device. If `click` is set, after running the above command, the image will be displayed. (1) Use *left-click* to record the coordinates of the click. It supports modifying points, and only last point coordinates are recorded. (2) Use *right-click* to finish the selection.
+
+### Demo
+<table>
+  <tr>
+    <td><img src="./example/remove-anything/person/with_points.png" width="100%"></td>
+    <td><img src="./example/remove-anything/person/with_mask.png" width="100%"></td>
+    <td><img src="./example/remove-anything/person/inpainted_with_mask.png" width="100%"></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td><img src="./example/remove-anything/bridge/with_points.png" width="100%"></td>
+    <td><img src="./example/remove-anything/bridge/with_mask.png" width="100%"></td>
+    <td><img src="./example/remove-anything/bridge/inpainted_with_mask.png" width="100%"></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td><img src="./example/remove-anything/boat/with_points.png" width="100%"></td>
+    <td><img src="./example/remove-anything/boat/with_mask.png" width="100%"></td>
+    <td><img src="./example/remove-anything/boat/inpainted_with_mask.png" width="100%"></td>
+  </tr>
+</table>
+
+
+<table>
+  <tr>
+    <td><img src="./example/remove-anything/baseball/with_points.png" width="100%"></td>
+    <td><img src="./example/remove-anything/baseball/with_mask.png" width="100%"></td>
+    <td><img src="./example/remove-anything/baseball/inpainted_with_mask.png" width="100%"></td>
+  </tr>
+</table>
+
+
+
+## <span id="fill-anything">📌 Fill Anything</span>
+<!-- <table>
+  <caption align="center">Text prompt: "a teddy bear on a bench"</caption>
+    <tr>
+      <td><img src="./example/fill-anything/sample1/with_points.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample1/with_mask.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample1/filled_with_mask.png" width="100%"></td>
+    </tr>
+</table> -->
+<p align="center">Text prompt: "a teddy bear on a bench"</p>
+<p align="center">
+    <img src="./example/GIF/Fill-sample1.gif" alt="image" style="width:400px;">
+</p>
+
+**Click** on an object, **type** in what you want to fill, and Inpaint Anything will **fill** it!
+- Click on an object;
+- [SAM](https://segment-anything.com/) segments the object out;
+- Input a text prompt;
+- Text-prompt-guided inpainting models (e.g., [Stable Diffusion](https://github.com/CompVis/stable-diffusion)) fill the "hole" according to the text.
+
+### Installation
+Requires `python>=3.8`
+```bash
+python -m pip install torch torchvision torchaudio
+python -m pip install -e segment_anything
+python -m pip install diffusers transformers accelerate scipy safetensors
 ```
 
-See the [example notebook](https://github.com/facebookresearch/segment-anything/blob/main/notebooks/onnx_model_example.ipynb) for details on how to combine image preprocessing via SAM's backbone with mask prediction using the ONNX model. It is recommended to use the latest stable version of PyTorch for ONNX export.
+### Usage
+Download the model checkpoints provided in [segment_anything](./segment_anything/README.md)
+(e.g. [sam_vit_h_4b8939.pth](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth)).
+, and put them into `./pretrained_models`.
 
-## <a name="Models"></a>Model Checkpoints
-
-Three model versions of the model are available with different backbone sizes. These models can be instantiated by running 
-```
-from segment_anything import sam_model_registry
-sam = sam_model_registry["<model_type>"](checkpoint="<path/to/checkpoint>")
-```
-Click the links below to download the checkpoint for the corresponding model type.
-
-* **`default` or `vit_h`: [ViT-H SAM model.](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth)**
-* `vit_l`: [ViT-L SAM model.](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_l_0b3195.pth)
-* `vit_b`: [ViT-B SAM model.](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth)
-
-## Dataset
-See [here](https://ai.facebook.com/datasets/segment-anything/) for an overview of the datastet. The dataset can be downloaded [here](https://ai.facebook.com/datasets/segment-anything-downloads/). By downloading the datasets you agree that you have read and accepted the terms of the SA-1B Dataset Research License.
-
-We save masks per image as a json file. It can be loaded as a dictionary in python in the below format.
-
-
-```python
-{
-    "image"                 : image_info,
-    "annotations"           : [annotation],
-}
-
-image_info {
-    "image_id"              : int,              # Image id
-    "width"                 : int,              # Image width
-    "height"                : int,              # Image height
-    "file_name"             : str,              # Image filename
-}
-
-annotation {
-    "id"                    : int,              # Annotation id
-    "segmentation"          : dict,             # Mask saved in COCO RLE format.
-    "bbox"                  : [x, y, w, h],     # The box around the mask, in XYWH format
-    "area"                  : int,              # The area in pixels of the mask
-    "predicted_iou"         : float,            # The model's own prediction of the mask's quality
-    "stability_score"       : float,            # A measure of the mask's quality
-    "crop_box"              : [x, y, w, h],     # The crop of the image used to generate the mask, in XYWH format
-    "point_coords"          : [[x, y]],         # The point coordinates input to the model to generate the mask
-}
+Specify an image, a point and text prompt, and run:
+```bash
+python fill_anything.py \
+    --input_img ./example/fill-anything/sample1.png \
+    --coords_type key_in \
+    --point_coords 750 500 \
+    --point_labels 1 \
+    --text_prompt "a teddy bear on a bench" \
+    --dilate_kernel_size 50 \
+    --output_dir ./results \
+    --sam_model_type "vit_h" \
+    --sam_ckpt ./pretrained_models/sam_vit_h_4b8939.pth
 ```
 
-Image ids can be found in sa_images_ids.txt which can be downloaded using the above [link](https://ai.facebook.com/datasets/segment-anything-downloads/) as well.
+### Demo
 
-To decode a mask in COCO RLE format into binary:
+<table>
+  <caption align="center">Text prompt: "a camera lens in the hand"</caption>
+    <tr>
+      <td><img src="./example/fill-anything/sample2/with_points.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample2/with_mask.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample2/filled_with_mask.png" width="100%"></td>
+    </tr>
+</table>
+
+<table>
+  <caption align="center">Text prompt: "a Picasso painting on the wall"</caption>
+    <tr>
+      <td><img src="./example/fill-anything/sample5/with_points.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample5/with_mask.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample5/filled_with_mask.png" width="100%"></td>
+    </tr>
+</table>
+
+<table>
+  <caption align="center">Text prompt: "an aircraft carrier on the sea"</caption>
+    <tr>
+      <td><img src="./example/fill-anything/sample3/with_points.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample3/with_mask.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample3/filled_with_mask.png" width="100%"></td>
+    </tr>
+</table>
+
+<table>
+  <caption align="center">Text prompt: "a sports car on a road"</caption>
+    <tr>
+      <td><img src="./example/fill-anything/sample4/with_points.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample4/with_mask.png" width="100%"></td>
+      <td><img src="./example/fill-anything/sample4/filled_with_mask.png" width="100%"></td>
+    </tr>
+</table>
+
+
+## <span id="replace-anything">📌 Replace Anything</span>
+<!-- <table>
+  <caption align="center">Text prompt: "a man in office"</caption>
+    <tr>
+      <td><img src="./example/replace-anything/man/with_points.png" width="100%"></td>
+      <td><img src="./example/replace-anything/man/with_mask.png" width="100%"></td>
+      <td><img src="./example/replace-anything/man/replaced_with_mask.png" width="100%"></td>
+    </tr>
+</table> -->
+<p align="center">Text prompt: "a man in office"</p>
+<p align="center">
+    <img src="./example/GIF/Replace-man.gif" alt="image" style="width:400px;">
+</p>
+
+**Click** on an object, **type** in what background you want to replace, and Inpaint Anything will **replace** it!
+- Click on an object;
+- [SAM](https://segment-anything.com/) segments the object out;
+- Input a text prompt;
+- Text-prompt-guided inpainting models (e.g., [Stable Diffusion](https://github.com/CompVis/stable-diffusion)) replace the background according to the text.
+
+### Installation
+Requires `python>=3.8`
+```bash
+python -m pip install torch torchvision torchaudio
+python -m pip install -e segment_anything
+python -m pip install diffusers transformers accelerate scipy safetensors
 ```
-from pycocotools import mask as mask_utils
-mask = mask_utils.decode(annotation["segmentation"])
+
+### Usage
+Download the model checkpoints provided in [segment_anything](./segment_anything/README.md)
+(e.g. [sam_vit_h_4b8939.pth](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth))
+, and put them into `./pretrained_models`.
+
+Specify an image, a point and text prompt, and run:
+```bash
+python replace_anything.py \
+    --input_img ./example/replace-anything/dog.png \
+    --coords_type key_in \
+    --point_coords 750 500 \
+    --point_labels 1 \
+    --text_prompt "sit on the swing" \
+    --output_dir ./results \
+    --sam_model_type "vit_h" \
+    --sam_ckpt ./pretrained_models/sam_vit_h_4b8939.pth
 ```
-See [here](https://github.com/cocodataset/cocoapi/blob/master/PythonAPI/pycocotools/mask.py) for more instructions to manipulate masks stored in RLE format.
+
+### Demo
+<table>
+  <caption align="center">Text prompt: "sit on the swing"</caption>
+    <tr>
+      <td><img src="./example/replace-anything/dog/with_points.png" width="100%"></td>
+      <td><img src="./example/replace-anything/dog/with_mask.png" width="100%"></td>
+      <td><img src="./example/replace-anything/dog/replaced_with_mask.png" width="100%"></td>
+    </tr>
+</table>
+
+<table>
+  <caption align="center">Text prompt: "a bus, on the center of a country road, summer"</caption>
+    <tr>
+      <td><img src="./example/replace-anything/bus/with_points.png" width="100%"></td>
+      <td><img src="./example/replace-anything/bus/with_mask.png" width="100%"></td>
+      <td><img src="./example/replace-anything/bus/replaced_with_mask.png" width="100%"></td>
+    </tr>
+</table>
+
+<table>
+  <caption align="center">Text prompt: "breakfast"</caption>
+    <tr>
+      <td><img src="./example/replace-anything/000000029675/with_points.png" width="100%"></td>
+      <td><img src="./example/replace-anything/000000029675/with_mask.png" width="100%"></td>
+      <td><img src="./example/replace-anything/000000029675/replaced_with_mask.png" width="100%"></td>
+    </tr>
+</table>
+
+<table>
+  <caption align="center">Text prompt: "crossroad in the city"</caption>
+    <tr>
+      <td><img src="./example/replace-anything/000000000724/with_points.png" width="100%"></td>
+      <td><img src="./example/replace-anything/000000000724/with_mask.png" width="100%"></td>
+      <td><img src="./example/replace-anything/000000000724/replaced_with_mask.png" width="100%"></td>
+    </tr>
+</table>
+
+## <span id="remove-anything-3d">📌 Remove Anything 3D</span>
+Remove Anything 3D can remove any object from a 3D scene! We release some results below. (Code and implementation details will be released soon.)
+
+<table>
+    <tr>
+      <td><img src="./example/remove-anything-3d/horns/org.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-3d/horns/mask.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-3d/horns/result.gif" width="100%"></td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+      <td><img src="./example/remove-anything-3d/room/org.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-3d/room/mask.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-3d/room/result.gif" width="100%"></td>
+    </tr>
+</table>
 
 
-## License
-The model is licensed under the [Apache 2.0 license](LICENSE).
+## <span id="remove-anything-video">📌 Remove Anything Video</span>
+With a single click on an object in the first video frame, Remove Anything Video can remove the object from the whole video! We release some results below. (Code and implementation details will be released soon.)
 
-## Contributing
+<table>
+    <tr>
+      <td><img src="./example/remove-anything-video/drift-chicane/original.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-video/drift-chicane/mask.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-video/drift-chicane/removed.gif" width="100%"></td>
+    </tr>
+</table>
 
-See [contributing](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
+<table>
+    <tr>
+      <td><img src="./example/remove-anything-video/paragliding/original.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-video/paragliding/mask.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-video/paragliding/removed.gif" width="100%"></td>
+    </tr>
+</table>
 
-## Contributors
+<table>
+    <tr>
+      <td><img src="./example/remove-anything-video/surf/original.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-video/surf/mask.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-video/surf/removed.gif" width="100%"></td>
+    </tr>
+</table>
 
-The Segment Anything project was made possible with the help of many contributors (alphabetical):
+<table>
+    <tr>
+      <td><img src="./example/remove-anything-video/tennis-vest/original.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-video/tennis-vest/mask.gif" width="100%"></td>
+      <td><img src="./example/remove-anything-video/tennis-vest/removed.gif" width="100%"></td>
+    </tr>
+</table>
 
-Aaron Adcock, Vaibhav Aggarwal, Morteza Behrooz, Cheng-Yang Fu, Ashley Gabriel, Ahuva Goldstand, Allen Goodman, Sumanth Gurram, Jiabo Hu, Somya Jain, Devansh Kukreja, Robert Kuo, Joshua Lane, Yanghao Li, Lilian Luong, Jitendra Malik, Mallika Malhotra, William Ngan, Omkar Parkhi, Nikhil Raina, Dirk Rowe, Neil Sejoor, Vanessa Stark, Bala Varadarajan, Bram Wasti, Zachary Winstrom
+## Acknowledgments
+- [Segment Anything](https://github.com/facebookresearch/segment-anything)
+- [LaMa](https://github.com/advimman/lama)
+- [Stable Diffusion](https://github.com/CompVis/stable-diffusion)
 
-## Citing Segment Anything
 
-If you use SAM or SA-1B in your research, please use the following BibTeX entry. 
 
+ ## Other Interesting Repositories
+- [Awesome Anything](https://github.com/VainF/Awesome-Anything)
+- [Composable AI](https://github.com/Adamdad/Awesome-ComposableAI)
+- [Grounded SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything)
+
+## Citation
+If you find this work useful for your research, please cite us:
 ```
-@article{kirillov2023segany,
-  title={Segment Anything}, 
-  author={Kirillov, Alexander and Mintun, Eric and Ravi, Nikhila and Mao, Hanzi and Rolland, Chloe and Gustafson, Laura and Xiao, Tete and Whitehead, Spencer and Berg, Alexander C. and Lo, Wan-Yen and Doll{\'a}r, Piotr and Girshick, Ross},
-  journal={arXiv:2304.02643},
+@article{yu2023inpaint,
+  title={Inpaint Anything: Segment Anything Meets Image Inpainting},
+  author={Yu, Tao and Feng, Runseng and Feng, Ruoyu and Liu, Jinming and Jin, Xin and Zeng, Wenjun and Chen, Zhibo},
+  journal={arXiv preprint arXiv:2304.06790},
   year={2023}
 }
 ```
+  
+<p align="center">
+  <a href="https://star-history.com/#geekyutao/Inpaint-Anything&Date">
+    <img src="https://api.star-history.com/svg?repos=geekyutao/Inpaint-Anything&type=Date" alt="Star History Chart">
+  </a>
+</p>
