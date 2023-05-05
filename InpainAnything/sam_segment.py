@@ -29,7 +29,7 @@ def predict_masks_with_sam(
     masks, scores, logits = predictor.predict(
         point_coords=point_coords,
         point_labels=point_labels,
-        multimask_output=True,
+        multimask_output=False,
     )
     return masks, scores, logits
 
