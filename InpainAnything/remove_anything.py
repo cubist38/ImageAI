@@ -83,7 +83,7 @@ if __name__ == "__main__":
         latest_coords = args.point_coords
     img = load_img_to_array(args.input_img)
 
-    masks, _, _ = predict_masks_with_sam(
+    masks, scores, logits = predict_masks_with_sam(
         img,
         [latest_coords],
         args.point_labels,
@@ -92,7 +92,7 @@ if __name__ == "__main__":
         device=device,
     )
     masks = masks.astype(np.uint8) * 255
-
+    print(scores)
     # dilate mask to avoid unmasked edge effect
     if args.dilate_kernel_size is not None:
         masks = [dilate_mask(mask, args.dilate_kernel_size) for mask in masks]
