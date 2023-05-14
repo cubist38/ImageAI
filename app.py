@@ -3,7 +3,7 @@ from PIL import Image
 from st_clickable_images import clickable_images
 
 
-uploaded_file = st.file_uploader("Choose an image...", type="jpg")
+uploaded_file = st.file_uploader("Choose an image...", type= ["jpg", "png", "jpeg"])
 
 def on_image_click(x, y):
     st.write("You clicked on the image at coordinates:", x, y)
