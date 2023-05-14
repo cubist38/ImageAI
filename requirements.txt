@@ -1,5 +1,4 @@
 streamlit
 pyngrok
 flask
-streamlit-drawable-canvas
 Pillow

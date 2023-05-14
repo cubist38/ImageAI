@@ -7,14 +7,15 @@ uploaded_file = st.file_uploader("Choose an image...", type="jpg")
 if uploaded_file is not None:
     # Load the image and create a canvas
     image = Image.open(uploaded_file)
-    canvas = st_canvas(
-        width=image.width,
-        height=image.height,
-        image_mode='RGB'
-    )
-
-    # Display the image and wait for the user to click
+    # Create a canvas element
     st.image(image)
-    if canvas.clicked:
-        x, y = canvas.coordinates
-        st.write(f"You clicked at ({x}, {y})")
+
+canvas = st.empty()
+def on_click(event):
+    x = event.x
+    y = event.y
+    # Draw a point at the coordinates of the click
+    print(x, y)
+    canvas.fill_rect((x - 5, y - 5, 10, 10), "red")
+
+canvas.on_click(on_click)
