@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.write('# Hello World from 1littlecoder, please subscribe')
-st.write('## Run Streamlit on Colab with `pyngrok` ')
-st.write("This is an amazing tutorial, I love this channel!!!")
-st.markdown("# Don't forget to subscribe")
+uploaded_file = st.file_uploader("Choose an image...", type="jpg")
+if uploaded_file is not None:
+    # Do something with the image, e.g. display it
+    st.image(uploaded_file)
