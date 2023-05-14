@@ -10,12 +10,18 @@ if uploaded_file is not None:
     # Create a canvas element
     st.image(image)
 
+# Create a canvas element
 canvas = st.empty()
-def on_click(event):
-    x = event.x
-    y = event.y
-    # Draw a point at the coordinates of the click
-    print(x, y)
-    canvas.fill_rect((x - 5, y - 5, 10, 10), "red")
 
-canvas.on_event("click", on_click)
+# Add an event listener to the canvas element to detect when the user clicks on it
+def on_click(event):
+  x = event.x
+  y = event.y
+
+  # Draw a point at the coordinates of the click
+  canvas.fill_rect((x - 5, y - 5, 10, 10), "red")
+
+canvas.on_change(on_click)
+
+# # Display the image with the clickable images component
+# clicked_image = clickable_images([image], canvas=canvas)
