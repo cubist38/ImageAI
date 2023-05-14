@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw
 import numpy as np
 import torch
 from InpaintAnything.utils import dilate_mask, show_mask
-from sam_segment import predict_masks_with_sam
+from InpaintAnything.sam_segment import predict_masks_with_sam
 
 
 RADIUS = 5
