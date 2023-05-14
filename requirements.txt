@@ -2,3 +2,4 @@ streamlit
 pyngrok
 flask
 Pillow
+streamlit-cropper

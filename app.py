@@ -1,23 +1,14 @@
 import streamlit as st
-from PIL import Image
+from streamlit_cropper import st_cropper, draw_cropped_image
 
 
-# Display a file uploader to upload an image
-uploaded_file = st.file_uploader("Upload an image here", type=["jpg", "jpeg", "png"])
+def main():
+    st.title("Image Cropper Demo")
+    image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    if image:
+        cropped_image, coords = st_cropper(image=image, realtime_update=True, return_coords=True)
+        st.image(draw_cropped_image(cropped_image, coords), caption="Cropped Image")
+        st.write(f"Clicked at: {coords}")
 
-
-# If an image is uploaded
-if uploaded_file is not None:
-    # Load the image
-    image = Image.open(uploaded_file)
-    st.image(image, caption="Uploaded Image", use_column_width=True)
-    
-    # Get user click position
-    click_pos = st.session_state.get('click_pos')
-    if click_pos is not None:
-        st.write("You clicked at:", click_pos)
-
-    # Add click handler to image
-    if st.button("Click on the image"):
-        click_pos = st.mouse_clicks.add(click_data=image)
-        st.session_state['click_pos'] = click_pos
+if __name__ == "__main__":
+    main()
