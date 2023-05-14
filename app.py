@@ -16,7 +16,7 @@ def main():
         image = Image.open(image_file)
         st.image(image, caption='Uploaded Image.', use_column_width=True)
         coords = streamlit_image_coordinates(image)
-        print(coords)
+        st.write("Coordinates: ", coords)
         cropped_image = draw_point_on_image(image, coords)
         st.image(cropped_image, caption="Cropped Image")
         st.write(f"Clicked at: {coords}")
