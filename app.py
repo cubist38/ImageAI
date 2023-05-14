@@ -3,9 +3,9 @@ from streamlit_cropper import st_cropper
 from PIL import Image, ImageDraw
 
 def draw_point_on_image(image, coords):
-    img = Image.fromarray(image)
+    img = image.copy()
     draw = ImageDraw.Draw(img)
-    draw.point((coords[0], coords[1]), fill="red")
+    draw.point(coords, fill="red")
     return img
 
 def main():
@@ -13,8 +13,9 @@ def main():
     image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     if image_file is not None:
         image = Image.open(image_file)
-        cropped_image, coords = st_cropper(image, realtime_update=True, return_coords=True)
-        st.image(draw_point_on_image(cropped_image, coords), caption="Cropped Image")
+        coords = st_cropper(image, realtime_update=True, key="cropper")
+        cropped_image = draw_point_on_image(image, coords)
+        st.image(cropped_image, caption="Cropped Image")
         st.write(f"Clicked at: {coords}")
 
 if __name__ == "__main__":
