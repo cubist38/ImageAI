@@ -2,4 +2,4 @@ streamlit
 pyngrok
 flask
 Pillow
-streamlit-cropper
+streamlit-image-coordinates
