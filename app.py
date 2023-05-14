@@ -18,9 +18,6 @@ def main():
         coords = streamlit_image_coordinates(image)
         if coords:
             st.write("Coordinates: ", coords)
-            cropped_image = draw_point_on_image(image, coords)
-            st.image(cropped_image, caption="Cropped Image")
-            st.write(f"Clicked at: {coords}")
 
 if __name__ == "__main__":
     main()
