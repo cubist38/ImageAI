@@ -24,7 +24,7 @@ def main():
         image = resize_with_aspect_ratio(image)
         coords = streamlit_image_coordinates(image)
         if coords:
-            st.write("Coordinates: ", coords)
+            st.image(draw_point_on_image(image, coords), caption="Selected point", use_column_width=True)
 
 if __name__ == "__main__":
     main()
