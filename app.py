@@ -10,9 +10,10 @@ def draw_point_on_image(image, coords):
 
 def main():
     st.title("Image Cropper Demo")
-    image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-    if image:
-        cropped_image, coords = st_cropper(image=image, realtime_update=True, return_coords=True)
+    image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    if image_file is not None:
+        image = Image.open(image_file)
+        cropped_image, coords = st_cropper(image, realtime_update=True, return_coords=True)
         st.image(draw_point_on_image(cropped_image, coords), caption="Cropped Image")
         st.write(f"Clicked at: {coords}")
 
