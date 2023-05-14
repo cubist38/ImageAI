@@ -2,7 +2,7 @@ from flask import Flask
 from pyngrok import ngrok
 import json
 
-with open('./data/config.json', 'r') as f:
+with open('/content/drive/MyDrive/config.json', 'r') as f:
     config = json.load(f)
 ngrok.set_auth_token(config['ngrok_token'])
 
