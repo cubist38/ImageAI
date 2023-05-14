@@ -1,8 +1,9 @@
 import gradio as gr
 
-def search(image):
-    print(type(image))
-    return [image, image]
+interface = gr.Interface(
+    inputs=[gr.inputs.Image(label="Image")],
+    outputs=[gr.outputs.Image(label="Output")],
+)
 
-iface = gr.Interface(search, "image", outputs = ["image", "image"], description="Enter a search query")
-iface.launch(share = True)
+# Show the interface
+interface.launch(title="Image Demo")
