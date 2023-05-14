@@ -5,7 +5,7 @@ from PIL import Image, ImageDraw
 def draw_point_on_image(image, coords):
     img = image.copy()
     draw = ImageDraw.Draw(img)
-    draw.point(coords, fill="red")
+    draw.point(coords, fill="red", size=10)
     return img
 
 def resize_with_aspect_ratio(image, max_width = 640):
