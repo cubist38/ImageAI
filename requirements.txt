@@ -2,4 +2,3 @@ streamlit
 pyngrok
 flask
 Pillow
-st-clickable-images
