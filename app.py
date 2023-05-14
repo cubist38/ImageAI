@@ -23,6 +23,7 @@ def main():
         image = Image.open(image_file)
         image = resize_with_aspect_ratio(image)
         coords = streamlit_image_coordinates(image)
+        st.write(coords)
         if coords:
             st.image(draw_point_on_image(image, coords), caption="Selected point", use_column_width=True)
 
