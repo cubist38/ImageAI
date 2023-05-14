@@ -13,7 +13,7 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     # Create a canvas element
     st.image(image)
-    st_clickable_image = st_clickable_image(image, on_image_click)
+    st_clickable_image = clickable_images(image, on_image_click)
 
     # Display the clickable image
     if st_clickable_image is not None:
