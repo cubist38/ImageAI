@@ -18,4 +18,4 @@ def on_click(event):
     print(x, y)
     canvas.fill_rect((x - 5, y - 5, 10, 10), "red")
 
-canvas.on_click(on_click)
+canvas.on_event("click", on_click)
