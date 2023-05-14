@@ -9,7 +9,7 @@ def draw_point_on_image(image, coords):
     draw.point(coords, fill="red")
     return img
 
-def resize_with_aspect_ratio(image, max_width=500):
+def resize_with_aspect_ratio(image, max_width = 640):
     width, height = image.size
     aspect_ratio = height / width
     new_width = max_width
