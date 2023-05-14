@@ -1,3 +1,6 @@
 streamlit
 pyngrok
 flask
+salesforce-lavis
+opencv-python
+opencv-contrib-python
