@@ -2,10 +2,13 @@ import streamlit as st
 from streamlit_image_coordinates import streamlit_image_coordinates
 from PIL import Image, ImageDraw
 
-def draw_point_on_image(image, coords):
+RADIUS = 5
+
+def draw_point_on_image(image, coords, radius = 10):
     img = image.copy()
     draw = ImageDraw.Draw(img)
-    draw.point(coords, fill="red", size=10)
+    x, y = coords
+    draw.ellipse((x, y, x + radius, y + radius), fill='red')
     return img
 
 def resize_with_aspect_ratio(image, max_width = 640):
@@ -24,7 +27,7 @@ def main():
         coords = streamlit_image_coordinates(image)
         if coords:
             st.write(coords)
-            st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"]))), caption="Selected point", use_column_width=True)
+            st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"])), RADIUS), caption="Selected point", use_column_width=True)
 
 if __name__ == "__main__":
     main()
