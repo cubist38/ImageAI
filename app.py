@@ -40,7 +40,7 @@ def main():
     if image_file is not None:
         image = Image.open(image_file)
         image = resize_with_aspect_ratio(image, 512)
-        coords = streamlit_image_coordinates(image, draw_center = True)
+        coords = streamlit_image_coordinates(image)
         if coords:
             if image.mode == "RGBA":
                 image = image.convert("RGB")
