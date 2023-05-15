@@ -1,7 +1,7 @@
 import streamlit as st
 from remove import remove_on_clicked
 from PIL import Image
-from engine import (resize_with_aspect_ratio, upload_an_image, 
+from engine import (resize_with_aspect_ratio, 
                     draw_point_on_image, create_center_button)
 from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
 
