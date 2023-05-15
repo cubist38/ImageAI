@@ -55,9 +55,8 @@ def main():
                 device = device,
             )
             masks = masks.astype(np.uint8) * 255
-            masks = [dilate_mask(mask, 15) for mask in masks]
-            # find mask with highest score
             mask = masks[np.argmax(scores)]
+            mask = dilate_mask(mask, 15)
             st.image(mask, use_column_width=True)
 
 if __name__ == "__main__":
