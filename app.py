@@ -58,7 +58,7 @@ def main():
             masks = [dilate_mask(mask, 15) for mask in masks]
             # find mask with highest score
             mask = masks[np.argmax(scores)]
-            st.image(mask)
+            st.image(mask, use_column_width=True)
 
 if __name__ == "__main__":
     main()
