@@ -4,7 +4,7 @@ from utils import dilate_mask
 from lama_model import load_lama_model, inpaint_img_with_builded_lama
 from PIL import Image
 from sam_model import load_sam_model, predict_masks_with_sam
-from utils import draw_point_on_image, create_center_button
+from engine import draw_point_on_image, create_center_button
 import numpy as np
 import torch
 
