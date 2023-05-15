@@ -42,22 +42,30 @@ def main():
         image = resize_with_aspect_ratio(image, 512)
         coords = streamlit_image_coordinates(image)
         if coords:
+            st.write("Coordinates: ", coords)
             st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)        
             if image.mode == "RGBA":
                 image = image.convert("RGB")
             image =  np.array(image)
-            masks, scores, logits = predict_masks_with_sam(
-                image,
-                [[int(coords["x"]), int(coords["y"])]],
-                1,
-                model_type= "vit_h",
-                ckpt_p = "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth",
-                device = device,
+            remove_button = st.button('Remove', key='my_button')
+            # Apply CSS to center the button
+            st.markdown(
+                f'<style>.stButton>button#{remove_button._id} {{display:block;margin: 0 auto;}}</style>', 
+                unsafe_allow_html=True
             )
-            masks = masks.astype(np.uint8) * 255
-            mask = masks[np.argmax(scores)]
-            mask = dilate_mask(mask, 15)
-            st.image(mask, use_column_width=True)
+            if remove_button:
+                masks, scores, logits = predict_masks_with_sam(
+                    image,
+                    [[int(coords["x"]), int(coords["y"])]],
+                    1,
+                    model_type= "vit_h",
+                    ckpt_p = "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth",
+                    device = device,
+                )
+                masks = masks.astype(np.uint8) * 255
+                mask = masks[np.argmax(scores)]
+                mask = dilate_mask(mask, 15)
+                st.image(mask, use_column_width=True)
 
 if __name__ == "__main__":
     main()

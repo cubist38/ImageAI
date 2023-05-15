@@ -9,8 +9,6 @@ import torch
 from segment_anything import SamPredictor, sam_model_registry
 from utils import load_img_to_array, save_array_to_img, dilate_mask, \
     show_mask, show_points
-import streamlit as st
-
 
 
 def predict_masks_with_sam(
@@ -26,7 +24,6 @@ def predict_masks_with_sam(
     sam = sam_model_registry[model_type](checkpoint=ckpt_p)
     sam.to(device=device)
     predictor = SamPredictor(sam)
-    st.write(point_coords)
     predictor.set_image(img)
     masks, scores, logits = predictor.predict(
         point_coords=point_coords,
