@@ -52,8 +52,8 @@ def resize_with_aspect_ratio(image, max_width = 640):
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     st.title("Remove anything from an image")
-    image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     predictor = None
+    image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     if image_file is not None:
         image = Image.open(image_file)
         image = resize_with_aspect_ratio(image, 512)
