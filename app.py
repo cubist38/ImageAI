@@ -9,10 +9,10 @@ features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything'
 RADIUS = 5
 
 def main():
-    st.markdown("<h1 style='text-align: center; color: red;'>Final Project</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: red;'>Our Magic Image Editting</h1>", unsafe_allow_html=True)
     feature = st.selectbox('Choose a feature to use', features)
     if feature == 'Remove Anything Image':
-        st.markdown("# Click on an object in the image, and Inpainting Anything will remove it instantly!")
+        st.markdown("## Click on an object in the image, and our technique will remove it instantly!")
         image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
         if image_file is not None:
             image = Image.open(image_file)
