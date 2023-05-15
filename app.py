@@ -9,6 +9,7 @@ from sam_segment import predict_masks_with_sam
 from utils import dilate_mask
 from lama_inpaint import build_lama_model, inpaint_img_with_builded_lama
 
+
 def create_center_button():
     # Apply CSS to center the button
     col1, col2, col3 , col4, col5 = st.columns(5)
@@ -49,14 +50,14 @@ def resize_with_aspect_ratio(image, max_width = 512):
     new_height = int(new_width * aspect_ratio)
     return image.resize((new_width, new_height))
 
-@st.cache_resource(allow_output_mutation = True)
+@st.cache_resource()
 def load_sam_model(sam_model_type, sam_model_path, device):
     sam = sam_model_registry[sam_model_type](checkpoint=sam_model_path)
     sam.to(device=device)
     predictor = SamPredictor(sam)
     return predictor
 
-@st.cache_resource(allow_output_mutation = True)
+@st.cache_resource()
 def load_lama_model(
         config_p: str, 
         ckpt_p: str,
