@@ -26,3 +26,4 @@ webdataset
 packaging
 wldhx.yadisk-direct
 omegaconf
+torchtext==0.10.0
