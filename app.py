@@ -6,7 +6,6 @@ from engine import (resize_with_aspect_ratio,
 from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
 
 features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything']
-selected_feature = st.button('Select Feature')
 RADIUS = 5
 
 def main():
