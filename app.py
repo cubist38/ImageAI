@@ -58,15 +58,15 @@ def main():
         if coords:
             st.write("Coordinates: ", coords)
             st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)        
-            if image.mode == "RGBA":
-                image = image.convert("RGB")
-            image =  np.array(image)
             remove_button = create_center_button()
             if remove_button:
+                if image.mode == "RGBA":
+                    image = image.convert("RGB")
+                image =  np.array(image)
                 masks, scores, logits = predict_masks_with_sam(
                     image,
                     [[int(coords["x"]), int(coords["y"])]],
-                    1,
+                    [1],
                     model_type= "vit_h",
                     ckpt_p = "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth",
                     device = device,
