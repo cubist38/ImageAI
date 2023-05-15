@@ -26,6 +26,9 @@ def main():
                     img_inpainted = remove_on_clicked(image, coords)
                     st.image(img_inpainted, use_column_width=True)
     elif feature == 'Remove Anything Video':
-        st.write("With a single click on an object in the first video frame, Remove Anything Video can remove the object from the whole video!")
+        st.markdown("## With a single click on an object in the first video frame, our technique can remove the object from the whole video!")
+        video_file = st.file_uploader("Upload a video", type=["mp4", "mov"])
+        if video_file is not None:
+            st.video(video_file)
 if __name__ == "__main__":
     main()
