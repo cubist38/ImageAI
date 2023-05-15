@@ -4,7 +4,9 @@ from PIL import Image, ImageDraw
 import numpy as np
 import torch
 import cv2
-from InpaintAnything.sam_segment import predict_masks_with_sam
+from sam_segment import predict_masks_with_sam
+from utils import dilate_mask, show_mask
+
 
 def dilate_mask(mask, dilate_factor=15):
     mask = mask.astype(np.uint8)
