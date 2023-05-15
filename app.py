@@ -11,7 +11,6 @@ RADIUS = 5
 def main():
     st.markdown("<h1 style='text-align: center; color: red;'>Final Project</h1>", unsafe_allow_html=True)
     feature = st.selectbox('Choose a feature to use', features)
-    st.write('Selected Feature:', feature) 
     if feature == 'Remove Anything Image':
         st.write("Click on an object in the image, and Inpainting Anything will remove it instantly!")
         image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
