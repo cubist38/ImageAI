@@ -16,7 +16,7 @@ def main():
         image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
         if image_file is not None:
             image = Image.open(image_file)
-            #image = resize_with_aspect_ratio(image, 700)
+            image = resize_with_aspect_ratio(image, 512)
             coords = st_image_coordinates(image)
             if coords:
                 st.write("Coordinates: ", coords)
