@@ -18,8 +18,9 @@ albumentations
 hydra-core
 pytorch-lightning
 tabulate
-kornia
+kornia==0.5.3
 webdataset
 packaging
 scikit-learn
 wldhx.yadisk-direct
+kornia-contrib

@@ -1,5 +1,4 @@
 import torch
-from kornia import SamplePadding
 from kornia.augmentation import RandomAffine, CenterCrop
 
 
