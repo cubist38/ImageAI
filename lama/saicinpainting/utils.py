@@ -7,9 +7,7 @@ import signal
 import sys
 import traceback
 import warnings
-
 import torch
-from pytorch_lightning import seed_everything
 
 LOGGER = logging.getLogger(__name__)
 
