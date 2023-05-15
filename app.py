@@ -9,7 +9,7 @@ features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything'
 RADIUS = 5
 
 def main():
-    st.markdown("<h1 style='text-align: center; color: red;'>Final Project</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: red;'># Final Project</h1>", unsafe_allow_html=True)
     feature = st.selectbox('Choose a feature', features)
     st.write('Selected Feature:', feature)
     if feature == 'Remove Anything Image':
