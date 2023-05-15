@@ -5,6 +5,7 @@ from pathlib import Path
 from matplotlib import pyplot as plt
 from typing import Any, Dict, List
 import torch
+import streamlit as st
 
 from segment_anything import SamPredictor, sam_model_registry
 from utils import load_img_to_array, save_array_to_img, dilate_mask, \
@@ -23,6 +24,8 @@ def predict_masks_with_sam(
     point_labels = np.array(point_labels)
     sam = sam_model_registry[model_type](checkpoint=ckpt_p)
     sam.to(device=device)
+    st.write("sam model loaded", use_column_width=True)
+    st.write(img.shape)
     predictor = SamPredictor(sam)
     predictor.set_image(img)
     masks, scores, logits = predictor.predict(
