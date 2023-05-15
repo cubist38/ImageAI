@@ -28,6 +28,7 @@ def main():
                     if remove_button:
                         img_inpainted = remove_on_clicked(image, coords)
                         st.image(img_inpainted, use_column_width=True)
-
+        elif feature == 'Remove Anything Video':
+            st.write("With a single click on an object in the first video frame, Remove Anything Video can remove the object from the whole video!")
 if __name__ == "__main__":
     main()
