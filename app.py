@@ -11,8 +11,8 @@ RADIUS = 5
 
 def main():
     if selected_feature:
-        feature = st.radio('Choose an event', features, index=0)
-        #feature = st.selectbox('Choose a feature', features)
+        #feature = st.radio('Choose an event', features, index=0)
+        feature = st.selectbox('Choose a feature', features)
         st.write('Selected Feature:', feature)
         if feature == 'Remove Anything Image':
             st.write("Click on an object in the image, and Inpainting Anything will remove it instantly!")
