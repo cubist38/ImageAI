@@ -67,9 +67,8 @@ def main():
                     image = image.convert("RGB")
                 image =  np.array(image)
                 if predictor is None:
-
                     st.write("Loading SAM model...")
-                    sam = sam_model_registry[model_type](checkpoint=ckpt_p)
+                    sam = sam_model_registry["vit_h"](checkpoint="/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth")
                     sam.to(device=device)
                     st.write("SAM model loaded!")
                     predictor = SamPredictor(sam)
