@@ -46,7 +46,6 @@ def main():
             if image.mode == "RGBA":
                 image = image.convert("RGB")
             image =  np.array(image)
-            st.image(str(image))
             masks, scores, logits = predict_masks_with_sam(
                 image,
                 [[int(coords["x"]), int(coords["y"])]],
