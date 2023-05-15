@@ -18,6 +18,7 @@ def predict_masks_with_sam(
         predictor: SamPredictor):
     point_coords = np.array(point_coords)
     point_labels = np.array(point_labels)
+    predictor.set_image(img)
     masks, scores, logits = predictor.predict(
         point_coords=point_coords,
         point_labels=point_labels,
