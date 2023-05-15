@@ -39,12 +39,13 @@ def main():
     image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     if image_file is not None:
         image = Image.open(image_file)
-        image = resize_with_aspect_ratio(image)
-        coords = streamlit_image_coordinates(image)
+        image = resize_with_aspect_ratio(image, 512)
+        coords = streamlit_image_coordinates(image, use_column_width=True)
         if coords:
             if image.mode == "RGBA":
                 image = image.convert("RGB")
             image =  np.array(image)
+            
             masks, scores, logits = predict_masks_with_sam(
                 image,
                 [(int(coords["x"]), int(coords["y"]))],
