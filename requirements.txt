@@ -2,6 +2,7 @@ streamlit
 Pillow
 streamlit-image-coordinates
 opencv-python
+pyngrok
 pyyaml
 tqdm
 numpy
