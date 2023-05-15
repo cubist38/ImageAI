@@ -5,7 +5,8 @@ import numpy as np
 import torch
 import cv2
 from sam_segment import predict_masks_with_sam
-from utils import dilate_mask, show_mask
+from utils import dilate_mask
+from lama_inpaint import inpaint_img_with_lama
 
 def create_center_button():
     # Apply CSS to center the button
@@ -74,7 +75,10 @@ def main():
                 masks = masks.astype(np.uint8) * 255
                 mask = masks[np.argmax(scores)]
                 mask = dilate_mask(mask, 15)
-                st.image(mask, use_column_width=True)
+                img_inpainted = inpaint_img_with_lama(
+                    image, mask, "lama/configs/prediction/default.yaml", 
+                    "/content/drive/MyDrive/InpaintAnything/Weights/big-lama", device=device)
+                st.image(img_inpainted, use_column_width=True)
 
 if __name__ == "__main__":
     main()
