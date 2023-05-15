@@ -10,7 +10,7 @@ def draw_point_on_image(image, coords, radius = 10):
     draw.ellipse((x, y, x + radius, y + radius), fill='red')
     return img
 
-def resize_with_aspect_ratio(image, max_width = 512):
+def resize_pil_keep_aspect_ratio(image, max_width = 512):
     width, height = image.size
     aspect_ratio = height / width
     new_width = max_width
@@ -25,6 +25,14 @@ def dilate_mask(mask, dilate_factor=15):
         iterations=1
     )
     return mask
+
+def resize_rgb_keep_aspect_ratio(image, max_width = 512):
+    width, height, _ = image.shape
+    aspect_ratio = height / width
+    new_width = max_width
+    new_height = int(new_width * aspect_ratio)
+    return cv2.resize(image, (new_width, new_height))
+
 
 def create_center_button(name: str):
     # Apply CSS to center the button
