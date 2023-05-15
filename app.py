@@ -51,11 +51,10 @@ def resize_with_aspect_ratio(image, max_width = 640):
 
 @st.cache(allow_output_mutation=True)
 def load_sam_model(sam_model_type, sam_model_path, device):
-    st.write("Loading SAM model...")
     sam = sam_model_registry[sam_model_type](checkpoint=sam_model_path)
     sam.to(device=device)
     predictor = SamPredictor(sam)
-    return model
+    return predictor
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
