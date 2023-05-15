@@ -3,6 +3,8 @@ import numpy as np
 import cv2
 import streamlit as st
 
+def upload_an_image():
+    return st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
 def draw_point_on_image(image, coords, radius = 10):
     img = image.copy()
