@@ -7,7 +7,6 @@ from typing import Any, Dict, List
 import torch
 import streamlit as st
 
-from segment_anything import SamPredictor, sam_model_registry
 from utils import load_img_to_array, save_array_to_img, dilate_mask, \
     show_mask, show_points
 
@@ -16,17 +15,10 @@ def predict_masks_with_sam(
         img: np.ndarray,
         point_coords: List[List[float]],
         point_labels: List[int],
-        model_type: str,
-        ckpt_p: str,
-        device="cuda"
-):
+        predictor):
+
     point_coords = np.array(point_coords)
     point_labels = np.array(point_labels)
-    sam = sam_model_registry[model_type](checkpoint=ckpt_p)
-    sam.to(device=device)
-    st.write("sam model loaded", use_column_width=True)
-    st.write(img.shape)
-    predictor = SamPredictor(sam)
     predictor.set_image(img)
     masks, scores, logits = predictor.predict(
         point_coords=point_coords,

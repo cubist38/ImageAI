@@ -1,5 +1,6 @@
 import streamlit as st
 from streamlit_image_coordinates import streamlit_image_coordinates
+from segment_anything import SamPredictor, sam_model_registry
 from PIL import Image, ImageDraw
 import numpy as np
 import torch
@@ -52,6 +53,7 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     st.title("Remove anything from an image")
     image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    predictor = None
     if image_file is not None:
         image = Image.open(image_file)
         image = resize_with_aspect_ratio(image, 512)
@@ -64,14 +66,18 @@ def main():
                 if image.mode == "RGBA":
                     image = image.convert("RGB")
                 image =  np.array(image)
-                masks, scores, logits = predict_masks_with_sam(
-                    image,
+                if predictor is None:
+
+                    st.write("Loading SAM model...")
+                    sam = sam_model_registry[model_type](checkpoint=ckpt_p)
+                    sam.to(device=device)
+                    st.write("SAM model loaded!")
+                    predictor = SamPredictor(sam)
+
+                masks, scores, logits = predict_masks_with_sam(image,
                     [[int(coords["x"]), int(coords["y"])]],
                     [1],
-                    model_type= "vit_h",
-                    ckpt_p = "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth",
-                    device = device,
-                )
+                    predictor)
                 masks = masks.astype(np.uint8) * 255
                 mask = masks[np.argmax(scores)]
                 mask = dilate_mask(mask, 15)
