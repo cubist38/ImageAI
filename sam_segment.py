@@ -24,7 +24,7 @@ def predict_masks_with_sam(
     sam = sam_model_registry[model_type](checkpoint=ckpt_p)
     sam.to(device=device)
     predictor = SamPredictor(sam)
-
+    st.write(point_coords)
     predictor.set_image(img)
     masks, scores, logits = predictor.predict(
         point_coords=point_coords,
