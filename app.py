@@ -9,7 +9,7 @@ from utils import dilate_mask, show_mask
 
 def create_center_button():
     # Apply CSS to center the button
-    col1, col2, col3 , col4, col5 = st.beta_columns(5)
+    col1, col2, col3 , col4, col5 = st.columns(5)
     with col1:
         pass
     with col2:
