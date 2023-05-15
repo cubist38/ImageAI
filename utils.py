@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw
+from PIL import ImageDraw
 import numpy as np
 import cv2
 import streamlit as st

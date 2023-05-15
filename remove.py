@@ -1,10 +1,9 @@
 import streamlit as st
-from sam_segment import predict_masks_with_sam
 from streamlit_image_coordinates import streamlit_image_coordinates
 from utils import dilate_mask
-from lama_inpaint import inpaint_img_with_builded_lama
-from PIL import Image, ImageDraw
-from sam import load_sam_model, load_lama_model
+from lama_model import load_lama_model, inpaint_img_with_builded_lama
+from PIL import Image
+from sam_model import load_sam_model, predict_masks_with_sam
 from utils import draw_point_on_image, create_center_button
 import numpy as np
 import torch
