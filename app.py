@@ -23,8 +23,6 @@ def main():
                 if remove_button:
                     img_inpainted = remove_on_clicked(image, coords)
                     st.image(img_inpainted, use_column_width=True)
-    if st.button("Fill Anything"):
-        st.write("Click on an object, type in what you want to fill, and Inpaint Anything will fill it!")
 
 if __name__ == "__main__":
     main()
