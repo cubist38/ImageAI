@@ -7,7 +7,7 @@ import torch
 import cv2
 from sam_segment import predict_masks_with_sam
 from utils import dilate_mask
-from lama_inpaint import inpaint_img_with_lama
+from lama_inpaint import build_lama_model, inpaint_img_with_builded_lama
 
 def create_center_button():
     # Apply CSS to center the button
@@ -49,12 +49,19 @@ def resize_with_aspect_ratio(image, max_width = 640):
     new_height = int(new_width * aspect_ratio)
     return image.resize((new_width, new_height))
 
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def load_sam_model(sam_model_type, sam_model_path, device):
     sam = sam_model_registry[sam_model_type](checkpoint=sam_model_path)
     sam.to(device=device)
     predictor = SamPredictor(sam)
     return predictor
+
+@st.cache_resource
+def load_lama_model(
+        config_p: str, 
+        ckpt_p: str,
+        device = "cuda"):
+    return build_lama_model(config_p, ckpt_p, device)
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -83,9 +90,12 @@ def main():
                 masks = masks.astype(np.uint8) * 255
                 mask = masks[np.argmax(scores)]
                 mask = dilate_mask(mask, 15)
-                img_inpainted = inpaint_img_with_lama(
-                    image, mask, "lama/configs/prediction/default.yaml", 
-                    "/content/drive/MyDrive/InpaintAnything/Weights/big-lama", device=device)
+                lama_model = load_lama_model(
+                                config_p = "lama/configs/prediction/default.yaml", 
+                                ckpt_p = "/content/drive/MyDrive/InpaintAnything/Weights/big-lama", 
+                                device = device
+                            )
+                img_inpainted = inpaint_img_with_builded_lama(lama_model, image, mask, config_p = "lama/configs/prediction/default.yaml")
                 st.image(img_inpainted, use_column_width=True)
 
 if __name__ == "__main__":
