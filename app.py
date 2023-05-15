@@ -7,6 +7,20 @@ import cv2
 from sam_segment import predict_masks_with_sam
 from utils import dilate_mask, show_mask
 
+def create_center_button():
+    # Apply CSS to center the button
+    col1, col2, col3 , col4, col5 = st.beta_columns(5)
+    with col1:
+        pass
+    with col2:
+        pass
+    with col4:
+        pass
+    with col5:
+        pass
+    with col3 :
+        remove_button = st.button('Remove', key='my_button')
+    return remove_button
 
 def dilate_mask(mask, dilate_factor=15):
     mask = mask.astype(np.uint8)
@@ -47,12 +61,7 @@ def main():
             if image.mode == "RGBA":
                 image = image.convert("RGB")
             image =  np.array(image)
-            remove_button = st.button('Remove', key='my_button')
-            # Apply CSS to center the button
-            st.markdown(
-                f'<style>.stButton>button#{remove_button._id} {{display:block;margin: 0 auto;}}</style>', 
-                unsafe_allow_html=True
-            )
+            remove_button = create_center_button()
             if remove_button:
                 masks, scores, logits = predict_masks_with_sam(
                     image,
