@@ -9,6 +9,7 @@ import traceback
 import warnings
 
 import torch
+from pytorch_lightning import seed_everything
 
 LOGGER = logging.getLogger(__name__)
 
@@ -106,6 +107,15 @@ def print_traceback_handler(sig, frame):
 def register_debug_signal_handlers(sig=signal.SIGUSR1, handler=print_traceback_handler):
     LOGGER.warning(f'Setting signal {sig} handler {handler}')
     signal.signal(sig, handler)
+
+
+def handle_deterministic_config(config):
+    seed = dict(config).get('seed', None)
+    if seed is None:
+        return False
+
+    seed_everything(seed)
+    return True
 
 
 def get_shape(t):
