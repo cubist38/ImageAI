@@ -3,9 +3,17 @@ from streamlit_image_coordinates import streamlit_image_coordinates
 from PIL import Image, ImageDraw
 import numpy as np
 import torch
-from InpaintAnything.utils.utils import dilate_mask, show_mask
+import cv2
 from InpaintAnything.sam_segment import predict_masks_with_sam
 
+def dilate_mask(mask, dilate_factor=15):
+    mask = mask.astype(np.uint8)
+    mask = cv2.dilate(
+        mask,
+        np.ones((dilate_factor, dilate_factor), np.uint8),
+        iterations=1
+    )
+    return mask
 
 RADIUS = 5
 

@@ -3,3 +3,4 @@ pyngrok
 flask
 Pillow
 streamlit-image-coordinates
+opencv-python
