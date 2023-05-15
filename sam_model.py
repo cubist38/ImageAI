@@ -2,6 +2,7 @@
 from segment_anything import SamPredictor, sam_model_registry
 from typing import List
 import numpy as np
+import streamlit as st
 
 @st.cache_resource()
 def load_sam_model(sam_model_type, sam_model_path, device):
