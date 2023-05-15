@@ -42,21 +42,21 @@ def draw_point_on_image(image, coords, radius = 10):
     draw.ellipse((x, y, x + radius, y + radius), fill='red')
     return img
 
-def resize_with_aspect_ratio(image, max_width = 640):
+def resize_with_aspect_ratio(image, max_width = 512):
     width, height = image.size
     aspect_ratio = height / width
     new_width = max_width
     new_height = int(new_width * aspect_ratio)
     return image.resize((new_width, new_height))
 
-@st.cache_resource
+@st.cache_resource(allow_output_mutation = True)
 def load_sam_model(sam_model_type, sam_model_path, device):
     sam = sam_model_registry[sam_model_type](checkpoint=sam_model_path)
     sam.to(device=device)
     predictor = SamPredictor(sam)
     return predictor
 
-@st.cache_resource
+@st.cache_resource(allow_output_mutation = True)
 def load_lama_model(
         config_p: str, 
         ckpt_p: str,
