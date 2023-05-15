@@ -4,6 +4,9 @@ import torch
 import os
 import yaml
 import numpy as np
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / "lama"))
 from saicinpainting.evaluation.utils import move_to_device
 from saicinpainting.training.trainers import load_checkpoint
 from saicinpainting.evaluation.data import pad_tensor_to_modulo
