@@ -83,7 +83,6 @@ def main():
                 predictor = load_sam_model("vit_h", 
                                             "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth", 
                                             device)
-                st.write("SAM model loaded!")
                 masks, scores, logits = predict_masks_with_sam(image,
                     [[int(coords["x"]), int(coords["y"])]],
                     [1],
