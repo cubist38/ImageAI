@@ -48,7 +48,7 @@ def main():
             
             masks, scores, logits = predict_masks_with_sam(
                 image,
-                [(int(coords["x"]), int(coords["y"]))],
+                [[int(coords["x"]), int(coords["y"])]],
                 1,
                 model_type= "vit_h",
                 ckpt_p = "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth",
