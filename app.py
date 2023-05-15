@@ -11,7 +11,7 @@ RADIUS = 5
 def main():
     if st.button("Remove Anything"):
         st.write("Click on an object in the image, and Inpainting Anything will remove it instantly!")
-        image_file = upload_an_image()
+        image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
         if image_file is not None:
             image = Image.open(image_file)
             image = resize_with_aspect_ratio(image, 700)
