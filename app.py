@@ -41,8 +41,8 @@ def main():
         image = Image.open(image_file)
         image = resize_with_aspect_ratio(image, 512)
         coords = streamlit_image_coordinates(image)
-        st.image(draw_point_on_image(image, coords, radius = RADIUS), use_column_width=True)        
         if coords:
+            st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)        
             if image.mode == "RGBA":
                 image = image.convert("RGB")
             image =  np.array(image)
