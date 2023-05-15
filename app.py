@@ -49,10 +49,17 @@ def resize_with_aspect_ratio(image, max_width = 640):
     new_height = int(new_width * aspect_ratio)
     return image.resize((new_width, new_height))
 
+@st.cache(allow_output_mutation=True)
+def load_sam_model(sam_model_type, sam_model_path, device):
+    st.write("Loading SAM model...")
+    sam = sam_model_registry[sam_model_type](checkpoint=sam_model_path)
+    sam.to(device=device)
+    predictor = SamPredictor(sam)
+    return model
+
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     st.title("Remove anything from an image")
-    predictor = None
     image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     if image_file is not None:
         image = Image.open(image_file)
@@ -66,11 +73,9 @@ def main():
                 if image.mode == "RGBA":
                     image = image.convert("RGB")
                 image =  np.array(image)
-                if predictor is None:
-                    st.write("Loading SAM model...")
-                    sam = sam_model_registry["vit_h"](checkpoint="/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth")
-                    sam.to(device=device)
-                    predictor = SamPredictor(sam)
+                predictor = load_sam_model("vit_h", 
+                                            "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth", 
+                                            device)
                 st.write("SAM model loaded!")
                 masks, scores, logits = predict_masks_with_sam(image,
                     [[int(coords["x"]), int(coords["y"])]],
