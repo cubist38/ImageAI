@@ -5,7 +5,7 @@ from remove_anything_video import load_remove_anything_video
 import numpy as np
 import torch
 import imageio
-import st
+import streamlit as st
 
 
 def remove_selected_object_on_image(image, coords):
