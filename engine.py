@@ -1,4 +1,4 @@
-from PIL import ImageDraw
+from PIL import ImageDraw, Image
 import numpy as np
 import cv2
 import streamlit as st
@@ -83,6 +83,8 @@ def load_raw_video(video_raw_p):
         frame_ps.append(frame_p)
         all_frame[i] = resize_imageio_keep_aspect_ratio(all_frame[i])
         iio.imwrite(frame_ps[i], all_frame[i])
-    return frame_ps, fps, np.array(all_frame[0], dtype=np.uint8)
+    first_frame = Image.new("RGB", all_frame[0].size)
+    first_frame.putdata(all_frame[0].data)
+    return frame_ps, fps, first_frame
         
     
