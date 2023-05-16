@@ -7,6 +7,7 @@ import imageio.v2 as iio
 import imageio
 import os
 from pathlib import Path
+from skimage.transform import resize
 
 def draw_point_on_image(image, coords, radius = 10):
     img = image.copy()
@@ -34,7 +35,7 @@ def dilate_mask(mask, dilate_factor=15):
     )
     return mask
 
-def resize_rgb_keep_aspect_ratio(image, max_size = 512):
+def resize_imageio_keep_aspect_ratio(image, max_size = 512):
     height, width, _ = image.shape
     if width > height:
         new_height = int(height * max_size / width)
@@ -42,7 +43,7 @@ def resize_rgb_keep_aspect_ratio(image, max_size = 512):
     else:
         new_width = int(width * max_size / height)
         new_height = max_size
-    return cv2.resize(image, (new_width, new_height))
+    return resize(image, (new_height, new_width))
 
 
 def create_center_button(name: str):
@@ -80,7 +81,7 @@ def load_raw_video(video_raw_p):
     for i in range(len(all_frame)):
         frame_p = str(mkstemp(suffix=f"{i:0>6}.png"))
         frame_ps.append(frame_p)
-        resized_frame = resize_pil_keep_aspect_ratio(all_frame[i])
+        
         iio.imwrite(frame_ps[i], resized_frame)
     return frame_ps, fps
         
