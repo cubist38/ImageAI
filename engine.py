@@ -81,7 +81,7 @@ def load_raw_video(video_raw_p):
     for i in range(len(all_frame)):
         frame_p = str(mkstemp(suffix=f"{i:0>6}.png"))
         frame_ps.append(frame_p)
-        all_frame[i] = resize_imageio_keep_aspect_ratio(all_frame[i])
+        #all_frame[i] = resize_imageio_keep_aspect_ratio(all_frame[i])
         iio.imwrite(frame_ps[i], all_frame[i])
     return frame_ps, fps
         
