@@ -4,8 +4,8 @@ from engine import dilate_mask
 from remove_anything_video import load_remove_anything_video
 import numpy as np
 import torch
-import imageio
 import streamlit as st
+import imageio
 
 
 def remove_selected_object_on_image(image, coords):
@@ -40,7 +40,8 @@ def remove_selected_object_on_video(frames_p, coords, fps = 30):
             frames_p, 0, np.array([[int(coords["x"]), int(coords["y"])]]), np.array([1]), 2,
             15
         )
+    all_frames = [np.array(frame) for frame in all_frame_rm_w_mask]    
     output_file = 'output.mp4'
     # Save the frames as a video using imageio
-    imageio.mimsave(output_file, all_frame_rm_w_mask, fps=fps)
+    imageio.mimsave(output_file, all_frames, fps=fps)
     return output_file
