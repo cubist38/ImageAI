@@ -28,12 +28,12 @@ def main():
                     st.image(img_inpainted, use_column_width=True)
     elif feature == 'Remove Anything Video':
         st.markdown("## With a single click on an object in the first video frame, our technique can remove the object from the whole video!")
-        video_file = st.file_uploader("Upload a video", type=["mp4", "mov"])
+        video_file = st.file_uploader("Upload a video", type=["mp4", "mov", "gif"])
         if video_file is not None:
             vidcap = cv2.VideoCapture(video_file)
             images = [] 
             while True:
-                success,image = vidcap.read()
+                success, image = vidcap.read()
                 if not success:
                     break
                 image = resize_rgb_keep_aspect_ratio(image, 512)
