@@ -37,7 +37,7 @@ def remove_selected_object_on_video(frames, coords):
     model.to(device)
     with torch.no_grad():
         all_frame_rm_w_mask, all_mask, all_box = model(
-            frames, 0, np.array([[int(coords["x"]), int(coords["y"])]]), np.array(1), 2,
+            frames, 0, np.array([[int(coords["x"]), int(coords["y"])]]), np.array([1]), 2,
             15
         )
     st.write(all_frame_rm_w_mask[0])
