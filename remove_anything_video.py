@@ -12,8 +12,6 @@ import argparse
 import tempfile
 import imageio
 import imageio.v2 as iio
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
 from sam_model import build_sam_model
 from lama_model import build_lama_model, inpaint_img_with_builded_lama
 from ostrack import build_ostrack_model, get_box_using_ostrack
@@ -150,7 +148,6 @@ class RemoveAnythingVideo(nn.Module):
 
         # get key-frame mask
         key_frame= frame_ps[key_frame_idx]
-        #key_frame = iio.imread(key_frame_p)
         key_masks, key_scores = self.forward_segmentor(
             key_frame, key_frame_point_coords, key_frame_point_labels)
 
