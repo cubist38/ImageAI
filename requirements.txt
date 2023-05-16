@@ -24,3 +24,4 @@ packaging
 scikit-learn
 wldhx.yadisk-direct
 jpeg4py
+lmdb
