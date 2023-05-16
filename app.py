@@ -30,8 +30,7 @@ def main():
         st.markdown("## With a single click on an object in the first video frame, our technique can remove the object from the whole video!")
         video_file = st.file_uploader("Upload a video", type=["mp4", "mov"])
         if video_file is not None:
-            video_bytes = video_file.read()
-            vidcap = cv2.VideoCapture(video_bytes)
+            vidcap = cv2.VideoCapture(video_file)
             images = [] 
             while True:
                 success,image = vidcap.read()
