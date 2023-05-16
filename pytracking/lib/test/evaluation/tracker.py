@@ -112,8 +112,11 @@ class Tracker:
                 if key in tracker_out or val is not None:
                     output[key].append(val)
 
+        # Initialize
+        image = self._read_image(seq.frames[0])
+
         start_time = time.time()
-        out = tracker.initialize(seq.frames[0], init_info)
+        out = tracker.initialize(image, init_info)
         if out is None:
             out = {}
 
@@ -125,8 +128,9 @@ class Tracker:
             init_default['all_scores'] = out['all_scores']
 
         _store_outputs(out, init_default)
-        for frame_num, image in enumerate(seq.frames[1:], start=1):
-            
+        for frame_num, frame_path in enumerate(seq.frames[1:], start=1):
+            image = self._read_image(frame_path)
+
             start_time = time.time()
 
             info = seq.frame_info(frame_num)
@@ -277,6 +281,3 @@ class Tracker:
             return decode_img(image_file[0], image_file[1])
         else:
             raise ValueError("type of image_file should be str or list")
-
-
-
