@@ -34,14 +34,14 @@ def main():
         if video_file is not None:
             tfile = tempfile.NamedTemporaryFile(delete=False)
             tfile.write(video_file.read())
-            vidcap = cv2.VideoCapture(tfile.name)
+            vidcap = cv2.VideoCapture(tfile.name)   
             fps = vidcap.get(cv2.CAP_PROP_FPS)
             frames = [] 
             while True:
                 success, frame = vidcap.read()
                 if not success:
                     break
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 #frame = resize_rgb_keep_aspect_ratio(frame, 640)
                 frames.append(frame)
             first_frame = Image.fromarray(frames[0])
