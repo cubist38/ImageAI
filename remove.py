@@ -40,5 +40,5 @@ def remove_selected_object_on_video(frames, coords):
             frames, 0, [[int(coords["x"]), int(coords["y"])]], np.array(1), 2,
             15
         )
-    st.write(len(all_frame_rm_w_mask))
+    st.write(all_frame_rm_w_mask[0])
     st.write(len(type(all_frame_rm_w_mask[0])))
