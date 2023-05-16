@@ -55,3 +55,14 @@ def create_center_button(name: str):
     with col2 :
         button = st.button(name)
     return button
+
+# func to save BytesIO on a drive
+def write_bytesio_to_file(filename, bytesio):
+    """
+    Write the contents of the given BytesIO to a file.
+    Creates the file or overwrites the file if it does
+    not exist yet. 
+    """
+    with open(filename, "wb") as outfile:
+        # Copy the BytesIO stream to the output file
+        outfile.write(bytesio.getbuffer())
