@@ -85,7 +85,6 @@ class RemoveAnythingVideo(nn.Module):
                           box=None, mask_input=None, multimask_output=True,
                           return_logits=False):
         self.segmentor.set_image(img)
-
         masks, scores, logits = self.segmentor.predict(
             point_coords=point_coords,
             point_labels=point_labels,
@@ -150,7 +149,8 @@ class RemoveAnythingVideo(nn.Module):
         assert key_frame_idx == 0, "Only support key frame at the beginning."
 
         # get key-frame mask
-        key_frame = frame_ps[key_frame_idx]
+        key_frame= frame_ps[key_frame_idx]
+        #key_frame = iio.imread(key_frame_p)
         key_masks, key_scores = self.forward_segmentor(
             key_frame, key_frame_point_coords, key_frame_point_labels)
 
