@@ -74,7 +74,7 @@ def mkstemp(suffix, dir=None):
     return Path(path)
 
 def load_raw_video(video_raw_p):
-    all_frame = iio.mimread(video_raw_p)
+    all_frame = iio.mimread(video_raw_p, memtest = False)
     fps = imageio.v3.immeta(video_raw_p, exclude_applied=False)["fps"]
     # tmp frames
     frame_ps = []
