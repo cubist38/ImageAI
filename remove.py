@@ -5,7 +5,6 @@ from engine import dilate_mask
 from remove_anything_video import load_remove_anything_video
 import numpy as np
 import torch
-import imageio.v2 as iio
 
 
 def remove_selected_object_on_image(image, coords):
