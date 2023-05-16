@@ -83,6 +83,7 @@ def load_raw_video(video_raw_p):
         frame_ps.append(frame_p)
         all_frame[i] = resize_imageio_keep_aspect_ratio(all_frame[i])
         iio.imwrite(frame_ps[i], all_frame[i])
+    st.write(all_frame[0].shape)
     first_frame = cv2.cvtColor(all_frame[0], cv2.COLOR_RGBA2RGB)
     first_frame = Image.fromarray(first_frame)
     return frame_ps, fps, first_frame
