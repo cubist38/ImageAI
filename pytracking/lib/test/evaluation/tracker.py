@@ -113,7 +113,7 @@ class Tracker:
                     output[key].append(val)
 
         start_time = time.time()
-        out = tracker.initialize(image, init_info)
+        out = tracker.initialize(seq.frames[0], init_info)
         if out is None:
             out = {}
 
@@ -126,7 +126,7 @@ class Tracker:
 
         _store_outputs(out, init_default)
         for frame_num, image in enumerate(seq.frames[1:], start=1):
-
+            
             start_time = time.time()
 
             info = seq.frame_info(frame_num)
