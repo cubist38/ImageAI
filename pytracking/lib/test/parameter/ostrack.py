@@ -18,7 +18,7 @@ def parameters(yaml_name: str):
     # Network checkpoint path
     # params.checkpoint = os.path.join(save_dir, "checkpoints/train/ostrack/%s/OSTrack_ep%04d.pth.tar" %
     #                                  (yaml_name, cfg.TEST.EPOCH))
-    params.checkpoint = os.path.join('/content/drive/MyDrive/vitb_384_mae_ce_32x4_ep300.pth')
+    params.checkpoint = os.path.join('/content/drive/MyDrive/InpaintAnything/Weights/vitb_384_mae_ce_32x4_ep300.pth')
     assert os.path.exists(params.checkpoint), f'checkpoint not found at {params.checkpoint}'
 
     # whether to save boxes from all queries
