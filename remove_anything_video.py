@@ -135,7 +135,7 @@ class RemoveAnythingVideo(nn.Module):
 
     def forward(
             self,
-            frame_ps: List[str],
+            frame_ps: List[np.ndarray],
             key_frame_idx: int,
             key_frame_point_coords: np.ndarray,
             key_frame_point_labels: np.ndarray,
@@ -194,7 +194,6 @@ class RemoveAnythingVideo(nn.Module):
         print("Inpainting ...")
         all_frame = self.forward_inpainter(all_frame, all_mask)
         return all_frame, all_mask, all_box
-
 
 
 def mkstemp(suffix, dir=None):
