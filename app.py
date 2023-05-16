@@ -42,10 +42,11 @@ def main():
                     break
                 image = resize_rgb_keep_aspect_ratio(image, 640)
                 images.append(image)
-            coords = st_image_coordinates(images[0])
+            first_frame = Image.fromarray(images[0])
+            coords = st_image_coordinates(first_frame)
             st.write(type(images[0]))
             if coords:
                 st.write("Coordinates: ", coords)
-                st.image(draw_point_on_image(Image.fromarray(images[0]), (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
+                st.image(draw_point_on_image(first_frame, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
 if __name__ == "__main__":
     main()
