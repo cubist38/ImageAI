@@ -74,15 +74,20 @@ def mkstemp(suffix, dir=None):
     return Path(path)
 
 def load_raw_video(video_raw_p):
-    all_frame = iio.mimread(video_raw_p, memtest = False)
-    fps = imageio.v3.immeta(video_raw_p, exclude_applied=False)["fps"]
-    # tmp frames
-    frame_ps = []
-    for i in range(len(all_frame)):
+    vidcap = cv2.VideoCapture(video_raw_p)
+    fps = vidcap.get(cv2.CAP_PROP_FPS)
+    frames_p = []
+    i = 0
+    while True:
+        success, image = vidcap.read()
+        if not success:
+            break
         frame_p = str(mkstemp(suffix=f"{i:0>6}.png"))
-        frame_ps.append(frame_p)
-        frame_i = resize_rgb_keep_aspect_ratio(all_frame[i], 512)
-        iio.imwrite(frame_ps[i], frame_i)
-    frame_ps = frame_ps[:10000]
-    return frame_ps, fps
+        frame = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        frame = resize_pil_keep_aspect_ratio(frame, 512)
+        cv2.imwrite(frame_p, frame)
+        frames_p.append(frame_p)
+        i += 1
+    return frames_p, fps
+        
     
