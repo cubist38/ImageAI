@@ -5,7 +5,7 @@ from remove_anything_video import load_remove_anything_video
 import numpy as np
 import torch
 import streamlit as st
-import cv2
+import imageio as iio
 
 def remove_selected_object_on_image(image, coords):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
@@ -40,11 +40,5 @@ def remove_selected_object_on_video(frames_p, coords, fps = 30):
             15
         )
     output_file = 'output.mp4'
-    w, h = all_frame_rm_w_mask[0].size
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video_writer = cv2.VideoWriter(output_file, fourcc, fps, (w, h))
-    for frame in all_frame_rm_w_mask:
-        frame = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
-        video_writer.write(frame)
-    video_writer.release()
+    iio.mimwrite(output_file, all_frame_rm_w_mask, fps=fps)
     return output_file
