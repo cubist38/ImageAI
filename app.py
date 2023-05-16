@@ -19,7 +19,7 @@ def main():
         image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
         if image_file is not None:
             image = Image.open(image_file)
-            image = resize_pil_keep_aspect_ratio(image, 512)
+            image = resize_pil_keep_aspect_ratio(image, 640)
             coords = st_image_coordinates(image)
             if coords:
                 st.write("Coordinates: ", coords)
@@ -40,7 +40,7 @@ def main():
                 success, image = vidcap.read()
                 if not success:
                     break
-                image = resize_rgb_keep_aspect_ratio(image, 512)
+                image = resize_rgb_keep_aspect_ratio(image, 640)
                 images.append(image)
             coords = st_image_coordinates(images[0])
             st.write(type(images[0]))
