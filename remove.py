@@ -43,5 +43,5 @@ def remove_selected_object_on_video(frames_p, coords, fps = 30):
     output_file = 'output.mp4'
 
     # Save the frames as a video using imageio
-    imageio.mimsave(output_file, all_frame_rm_w_mask, fps=30)
+    imageio.mimsave(output_file, all_frame_rm_w_mask, fps=fps)
     return output_file
