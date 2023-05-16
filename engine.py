@@ -79,11 +79,11 @@ def load_raw_video(video_raw_p):
     frames_p = []
     i = 0
     while True:
-        success, image = vidcap.read()
+        success, frame = vidcap.read()
         if not success:
             break
         frame_p = str(mkstemp(suffix=f"{i:0>6}.png"))
-        frame = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame = resize_rgb_keep_aspect_ratio(frame, 512)
         cv2.imwrite(frame_p, frame)
         frames_p.append(frame_p)
