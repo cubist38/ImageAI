@@ -30,13 +30,13 @@ def remove_selected_object_on_image(image, coords):
     img_inpainted = inpaint_img_with_builded_lama(lama_model, image, mask, config_p = "lama/configs/prediction/default.yaml")
     return img_inpainted
 
-def remove_selected_object_on_video(frames, coords):
+def remove_selected_object_on_video(frames_p, coords):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  
     model = load_remove_anything_video()
     model.to(device)
     with torch.no_grad():
         all_frame_rm_w_mask, all_mask, all_box = model(
-            frames, 0, np.array([[int(coords["x"]), int(coords["y"])]]), np.array([1]), 2,
+            frames_p, 0, np.array([[int(coords["x"]), int(coords["y"])]]), np.array([1]), 2,
             15
         )
     st.write(all_frame_rm_w_mask[0])

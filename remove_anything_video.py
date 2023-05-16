@@ -83,6 +83,7 @@ class RemoveAnythingVideo(nn.Module):
                           box=None, mask_input=None, multimask_output=True,
                           return_logits=False):
         self.segmentor.set_image(img)
+
         masks, scores, logits = self.segmentor.predict(
             point_coords=point_coords,
             point_labels=point_labels,
@@ -133,7 +134,7 @@ class RemoveAnythingVideo(nn.Module):
 
     def forward(
             self,
-            frame_ps: List[np.ndarray],
+            frame_ps: List[str],
             key_frame_idx: int,
             key_frame_point_coords: np.ndarray,
             key_frame_point_labels: np.ndarray,
@@ -147,7 +148,8 @@ class RemoveAnythingVideo(nn.Module):
         assert key_frame_idx == 0, "Only support key frame at the beginning."
 
         # get key-frame mask
-        key_frame= frame_ps[key_frame_idx]
+        key_frame_p = frame_ps[key_frame_idx]
+        key_frame = iio.imread(key_frame_p)
         key_masks, key_scores = self.forward_segmentor(
             key_frame, key_frame_point_coords, key_frame_point_labels)
 
@@ -172,7 +174,9 @@ class RemoveAnythingVideo(nn.Module):
         all_mask = [key_mask]
         all_frame = [key_frame]
         ref_mask = key_mask
-        for frame, box in zip(frame_ps[1:], all_box[1:]):
+        for frame_p, box in zip(frame_ps[1:], all_box[1:]):
+            frame = iio.imread(frame_p)
+
             # XYWH -> XYXY
             x, y, w, h = box
             sam_box = np.array([x, y, x + w, y + h])
@@ -189,6 +193,7 @@ class RemoveAnythingVideo(nn.Module):
         print("Inpainting ...")
         all_frame = self.forward_inpainter(all_frame, all_mask)
         return all_frame, all_mask, all_box
+
 
 @st.cache_resource()
 def load_remove_anything_video():
@@ -246,6 +251,7 @@ if __name__ == "__main__":
         for i in range(len(all_frame)):
             frame_p = str(mkstemp(suffix=f"{i:0>6}.png"))
             frame_ps.append(frame_p)
+
             iio.imwrite(frame_ps[i], all_frame[i])
     else:
         assert frame_raw_glob is not None
