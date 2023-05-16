@@ -32,7 +32,7 @@ def dilate_mask(mask, dilate_factor=15):
     return mask
 
 def resize_rgb_keep_aspect_ratio(image, max_size = 512):
-    width, height, _ = image.shape
+    height, width, _ = image.shape
     if width > height:
         aspect_ratio = width / height
         new_width = max_size
