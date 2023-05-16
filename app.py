@@ -4,7 +4,7 @@ from PIL import Image
 from engine import (resize_pil_keep_aspect_ratio, resize_rgb_keep_aspect_ratio, 
                     load_raw_video, draw_point_on_image, create_center_button, write_bytesio_to_file)
 from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
-import os
+import tempfile
 
 features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything']
 RADIUS = 5
@@ -30,9 +30,9 @@ def main():
         st.markdown("## With a single click on an object in the first video frame, our technique can remove the object from the whole video!")
         video_file = st.file_uploader("Upload a video", type=["mp4", "mov", "gif"])
         if video_file is not None:
-            write_bytesio_to_file("video.mp4", video_file)
-            frame_ps, fps = load_raw_video("video.mp4")
-            os.remove("video.mp4")
+            tfile = tempfile.NamedTemporaryFile(delete=False)
+            tfile.write(video_file.read())
+            frame_ps, fps = load_raw_video(tfile.name)
             first_frame = Image.open(frame_ps[0])
             coords = st_image_coordinates(first_frame)
             if coords:
@@ -40,6 +40,6 @@ def main():
                 st.image(draw_point_on_image(first_frame, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
                 remove_button = create_center_button(name = "Remove selected object")  
                 if remove_button:
-                    st.write("Removing object...")
+                    st.markdown("## Please wait for a while, we are processing your video...")
 if __name__ == "__main__":
     main()
