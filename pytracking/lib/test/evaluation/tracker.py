@@ -125,8 +125,7 @@ class Tracker:
             init_default['all_scores'] = out['all_scores']
 
         _store_outputs(out, init_default)
-        for frame_num, frame_path in enumerate(seq.frames[1:], start=1):
-            image = self._read_image(frame_path)
+        for frame_num, image in enumerate(seq.frames[1:], start=1):
 
             start_time = time.time()
 
