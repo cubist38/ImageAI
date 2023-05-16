@@ -41,6 +41,6 @@ def main():
                 remove_button = create_center_button(name = "Remove selected object")  
                 if remove_button:
                     video_inpainted = remove_selected_object_on_video(frames_p, coords, fps)
-                    st.video(video_inpainted, use_column_width=True)
+                    st.video(video_inpainted)
 if __name__ == "__main__":
     main()
