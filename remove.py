@@ -40,9 +40,8 @@ def remove_selected_object_on_video(frames_p, coords, fps = 30):
             frames_p, 0, np.array([[int(coords["x"]), int(coords["y"])]]), np.array([1]), 2,
             15
         )
-    # Create a BytesIO object to hold the video in memory
-    video_stream = BytesIO()
+    output_file = 'output.mp4'
 
-    # Save the frames as a video using imageio, but write to the BytesIO object instead of a file
-    imageio.mimsave(video_stream, all_frame_rm_w_mask, format='mp4', fps= fps)  #
-    return video_stream
+    # Save the frames as a video using imageio
+    imageio.mimsave(output_file, all_frame_rm_w_mask, fps=30)
+    return output_file
