@@ -41,10 +41,10 @@ def main():
                 success, frame = vidcap.read()
                 if not success:
                     break
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 frame = resize_rgb_keep_aspect_ratio(frame, 640)
-                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
                 frames.append(frame)
-            first_frame = Image.fromarray(frames[0])
+            first_frame = Image.fromarray(frames[0], 'RGB')
             coords = st_image_coordinates(first_frame)
             if coords:
                 st.write("Coordinates: ", coords)
