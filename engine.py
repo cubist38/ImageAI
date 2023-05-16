@@ -10,11 +10,16 @@ def draw_point_on_image(image, coords, radius = 10):
     draw.ellipse((x, y, x + radius, y + radius), fill='red')
     return img
 
-def resize_pil_keep_aspect_ratio(image, max_width = 512):
+def resize_pil_keep_aspect_ratio(image, max_size = 512):
     width, height = image.size
-    aspect_ratio = height / width
-    new_width = max_width
-    new_height = int(new_width * aspect_ratio)
+    if width > height:
+        aspect_ratio = width / height
+        new_width = max_size
+        new_height = int(new_width / aspect_ratio)
+    else:
+        aspect_ratio = height / width
+        new_height = max_size
+        new_width = int(new_height / aspect_ratio)
     return image.resize((new_width, new_height))
 
 def dilate_mask(mask, dilate_factor=15):
@@ -26,11 +31,16 @@ def dilate_mask(mask, dilate_factor=15):
     )
     return mask
 
-def resize_rgb_keep_aspect_ratio(image, max_width = 512):
+def resize_rgb_keep_aspect_ratio(image, max_size = 512):
     width, height, _ = image.shape
-    aspect_ratio = height / width
-    new_width = max_width
-    new_height = int(new_width * aspect_ratio)
+    if width > height:
+        aspect_ratio = width / height
+        new_width = max_size
+        new_height = int(new_width / aspect_ratio)
+    else:
+        aspect_ratio = height / width
+        new_height = max_size
+        new_width = int(new_height / aspect_ratio)
     return cv2.resize(image, (new_width, new_height))
 
 
