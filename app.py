@@ -33,8 +33,8 @@ def main():
         if video_file is not None:
             tmpfile = 'temp.mp4'
             write_bytesio_to_file(tmpfile, video_file)
-            os.remove(tmpfile)
-            vidcap = cv2.VideoCapture(tmpfile)   
+            vidcap = cv2.VideoCapture(tmpfile) 
+            os.remove(tmpfile)  
             fps = vidcap.get(cv2.CAP_PROP_FPS)
             frames = [] 
             while True:
