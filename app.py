@@ -2,11 +2,10 @@ import streamlit as st
 from remove import remove_selected_object_on_image, remove_selected_object_on_video
 from PIL import Image
 from engine import (resize_pil_keep_aspect_ratio, resize_rgb_keep_aspect_ratio,
-                    draw_point_on_image, create_center_button)
+                    draw_point_on_image, create_center_button, write_bytesio_to_file)
 from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
 import cv2
-import tempfile
-
+import os
 
 features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything']
 RADIUS = 5
@@ -32,9 +31,10 @@ def main():
         st.markdown("## With a single click on an object in the first video frame, our technique can remove the object from the whole video!")
         video_file = st.file_uploader("Upload a video", type=["mp4", "mov", "gif"])
         if video_file is not None:
-            tfile = tempfile.NamedTemporaryFile(delete=False)
-            tfile.write(video_file.read())
-            vidcap = cv2.VideoCapture(tfile.name)   
+            temp_file_to_save = './temp_file_1.mp4'
+            write_bytesio_to_file(temp_file_to_save, video_file)
+            vidcap = cv2.VideoCapture(temp_file_to_save)   
+            os.remove(temp_file_to_save)
             fps = vidcap.get(cv2.CAP_PROP_FPS)
             frames = [] 
             while True:
