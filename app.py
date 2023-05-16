@@ -42,6 +42,7 @@ def main():
                     break
                 image = resize_rgb_keep_aspect_ratio(image, 512)
                 images.append(image)
+            st.image(images[0], use_column_width=True)
             coords = st_image_coordinates(images[0])
             if coords:
                 st.write("Coordinates: ", coords)
