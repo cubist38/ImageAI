@@ -5,7 +5,7 @@ import numpy as np
 
 from pytracking.lib.test.evaluation.data import Sequence
 from pytracking.lib.utils.video_utils import video2frames
-from sam_model import predict_masks_with_sam
+from sam_segment import predict_masks_with_sam
 
 def video2seq(video_path, point_coords, point_labels, sam_model_type, sam_ckpt, output_dir):
     video_name, _ = os.path.splitext(video_path.split('/')[-1])
