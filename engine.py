@@ -14,10 +14,10 @@ def draw_point_on_image(image, coords, radius = 10):
 def resize_pil_keep_aspect_ratio(image, max_size = 512):
     width, height = image.size
     if width > height:
-        new_height = (height * max_size / width)
+        new_height = int(height * max_size / width)
         new_width = max_size
     else:
-        new_width = (width * max_size / height)
+        new_width = int(width * max_size / height)
         new_height = max_size
     return image.resize((new_width, new_height))
 
@@ -33,10 +33,10 @@ def dilate_mask(mask, dilate_factor=15):
 def resize_rgb_keep_aspect_ratio(image, max_size = 512):
     height, width, _ = image.shape
     if width > height:
-        new_height = (height * max_size / width)
+        new_height = int(height * max_size / width)
         new_width = max_size
     else:
-        new_width = (width * max_size / height)
+        new_width = int(width * max_size / height)
         new_height = max_size
     return cv2.resize(image, (new_width, new_height))
 
