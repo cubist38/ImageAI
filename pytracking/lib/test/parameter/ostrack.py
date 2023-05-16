@@ -5,7 +5,7 @@ from pytracking.lib.config.ostrack.config import cfg, update_config_from_file
 
 def parameters(yaml_name: str):
     params = TrackerParams()
-    update_config_from_file('/content/FinalProject/pytracking/lib/config/ostrack/vitb_384_mae_ce_32x4_ep300.yaml')
+    update_config_from_file('/content/FinalProject/pytracking/experiments/ostrack/vitb_384_mae_ce_32x4_ep300.yaml')
     params.cfg = cfg
     # print("test config: ", cfg)
 
