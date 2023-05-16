@@ -175,9 +175,7 @@ class RemoveAnythingVideo(nn.Module):
         all_mask = [key_mask]
         all_frame = [key_frame]
         ref_mask = key_mask
-        for frame_p, box in zip(frame_ps[1:], all_box[1:]):
-            frame = iio.imread(frame_p)
-
+        for frame, box in zip(frame_ps[1:], all_box[1:]):
             # XYWH -> XYXY
             x, y, w, h = box
             sam_box = np.array([x, y, x + w, y + h])
