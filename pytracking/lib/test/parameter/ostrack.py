@@ -5,12 +5,8 @@ from pytracking.lib.config.ostrack.config import cfg, update_config_from_file
 
 def parameters(yaml_name: str):
     params = TrackerParams()
-    # prj_dir = env_settings().prj_dir
-    prj_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
-    # save_dir = env_settings().save_dir
-    # update default config from yaml file
-    yaml_file = os.path.join(prj_dir, 'experiments/ostrack/%s.yaml' % yaml_name)
-    update_config_from_file(yaml_file)
+   
+    update_config_from_file("/content/drive/MyDrive/vitb_384/mae_ce_32x4_ep300.yaml")
     params.cfg = cfg
     # print("test config: ", cfg)
 
