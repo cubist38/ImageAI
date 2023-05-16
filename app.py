@@ -46,6 +46,6 @@ def main():
             st.write(type(images[0]))
             if coords:
                 st.write("Coordinates: ", coords)
-                st.image(draw_point_on_image(images[0], (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
+                st.image(draw_point_on_image(Image.fromarray(images[0]), (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
 if __name__ == "__main__":
     main()

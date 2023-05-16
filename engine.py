@@ -10,6 +10,7 @@ def draw_point_on_image(image, coords, radius = 10):
     draw.ellipse((x, y, x + radius, y + radius), fill='red')
     return img
 
+
 def resize_pil_keep_aspect_ratio(image, max_size = 512):
     width, height = image.size
     if width > height:
