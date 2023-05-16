@@ -5,6 +5,8 @@ from engine import dilate_mask
 from remove_anything_video import load_remove_anything_video
 import numpy as np
 import torch
+import imageio.v2 as iio
+
 
 def remove_selected_object_on_image(image, coords):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
@@ -32,3 +34,11 @@ def remove_selected_object_on_image(image, coords):
 def remove_selected_object_on_video(frames, coords):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  
     model = load_remove_anything_video()
+    model.to(device)
+    with torch.no_grad():
+        all_frame_rm_w_mask, all_mask, all_box = model(
+            frames, 0, [[int(coords["x"]), int(coords["y"])]], np.array(1), 2,
+            15
+        )
+    st.write(len(all_frame_rm_w_mask))
+    st.write(len(type(all_frame_rm_w_mask[0])))
