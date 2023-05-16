@@ -6,10 +6,8 @@ import torch.nn as nn
 from typing import Any, Dict, List
 from pathlib import Path
 from PIL import Image
-import os
 import sys
 import argparse
-import tempfile
 import imageio
 import imageio.v2 as iio
 from sam_model import build_sam_model
