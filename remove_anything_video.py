@@ -193,55 +193,6 @@ class RemoveAnythingVideo(nn.Module):
         all_frame = self.forward_inpainter(all_frame, all_mask)
         return all_frame, all_mask, all_box
 
-
-def mkstemp(suffix, dir=None):
-    fd, path = tempfile.mkstemp(suffix=f"{suffix}", dir=dir)
-    os.close(fd)
-    return Path(path)
-
-def show_img_with_mask(img, mask):
-    if np.max(mask) == 1:
-        mask = np.uint8(mask * 255)
-    dpi = plt.rcParams['figure.dpi']
-    height, width = img.shape[:2]
-    plt.figure(figsize=(width / dpi / 0.77, height / dpi / 0.77))
-    plt.imshow(img)
-    plt.axis('off')
-    show_mask(plt.gca(), mask, random_color=False)
-    tmp_p = mkstemp(".png")
-    plt.savefig(tmp_p, bbox_inches='tight', pad_inches=0)
-    plt.close()
-    return iio.imread(tmp_p)
-
-def show_img_with_point(img, point_coords, point_labels):
-    dpi = plt.rcParams['figure.dpi']
-    height, width = img.shape[:2]
-    plt.figure(figsize=(width / dpi / 0.77, height / dpi / 0.77))
-    plt.imshow(img)
-    plt.axis('off')
-    show_points(plt.gca(), point_coords, point_labels,
-                size=(width * 0.04) ** 2)
-    tmp_p = mkstemp(".png")
-    plt.savefig(tmp_p, bbox_inches='tight', pad_inches=0)
-    plt.close()
-    return iio.imread(tmp_p)
-
-def show_img_with_box(img, box):
-    dpi = plt.rcParams['figure.dpi']
-    height, width = img.shape[:2]
-    fig, ax = plt.subplots(1, figsize=(width / dpi / 0.77, height / dpi / 0.77))
-    ax.imshow(img)
-    ax.axis('off')
-
-    x1, y1, w, h = box
-    rect = patches.Rectangle((x1, y1), w, h, linewidth=2,
-                             edgecolor='r', facecolor='none')
-    ax.add_patch(rect)
-    tmp_p = mkstemp(".png")
-    fig.savefig(tmp_p, bbox_inches='tight', pad_inches=0)
-    plt.close()
-    return iio.imread(tmp_p)
-
 @st.cache_resource()
 def load_remove_anything_video():
     return RemoveAnythingVideo()
@@ -265,7 +216,7 @@ if __name__ == "__main__":
         --fps 25
     """
     parser = argparse.ArgumentParser()
-    setup_args(parser)
+    #setup_args(parser)
     args = parser.parse_args(sys.argv[1:])
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
