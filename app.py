@@ -5,6 +5,7 @@ from engine import (resize_pil_keep_aspect_ratio, resize_rgb_keep_aspect_ratio,
                     draw_point_on_image, create_center_button, write_bytesio_to_file)
 from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
 import cv2
+import os
 
 features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything']
 RADIUS = 5
@@ -32,6 +33,7 @@ def main():
         if video_file is not None:
             tmpfile = 'temp.mp4'
             write_bytesio_to_file(tmpfile, video_file)
+            os.remove(tmpfile)
             vidcap = cv2.VideoCapture(tmpfile)   
             fps = vidcap.get(cv2.CAP_PROP_FPS)
             frames = [] 
