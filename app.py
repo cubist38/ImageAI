@@ -34,6 +34,7 @@ def main():
             tfile.write(video_file.read())
             frames_p, fps = load_raw_video(tfile.name)
             first_frame = Image.open(frames_p[0])
+            coords = st_image_coordinates(first_frame)
             if coords:
                 st.write("Coordinates: ", coords)
                 st.image(draw_point_on_image(first_frame, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
