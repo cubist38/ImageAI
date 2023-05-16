@@ -1,10 +1,9 @@
 import streamlit as st
 from remove import remove_selected_object_on_image, remove_selected_object_on_video
 from PIL import Image
-from engine import (resize_pil_keep_aspect_ratio, resize_rgb_keep_aspect_ratio,
-                    draw_point_on_image, create_center_button, write_bytesio_to_file)
+from engine import (resize_pil_keep_aspect_ratio, resize_rgb_keep_aspect_ratio, 
+                    load_raw_video, draw_point_on_image, create_center_button, write_bytesio_to_file)
 from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
-import cv2
 import tempfile
 
 features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything']
@@ -33,17 +32,9 @@ def main():
         if video_file is not None:
             tfile = tempfile.NamedTemporaryFile(delete=False)
             tfile.write(video_file.read())
-            vidcap = cv2.VideoCapture(tfile.name)   
-            fps = vidcap.get(cv2.CAP_PROP_FPS)
-            frames = [] 
-            while True:
-                success, frame = vidcap.read()
-                if not success:
-                    break
-                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                frame = resize_rgb_keep_aspect_ratio(frame, 512)
-                frames.append(frame)
-            first_frame = Image.fromarray(frames[0])
+            
+            frame_ps, fps = load_raw_video(tfile.name)
+            
             coords = st_image_coordinates(first_frame)
             if coords:
                 st.write("Coordinates: ", coords)

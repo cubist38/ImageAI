@@ -2,6 +2,11 @@ from PIL import ImageDraw
 import numpy as np
 import cv2
 import streamlit as st
+import tempfile
+import imageio.v2 as iio
+import imageio
+import os
+from pathlib import Path
 
 def draw_point_on_image(image, coords, radius = 10):
     img = image.copy()
@@ -62,3 +67,22 @@ def write_bytesio_to_file(filename, bytesio):
     with open(filename, "wb") as outfile:
         # Copy the BytesIO stream to the output file
         outfile.write(bytesio.getbuffer())
+
+def mkstemp(suffix, dir=None):
+    fd, path = tempfile.mkstemp(suffix=f"{suffix}", dir=dir)
+    os.close(fd)
+    return Path(path)
+
+def load_raw_video(video_raw_p):
+    all_frame = iio.mimread(video_raw_p)
+    fps = imageio.v3.immeta(video_raw_p, exclude_applied=False)["fps"]
+    # tmp frames
+    frame_ps = []
+    for i in range(len(all_frame)):
+        frame_p = str(mkstemp(suffix=f"{i:0>6}.png"))
+        frame_ps.append(frame_p)
+        frame_i = resize_rgb_keep_aspect_ratio(all_frame[i], 512)
+        iio.imwrite(frame_ps[i], frame_i)
+    frame_ps = frame_ps[:10000]
+    return frame_ps, fps
+    
