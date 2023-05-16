@@ -42,9 +42,8 @@ def main():
                     break
                 image = resize_rgb_keep_aspect_ratio(image, 512)
                 images.append(image)
-            st.write(images[0].shape)
-            st.image(images[0])
-            coords = st_image_coordinates(images[0])
+            coords = st_image_coordinates(images[0], use_column_width=True)
+            st.write(type(images[0]))
             if coords:
                 st.write("Coordinates: ", coords)
                 st.image(draw_point_on_image(images[0], (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
