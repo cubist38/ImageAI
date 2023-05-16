@@ -1,10 +1,11 @@
-import streamlit as st
 from lama_model import load_lama_model, inpaint_img_with_builded_lama
 from sam_model import load_sam_model, predict_masks_with_sam
 from engine import dilate_mask
 from remove_anything_video import load_remove_anything_video
 import numpy as np
 import torch
+import imageio
+from io import BytesIO
 
 
 def remove_selected_object_on_image(image, coords):
@@ -30,7 +31,7 @@ def remove_selected_object_on_image(image, coords):
     img_inpainted = inpaint_img_with_builded_lama(lama_model, image, mask, config_p = "lama/configs/prediction/default.yaml")
     return img_inpainted
 
-def remove_selected_object_on_video(frames_p, coords):
+def remove_selected_object_on_video(frames_p, coords, fps = 30):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  
     model = load_remove_anything_video()
     model.to(device)
@@ -39,5 +40,9 @@ def remove_selected_object_on_video(frames_p, coords):
             frames_p, 0, np.array([[int(coords["x"]), int(coords["y"])]]), np.array([1]), 2,
             15
         )
-    st.write(all_frame_rm_w_mask[0])
-    st.write(type(all_frame_rm_w_mask))
+    # Create a BytesIO object to hold the video in memory
+    video_stream = BytesIO()
+
+    # Save the frames as a video using imageio, but write to the BytesIO object instead of a file
+    imageio.mimsave(video_stream, all_frame_rm_w_mask, format='mp4', fps= fps)  #
+    return video_stream
