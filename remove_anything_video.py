@@ -14,101 +14,38 @@ import imageio
 import imageio.v2 as iio
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from sam_segment import build_sam_model
-from lama_inpaint import build_lama_model, inpaint_img_with_builded_lama
+from sam_model import build_sam_model
+from lama_model import build_lama_model, inpaint_img_with_builded_lama
 from ostrack import build_ostrack_model, get_box_using_ostrack
 from sttn_video_inpaint import build_sttn_model, \
     inpaint_video_with_builded_sttn
 from pytracking.lib.test.evaluation.data import Sequence
 from utils import dilate_mask, show_mask, show_points, get_clicked_point
-
-
-def setup_args(parser):
-    parser.add_argument(
-        "--input_video", type=str, required=True,
-        help="Path to a single input video",
-    )
-    parser.add_argument(
-        "--coords_type", type=str, required=True,
-        default="key_in", choices=["click", "key_in"], 
-        help="The way to select coords",
-    )
-    parser.add_argument(
-        "--point_coords", type=float, nargs='+', required=True,
-        help="The coordinate of the point prompt, [coord_W coord_H].",
-    )
-    parser.add_argument(
-        "--point_labels", type=int, nargs='+', required=True,
-        help="The labels of the point prompt, 1 or 0.",
-    )
-    parser.add_argument(
-        "--dilate_kernel_size", type=int, default=None,
-        help="Dilate kernel size. Default: None",
-    )
-    parser.add_argument(
-        "--output_dir", type=str, required=True,
-        help="Output path to the directory with results.",
-    )
-    parser.add_argument(
-        "--sam_model_type", type=str,
-        default="vit_h", choices=['vit_h', 'vit_l', 'vit_b'],
-        help="The type of sam model to load. Default: 'vit_h"
-    )
-    parser.add_argument(
-        "--sam_ckpt", type=str, required=True,
-        help="The path to the SAM checkpoint to use for mask generation.",
-    )
-    parser.add_argument(
-        "--lama_config", type=str,
-        default="./lama/configs/prediction/default.yaml",
-        help="The path to the config file of lama model. "
-             "Default: the config of big-lama",
-    )
-    parser.add_argument(
-        "--lama_ckpt", type=str, required=True,
-        help="The path to the lama checkpoint.",
-    )
-    parser.add_argument(
-        "--tracker_ckpt", type=str, required=True,
-        help="The path to tracker checkpoint.",
-    )
-    parser.add_argument(
-        "--vi_ckpt", type=str, required=True,
-        help="The path to video inpainter checkpoint.",
-    )
-    parser.add_argument(
-        "--mask_idx", type=int, default=2, required=True,
-        help="Which mask in the first frame to determine the inpaint region.",
-    )
-    parser.add_argument(
-        "--fps", type=int, default=25, required=True,
-        help="FPS of the input and output videos.",
-    )
+import streamlit as st
 
 class RemoveAnythingVideo(nn.Module):
     def __init__(
             self, 
-            args,
             tracker_target="ostrack",
             segmentor_target="sam",
             inpainter_target="sttn",
     ):
         super().__init__()
         tracker_build_args = {
-            "tracker_param": args.tracker_ckpt
+            "tracker_param": "/content/drive/MyDrive/vitb_384/mae_ce_32x4_ep300"
         }
         segmentor_build_args = {
-            "model_type": args.sam_model_type,
-            "ckpt_p": args.sam_ckpt
+            "model_type": "vit_h",
+            "ckpt_p": "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth"
         }
         inpainter_build_args = {
             "lama": {
-                "lama_config": args.lama_config,
-                "lama_ckpt": args.lama_ckpt
+                "lama_config": "lama/configs/prediction/default.yaml",
+                "lama_ckpt": "/content/drive/MyDrive/InpaintAnything/Weights/big-lama"
             },
             "sttn": {
                 "model_type": "sttn",
-                "ckpt_p": args.vi_ckpt
+                "ckpt_p": "/content/drive/MyDrive/InpaintAnything/Weights/sttn.pth"
             }
         }
 
@@ -260,6 +197,7 @@ class RemoveAnythingVideo(nn.Module):
         return all_frame, all_mask, all_box
 
 
+
 def mkstemp(suffix, dir=None):
     fd, path = tempfile.mkstemp(suffix=f"{suffix}", dir=dir)
     os.close(fd)
@@ -308,7 +246,9 @@ def show_img_with_box(img, box):
     plt.close()
     return iio.imread(tmp_p)
 
-
+@st.cache_resource()
+def load_remove_anything_video():
+    return RemoveAnythingVideo()
 
 if __name__ == "__main__":
     """Example usage:
