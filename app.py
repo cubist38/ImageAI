@@ -35,12 +35,14 @@ def main():
             tfile = tempfile.NamedTemporaryFile(delete=False)
             tfile.write(video_file.read())
             vidcap = cv2.VideoCapture(tfile.name)
+            fps = vidcap.get(cv2.CAP_PROP_FPS)
             frames = [] 
             while True:
                 success, frame = vidcap.read()
                 if not success:
                     break
                 frame = resize_rgb_keep_aspect_ratio(frame, 640)
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 frames.append(frame)
             first_frame = Image.fromarray(frames[0])
             coords = st_image_coordinates(first_frame)
