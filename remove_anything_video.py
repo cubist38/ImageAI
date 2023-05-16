@@ -185,6 +185,7 @@ class RemoveAnythingVideo(nn.Module):
 
             ref_mask = mask
             all_mask.append(mask)
+            frame.convert('RGB')
             all_frame.append(frame)
 
         # get all-frame inpainted results
