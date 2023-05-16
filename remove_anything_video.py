@@ -150,8 +150,7 @@ class RemoveAnythingVideo(nn.Module):
         assert key_frame_idx == 0, "Only support key frame at the beginning."
 
         # get key-frame mask
-        key_frame_p = frame_ps[key_frame_idx]
-        key_frame = iio.imread(key_frame_p)
+        key_frame = frame_ps[key_frame_idx]
         key_masks, key_scores = self.forward_segmentor(
             key_frame, key_frame_point_coords, key_frame_point_labels)
 
