@@ -1,7 +1,7 @@
 import streamlit as st
 from remove import remove_selected_object_on_image, remove_selected_object_on_video
 from PIL import Image
-from engine import (resize_pil_keep_aspect_ratio, resize_rgb_keep_aspect_ratio, 
+from engine import (resize_pil_keep_aspect_ratio, 
                     load_raw_video, draw_point_on_image, create_center_button, write_bytesio_to_file)
 from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
 import tempfile
@@ -32,9 +32,8 @@ def main():
         if video_file is not None:
             tfile = tempfile.NamedTemporaryFile(delete=False)
             tfile.write(video_file.read())
-            frames_p, fps, first_frame = load_raw_video(tfile.name)
-            first_frame = Image.fromarray(first_frame, mode = "RGB")
-            coords = st_image_coordinates(first_frame)
+            frames_p, fps = load_raw_video(tfile.name)
+            first_frame = Image.open(frames_p[0])
             if coords:
                 st.write("Coordinates: ", coords)
                 st.image(draw_point_on_image(first_frame, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
