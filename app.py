@@ -22,7 +22,7 @@ def main():
             if coords:
                 st.write("Coordinates: ", coords)
                 st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
-                remove_button = create_center_button(name = "Remove")  
+                remove_button = create_center_button(name = "Remove clicked object")  
                 if remove_button:
                     img_inpainted = remove_on_clicked(image, coords)
                     st.image(img_inpainted, use_column_width=True)
