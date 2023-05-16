@@ -77,7 +77,12 @@ def load_raw_video(video_raw_p):
     vidcap = cv2.VideoCapture(video_raw_p)
     fps = vidcap.get(cv2.CAP_PROP_FPS)
     frames_p = []
-    i = 0
+    success, first_frame = vidcap.read()
+    first_frame_p = str(mkstemp(suffix=f"{0:0>6}.png"))
+    first_frame = cv2.cvtColor(first_frame, cv2.COLOR_BGR2RGB)
+    first_frame = resize_rgb_keep_aspect_ratio(first_frame, 512)
+    cv2.imwrite(first_frame_p, first_frame)
+    i = 1
     while True:
         success, frame = vidcap.read()
         if not success:
@@ -88,6 +93,6 @@ def load_raw_video(video_raw_p):
         cv2.imwrite(frame_p, frame)
         frames_p.append(frame_p)
         i += 1
-    return frames_p, fps
+    return frames_p, fps, first_frame
         
     

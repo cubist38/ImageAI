@@ -32,8 +32,8 @@ def main():
         if video_file is not None:
             tfile = tempfile.NamedTemporaryFile(delete=False)
             tfile.write(video_file.read())
-            frame_ps, fps = load_raw_video(tfile.name)
-            first_frame = Image.open(frame_ps[0])
+            frame_ps, fps, first_frame = load_raw_video(tfile.name)
+            first_frame = Image.fromarray(first_frame, mode = "RGB")
             coords = st_image_coordinates(first_frame)
             if coords:
                 st.write("Coordinates: ", coords)
