@@ -42,10 +42,10 @@ def main():
                 if not success:
                     break
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                frame = resize_rgb_keep_aspect_ratio(frame, 640)
+                #frame = resize_rgb_keep_aspect_ratio(frame, 640)
                 frames.append(frame)
-            first_frame = Image.fromarray(frames[0], 'BGR')
-            coords = st_image_coordinates(frames[0])
+            first_frame = Image.fromarray(frames[0])
+            coords = st_image_coordinates(first_frame)
             if coords:
                 st.write("Coordinates: ", coords)
                 st.image(draw_point_on_image(first_frame, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
