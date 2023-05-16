@@ -36,15 +36,11 @@ def resize_rgb_keep_aspect_ratio(image, max_width = 512):
 
 def create_center_button(name: str):
     # Apply CSS to center the button
-    col1, col2, col3 , col4, col5 = st.columns(5)
+    col1, col2, col3 = st.columns(3)
     with col1:
         pass
-    with col2:
+    with col3:
         pass
-    with col4:
-        pass
-    with col5:
-        pass
-    with col3 :
+    with col2 :
         button = st.button(name)
     return button
