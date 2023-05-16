@@ -44,7 +44,6 @@ def main():
                 images.append(image)
             first_frame = Image.fromarray(images[0])
             coords = st_image_coordinates(first_frame)
-            st.write(type(images[0]))
             if coords:
                 st.write("Coordinates: ", coords)
                 st.image(draw_point_on_image(first_frame, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
