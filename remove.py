@@ -40,4 +40,4 @@ def remove_selected_object_on_video(frames_p, coords):
             15
         )
     st.write(all_frame_rm_w_mask[0])
-    st.write(len(type(all_frame_rm_w_mask[0])))
+    st.write(type(all_frame_rm_w_mask))
