@@ -32,7 +32,7 @@ def main():
         if video_file is not None:
             tfile = tempfile.NamedTemporaryFile(delete=False)
             tfile.write(video_file.read())
-            frame_ps, fps, first_frame = load_raw_video(tfile.name)
+            frames_p, fps, first_frame = load_raw_video(tfile.name)
             first_frame = Image.fromarray(first_frame, mode = "RGB")
             coords = st_image_coordinates(first_frame)
             if coords:
@@ -40,6 +40,7 @@ def main():
                 st.image(draw_point_on_image(first_frame, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
                 remove_button = create_center_button(name = "Remove selected object")  
                 if remove_button:
-                    st.markdown("## Please wait for a while, we are processing your video...")
+                    video_inpainted = remove_selected_object_on_video(frames_p, coords)
+                    st.write("Inpainted video...")
 if __name__ == "__main__":
     main()
