@@ -19,8 +19,6 @@ def vis_traj(seq, output_boxes):
         frames_list.append(frame)
     return frames_list
 
-    # seq.frames[1:]
-
 def build_ostrack_model(tracker_param):
     tracker = Tracker('ostrack', tracker_param, "inpaint-videos")
     return tracker

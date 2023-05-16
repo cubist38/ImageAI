@@ -40,7 +40,7 @@ def main():
                 success, frame = vidcap.read()
                 if not success:
                     break
-                frame = resize_rgb_keep_aspect_ratio(image, 640)
+                frame = resize_rgb_keep_aspect_ratio(frame, 640)
                 frames.append(frame)
             first_frame = Image.fromarray(frames[0])
             coords = st_image_coordinates(first_frame)
@@ -49,8 +49,7 @@ def main():
                 st.image(draw_point_on_image(first_frame, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
                 remove_button = create_center_button(name = "Remove selected object")  
                 if remove_button:
-                    model = RemoveAnythingVideo(args)
-    
+                    model = remove_selected_object_on_video(frames, coords)
                     # video_inpainted = remove_selected_object_on_video(frames, coords)
                     # st.video(video_inpainted)
 if __name__ == "__main__":
