@@ -30,7 +30,7 @@ class RemoveAnythingVideo(nn.Module):
     ):
         super().__init__()
         tracker_build_args = {
-            "tracker_param": "/content/drive/MyDrive/vitb_384/mae_ce_32x4_ep300"
+            "tracker_param": "/content/drive/MyDrive/InpaintAnything/Weights/vitb_384_mae_ce_32x4_ep300"
         }
         segmentor_build_args = {
             "model_type": "vit_h",
