@@ -40,7 +40,7 @@ def remove_selected_object_on_video(frames_p, coords, fps = 30):
             15
         )
     output_file = 'output.mp4'
-    h, w, _ = all_frame_rm_w_mask[0].shape
+    w, h = all_frame_rm_w_mask[0].size
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     video_writer = cv2.VideoWriter(output_file, fourcc, fps, (w, h))
     for frame in all_frame_rm_w_mask:
