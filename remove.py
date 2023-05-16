@@ -5,7 +5,7 @@ from remove_anything_video import load_remove_anything_video
 import numpy as np
 import torch
 import imageio
-from io import BytesIO
+import st
 
 
 def remove_selected_object_on_image(image, coords):
@@ -41,7 +41,7 @@ def remove_selected_object_on_video(frames_p, coords, fps = 30):
             15
         )
     output_file = 'output.mp4'
-
+    st.write(all_frame_rm_w_mask[0].mode)
     # Save the frames as a video using imageio
     imageio.mimsave(output_file, all_frame_rm_w_mask, fps=fps)
     return output_file
