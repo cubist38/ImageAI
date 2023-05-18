@@ -4,10 +4,13 @@ from PIL import Image
 from engine import (resize_pil_keep_aspect_ratio, 
                     load_raw_video, draw_point_on_image, create_center_button, write_bytesio_to_file)
 from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
+from image_caption import ImageCaptioner
 import os
 
 features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything']
 RADIUS = 5
+
+imageCaptioner = None
 
 def main():
     st.markdown("<h1 style='text-align: center; color: red;'>Our Magic Eraser</h1>", unsafe_allow_html=True)
@@ -43,5 +46,18 @@ def main():
                 if remove_button:
                     output_file = remove_selected_object_on_video(frames_p, coords, fps)
                     st.video(output_file)
+    elif feature == 'Write image caption':
+        st.markdown("## With a single click on an object in the first video frame, our technique can remove the object from the whole video!")
+        uploaded_file = st.file_uploader("Choose an image...", type="jpg")
+        if uploaded_file is not None:
+            raw_img = Image.open(uploaded_file)
+            st.image(uploaded_file, caption='Uploaded Image.', use_column_width=True)
+
+            if imageCaptioner is None:
+                imageCaptioner = ImageCaptioner()
+            result_caption = imageCaptioner.generate_caption(raw_img)
+            st.subheader("Results")
+            st.write(result_caption)
+        
 if __name__ == "__main__":
     main()
