@@ -1,9 +1,9 @@
 import streamlit as st
-from remove import remove_selected_object_on_image, remove_selected_object_on_video
+#from remove import remove_selected_object_on_image, remove_selected_object_on_video
 from PIL import Image
-from engine import (resize_pil_keep_aspect_ratio, 
+#from engine import (resize_pil_keep_aspect_ratio, 
                     load_raw_video, draw_point_on_image, create_center_button, write_bytesio_to_file)
-from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
+#from streamlit_image_coordinates import streamlit_image_coordinates as st_image_coordinates
 from image_caption import ImageCaptioner
 import os
 
