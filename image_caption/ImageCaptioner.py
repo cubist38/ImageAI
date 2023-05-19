@@ -15,5 +15,6 @@ class ImageCaptioner():
         out = self.model.generate({"image": processed_image})
         return out[0]
     
+@st.cache_resource()
 def load_image_captioner():
     return ImageCaptioner()
