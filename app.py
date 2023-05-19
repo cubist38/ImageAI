@@ -20,17 +20,17 @@ def main():
     if feature == 'Remove Anything Image':
         st.markdown("## Click on an object in the image, and our technique will remove it instantly!")
         image_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-        # if image_file is not None:
-        #     image = Image.open(image_file)
-        #     image = resize_pil_keep_aspect_ratio(image, 640)
-        #     coords = st_image_coordinates(image)
-        #     if coords:
-        #         st.write("Coordinates: ", coords)
-        #         st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
-        #         remove_button = create_center_button(name = "Remove selected object")  
-        #         if remove_button:
-        #             img_inpainted = remove_selected_object_on_image(image, coords)
-        #             st.image(img_inpainted, use_column_width=True)
+        if image_file is not None:
+            image = Image.open(image_file)
+            image = resize_pil_keep_aspect_ratio(image, 640)
+            coords = st_image_coordinates(image)
+            if coords:
+                st.write("Coordinates: ", coords)
+                st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
+                remove_button = create_center_button(name = "Remove selected object")  
+                if remove_button:
+                    img_inpainted = remove_selected_object_on_image(image, coords)
+                    st.image(img_inpainted, use_column_width=True)
     elif feature == 'Remove Anything Video':
         st.markdown("## With a single click on an object in the first video frame, our technique can remove the object from the whole video!")
         video_file = st.file_uploader("Upload a video", type=["mp4", "mov", "gif"])
