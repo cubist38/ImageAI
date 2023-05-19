@@ -187,7 +187,6 @@ class RemoveAnythingVideo(nn.Module):
         all_frame = self.forward_inpainter(all_frame, all_mask)
         return all_frame, all_mask, all_box
 
-
 @st.cache_resource()
 def load_remove_anything_video():
     return RemoveAnythingVideo()

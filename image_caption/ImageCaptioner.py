@@ -15,10 +15,5 @@ class ImageCaptioner():
         out = self.model.generate({"image": processed_image})
         return out[0]
     
-### Usage ###
-# import PIL
-
-# image = PIL.open('path/to/image.png')
-# imageCaptioner = ImageCaptioner()
-# caption = imageCaptioner.generate_caption(image)
-# print(caption)
+def load_image_captioner():
+    return ImageCaptioner()

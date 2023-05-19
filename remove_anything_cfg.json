@@ -1,0 +1,5 @@
+{
+    "tracker_build_args": {
+        "tracker_params": "/content/drive/MyDrive/InpaintAnything/Weights/vitb_384_mae_ce_32x4_ep300"
+    }
+}
