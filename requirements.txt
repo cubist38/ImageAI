@@ -4,3 +4,6 @@ flask
 salesforce-lavis
 opencv-python
 opencv-contrib-python
+gdown
+faiss-cpu 
+faiss-gpu
