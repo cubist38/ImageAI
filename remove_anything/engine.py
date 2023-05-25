@@ -28,14 +28,3 @@ def dilate_mask(mask, dilate_factor=15):
         iterations=1
     )
     return mask
-
-def create_center_button(name: str):
-    # Apply CSS to center the button
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        pass
-    with col3:
-        pass
-    with col2 :
-        button = st.button(name)
-    return button
