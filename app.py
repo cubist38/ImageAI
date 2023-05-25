@@ -21,7 +21,7 @@ def main():
         coords = st_image_coordinates(image)
         if coords:
             image, mask = segment_selected_object_on_image(image, coords)
-            st.write(type(mask))
+            st.write(mask)
             remove_button = create_center_button(name = "Remove selected object")  
             st.image(mask, use_column_width=True)
             if remove_button:

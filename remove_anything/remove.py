@@ -26,10 +26,7 @@ def segment_selected_object_on_image(image, coords):
     masks = masks.astype(np.uint8) * 255
     mask = masks[np.argmax(scores)]
     mask = dilate_mask(mask, 15)
-    # masked_image = image.copy()
-    # masked_image = mask != 0
-    # color = np.array([255, 0, 0]) 
-
+    
     return image, mask
 
 def remove_selected_object_on_image(image, mask):
