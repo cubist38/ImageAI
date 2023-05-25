@@ -27,7 +27,7 @@ def segment_selected_object_on_image(image, coords):
     mask = masks[np.argmax(scores)]
     mask = dilate_mask(mask, 15)
     image_with_mask = image.copy()
-    color = np.array([30/255, 144/255, 255/255])
+    color = np.array([ 76, 76, 255])
     image_with_mask[mask == 255] = color
 
     return image, mask, image_with_mask
