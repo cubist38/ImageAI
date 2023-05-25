@@ -10,12 +10,6 @@ def load_sam_model(sam_model_type, sam_model_path, device):
     predictor = SamPredictor(sam)
     return predictor
 
-def build_sam_model(model_type: str, ckpt_p: str, device="cuda"):
-    sam = sam_model_registry[model_type](checkpoint=ckpt_p)
-    sam.to(device=device)
-    predictor = SamPredictor(sam)
-    return predictor
-
 def predict_masks_with_sam(
         img: np.ndarray,
         point_coords: List[List[float]],
