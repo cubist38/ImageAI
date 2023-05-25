@@ -10,7 +10,7 @@ import os
 features = ['Remove Anything Image', 'Remove Anything Video', 'Replace Anything', 'Write image caption']
 RADIUS = 5
 
-def main():
+def run_streamlit():
     st.markdown("<h1 style='text-align: center; color: red;'>Our Magic Eraser</h1>", unsafe_allow_html=True)
     feature = st.selectbox('Choose a feature to use', features)
     st.write('feature: ' + feature)
@@ -54,7 +54,4 @@ def main():
             imageCaptioner = load_image_captioner()
             result_caption = imageCaptioner.generate_caption(raw_img)
             st.subheader("Results")
-            st.write(result_caption)
-        
-if __name__ == "__main__":
-    main()
+            st.write(result_caption)    
