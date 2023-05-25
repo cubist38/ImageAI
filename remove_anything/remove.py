@@ -13,7 +13,7 @@ def remove_selected_object_on_image(image, coords):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
     if image.mode == "RGBA":
         image = image.convert("RGB")
-    with open('./config.json', 'r') as f:
+    with open('./remove_anything/config.json', 'r') as f:
         config = json.load(f)
     image =  np.array(image)
     predictor = load_sam_model(config["sam_model"]["model_type"], 
