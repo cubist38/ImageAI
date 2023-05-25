@@ -6,7 +6,7 @@
     },
     "lama_model":
     {
-        "config_p": "remove_anything/lama/configs/prediction/default.yaml",
+        "config_p": "./remove_anything/lama/configs/prediction/default.yaml",
         "ckpt_p": "/content/drive/MyDrive/InpaintAnything/Weights/big-lama"
     }
 
