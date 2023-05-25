@@ -9,8 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "remove_anything"))
 from remove import remove_selected_object_on_image
 from engine import draw_point_on_image, resize_pil_keep_aspect_ratio, create_center_button
 
-
-
+RADIUS = 10
 def main():
     st.markdown("<h1 style='text-align: center; color: red;'>Our Magic Eraser</h1>", unsafe_allow_html=True)
     st.markdown("## Click on an object in the image, and our technique will remove it instantly!")
