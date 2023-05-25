@@ -1,0 +1,13 @@
+{
+    "sam_model":
+    {
+        "model_type": "vit_h",
+        "ckpt_p": "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth"
+    },
+    "lama_model":
+    {
+        "config_p": "lama/configs/prediction/default.yaml",
+        "ckpt_p": "/content/drive/MyDrive/InpaintAnything/Weights/big-lama"
+    }
+
+}

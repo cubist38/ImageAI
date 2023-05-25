@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import sys
 from pathlib import Path
+import json
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "remove_anything"))
 from lama_model import load_lama_model, inpaint_img_with_builded_lama
@@ -12,9 +13,11 @@ def remove_selected_object_on_image(image, coords):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
     if image.mode == "RGBA":
         image = image.convert("RGB")
+    with open('./config.json', 'r') as f:
+        config = json.load(f)
     image =  np.array(image)
-    predictor = load_sam_model("vit_h", 
-                                "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth", 
+    predictor = load_sam_model(config["sam_model"]["model_type"], 
+                                config["sam_model"]["ckpt_p"], 
                                 device)
     masks, scores, logits = predict_masks_with_sam(image,
         [[int(coords["x"]), int(coords["y"])]],
@@ -24,8 +27,8 @@ def remove_selected_object_on_image(image, coords):
     mask = masks[np.argmax(scores)]
     mask = dilate_mask(mask, 15)
     lama_model = load_lama_model(
-                    config_p = "lama/configs/prediction/default.yaml", 
-                    ckpt_p = "/content/drive/MyDrive/InpaintAnything/Weights/big-lama", 
+                    config_p = config["lama_model"]["config_p"], 
+                    ckpt_p = config["lama_model"]["ckpt_p"], 
                     device = device
                 )
     img_inpainted = inpaint_img_with_builded_lama(lama_model, image, mask, config_p = "lama/configs/prediction/default.yaml")
