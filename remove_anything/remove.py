@@ -9,16 +9,16 @@ from lama_model import load_lama_model, inpaint_img_with_builded_lama
 from sam_model import load_sam_model, predict_masks_with_sam
 from engine import dilate_mask
 
-def remove_selected_object_on_image(image, coords):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
+def segment_selected_object_on_image(image, coords):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
     if image.mode == "RGBA":
-        image = image.convert("RGB")
+        image = image.convert("RGB")   
     with open('./remove_anything/config.json', 'r') as f:
         config = json.load(f)
-    image =  np.array(image)
     predictor = load_sam_model(config["sam_model"]["model_type"], 
                                 config["sam_model"]["ckpt_p"], 
                                 device)
+    image =  np.array(image)
     masks, scores, logits = predict_masks_with_sam(image,
         [[int(coords["x"]), int(coords["y"])]],
         [1],
@@ -26,6 +26,16 @@ def remove_selected_object_on_image(image, coords):
     masks = masks.astype(np.uint8) * 255
     mask = masks[np.argmax(scores)]
     mask = dilate_mask(mask, 15)
+    # masked_image = image.copy()
+    # masked_image = mask != 0
+    # color = np.array([255, 0, 0]) 
+
+    return image, mask
+
+def remove_selected_object_on_image(image, mask):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    
+    with open('./remove_anything/config.json', 'r') as f:
+        config = json.load(f)
     lama_model = load_lama_model(
                     config_p = config["lama_model"]["config_p"], 
                     ckpt_p = config["lama_model"]["ckpt_p"], 

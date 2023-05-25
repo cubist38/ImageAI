@@ -6,8 +6,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "remove_anything"))
-from remove import remove_selected_object_on_image
-from engine import draw_point_on_image, resize_pil_keep_aspect_ratio, create_center_button
+from remove import remove_selected_object_on_image, segment_selected_object_on_image
+from engine import (draw_point_on_image, resize_pil_keep_aspect_ratio, 
+                    create_center_button, show_mask)
 
 RADIUS = 10
 def main():
@@ -19,11 +20,11 @@ def main():
         image = resize_pil_keep_aspect_ratio(image, 640)
         coords = st_image_coordinates(image)
         if coords:
-            st.write("Coordinates: ", coords)
-            st.image(draw_point_on_image(image, (int(coords["x"]), int(coords["y"])), radius = RADIUS), use_column_width=True)  
             remove_button = create_center_button(name = "Remove selected object")  
+            image, mask = segment_selected_object_on_image(image, coords)
+            st.image(mask, use_column_width=True)
             if remove_button:
-                img_inpainted = remove_selected_object_on_image(image, coords)
+                img_inpainted = remove_selected_object_on_image(image, mask)
                 st.image(img_inpainted, use_column_width=True)
 if __name__ == "__main__":
     main()
