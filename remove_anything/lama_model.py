@@ -7,7 +7,6 @@ import numpy as np
 import sys
 from pathlib import Path
 
-print(str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent / "lama"))
 from saicinpainting.evaluation.utils import move_to_device
 from saicinpainting.training.trainers import load_checkpoint
