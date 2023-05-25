@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent / "remove_anything"))
 from remove import remove_selected_object_on_image, segment_selected_object_on_image
 from engine import (draw_point_on_image, resize_pil_keep_aspect_ratio, 
-                    create_center_button, show_mask)
+                    create_center_button)
 
 RADIUS = 10
 def main():
