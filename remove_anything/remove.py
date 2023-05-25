@@ -26,8 +26,10 @@ def segment_selected_object_on_image(image, coords):
     masks = masks.astype(np.uint8) * 255
     mask = masks[np.argmax(scores)]
     mask = dilate_mask(mask, 15)
-    
-    return image, mask
+    image_with_mask = image.copy()
+    image_with_mask[mask == 255] = [255, 0, 0]
+
+    return image, mask, image_with_mask
 
 def remove_selected_object_on_image(image, mask):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")    

@@ -20,10 +20,9 @@ def main():
         image = resize_pil_keep_aspect_ratio(image, 640)
         coords = st_image_coordinates(image)
         if coords:
-            image, mask = segment_selected_object_on_image(image, coords)
-            st.write(mask)
+            image, mask, image_with_mask = segment_selected_object_on_image(image, coords)
             remove_button = create_center_button(name = "Remove selected object")  
-            st.image(mask, use_column_width=True)
+            st.image(image_with_mask, use_column_width=True)
             if remove_button:
                 img_inpainted = remove_selected_object_on_image(image, mask)
                 st.image(img_inpainted, use_column_width=True)
