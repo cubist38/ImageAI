@@ -22,9 +22,13 @@ def main():
         if coords:
             image, mask, image_with_mask = segment_selected_object_on_image(image, coords)
             st.image(image_with_mask, use_column_width=True)
-            remove_button = create_center_button(name = "Remove selected object")  
-            if remove_button:
+            download, remove, highlight = create_center_button(name = ["Donwload this image with mask", "Highlight this mask", "Remove selected object"], image_data = image_with_mask)  
+            if remove:
                 img_inpainted = remove_selected_object_on_image(image, mask)
                 st.image(img_inpainted, use_column_width=True)
+            elif highlight:
+                pass
+            else:
+                pass
 if __name__ == "__main__":
     main()
