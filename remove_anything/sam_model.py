@@ -1,10 +1,6 @@
 from typing import List
 import numpy as np
 import streamlit as st
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent / "remove_anything"))
 from segment_anything import SamPredictor, sam_model_registry
 
 @st.cache_resource()
