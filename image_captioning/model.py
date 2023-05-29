@@ -7,5 +7,6 @@ def load_clip_interrogator(config_p, device: str):
     with open(config_p, "r") as f:
         model_config = json.load(f)
     config = Config(**model_config)
-    model = Interrogator(config, device)
+    config.device = device
+    model = Interrogator(config)
     return model
