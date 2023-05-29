@@ -1,0 +1,4 @@
+{
+    "caption_model_name": "blip-large",
+    "clip_model_name": "ViT-L-14/openai"
+}

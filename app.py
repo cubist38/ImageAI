@@ -9,6 +9,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "remove_anything"))
 from remove import remove_selected_object_on_image, segment_selected_object_on_image
 from engine import (draw_point_on_image, resize_pil_keep_aspect_ratio, 
                     create_center_button)
+sys.path.insert(0, str(Path(__file__).resolve().parent / "image_captioning"))
+from gen import generate_description
 
 RADIUS = 10
 def main():
@@ -27,7 +29,10 @@ def main():
             if remove:
                 img_inpainted = remove_selected_object_on_image(image, mask)
                 st.image(img_inpainted, use_column_width=True)
-            if highlight:
+            if highlight:  
                 pass
+        if st.button("Generate a description of this image"):
+            prompt = generate_description(image)
+            st.write(prompt)
 if __name__ == "__main__":
     main()
