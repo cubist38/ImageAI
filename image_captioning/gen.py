@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "image_captioning"))
-from model import load_clip_interrogator
+from captioning_model import load_clip_interrogator
 
 def generate_description(image, device="cuda"):
     if image.mode == "RGBA":
