@@ -11,6 +11,8 @@ from engine import (draw_point_on_image, resize_pil_keep_aspect_ratio,
                     create_center_button)
 sys.path.insert(0, str(Path(__file__).resolve().parent / "image_captioning"))
 from gen import generate_description
+sys.path.insert(0, str(Path(__file__).resolve().parent / "image_generation"))
+from imagine import text_to_image
 
 RADIUS = 10
 def main():
@@ -34,5 +36,10 @@ def main():
         if st.button("Generate a description of this image"):
             prompt = generate_description(image)
             st.write(prompt)
+    user_input = st.text_input("Enter a prompt to generate an image")
+    if user_input:
+        image = text_to_image(user_input)
+        st.image(image, use_column_width=True)
+    
 if __name__ == "__main__":
     main()

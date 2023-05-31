@@ -27,3 +27,4 @@ jpeg4py
 lmdb
 timm
 clip-interrogator
+diffusers
