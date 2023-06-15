@@ -29,7 +29,7 @@ const FileForm = () => {
     return (
         <div>
             <FileUploadContainer>
-                <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
+                <form onSubmit={handleSubmit}>
                     <input type="file" onChange={handleFileInputChange}/>
                     <button type="submit">Upload</button>
                 </form>
