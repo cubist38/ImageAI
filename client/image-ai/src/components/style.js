@@ -28,11 +28,12 @@ export const ToolButton = styled.button`
     box-sizing: border-box;
     appearance: none;
     background-color: transparent;
-    border: 2px solid #3498db;
+    // border: 2px solid #3498db;
+    border: transparent;
     cursor: pointer;
     font-size: 1rem;
     line-height: 1;
-    padding: 1.1em 2.8em;
+    padding: 1em;
     text-align: center;
     font-weight: 700;
     border-radius: 200px;

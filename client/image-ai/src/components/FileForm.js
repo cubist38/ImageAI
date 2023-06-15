@@ -9,12 +9,20 @@ const FileForm = () => {
     const { image, setImage } = useContext(ImageContext);
 
     const handleFileInputChange = (event) => {
-        let fileObj = URL.createObjectURL(event.target.files[0])
-        setFile(fileObj);
+        var _URL = window.URL || window.webkitURL;
+        let fileObj = _URL.createObjectURL(event.target.files[0])
+        let img = new Image();
+        img.onLoad = () => {
+            img.width = this.width;
+            img.height = this.height;
+        }
+        img.src = fileObj;
+        setFile(img);
     }
     
     const handleSubmit = (event) => {
         event.preventDefault();
+        
         setImage(file);
     }
 
