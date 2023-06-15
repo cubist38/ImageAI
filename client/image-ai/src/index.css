@@ -1,0 +1,20 @@
+body {
+  text-align: center;
+}
+
+h1 {
+  font-family: 'Josefin Sans', 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  color: #3f4850;
+  font-size: 100px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.display-img {
+  height:400px;
+}
