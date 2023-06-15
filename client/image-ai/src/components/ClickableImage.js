@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const ClickableImage = ({ image }) => {
-    const [circles, setCircles] = useState([]);
-    
-    console.log(image.src);
-
+const ClickableImage = ({ image, selectedPoints, setSelectedPoints }) => {
     const getClickCoords = (event) => {
         // from: https://stackoverflow.com/a/29296049/14198287
         var e = event.target;
@@ -23,22 +19,22 @@ const ClickableImage = ({ image }) => {
         // more info here: https://www.w3schools.com/graphics/svg_circle.asp
         let newCircle = (
         <circle
-            key={circles.length + 1}
+            key={selectedPoints.length + 1}
             cx={x}
             cy={y}
-            r="20"
-            stroke="black"
-            strokeWidth="1"
+            r="5"
+            // stroke="black"
+            // strokeWidth="1"
             fill="red"
         />
         );
 
         // update the array of circles; you HAVE to spread the current array
         // as 'circles' is immutible and will not accept new info
-        let allCircles = [...circles, newCircle];
+        let allCircles = [...selectedPoints, newCircle];
 
         // update 'circles'
-        setCircles(allCircles);
+        setSelectedPoints(allCircles);
     };
 
 
@@ -49,7 +45,7 @@ const ClickableImage = ({ image }) => {
             <ClickableSVG width={resizedWidth} height="500" src="https://upload.wikimedia.org/wikipedia/commons/0/09/America_Online_logo.svg" onClick={addCircle}>
                 {/* This loads your circles in the circles hook */}
                 <image height="500" xlinkHref={image.src} />
-                {circles}
+                {selectedPoints}
             </ClickableSVG>
         </div>
     );
@@ -58,9 +54,9 @@ const ClickableImage = ({ image }) => {
 export default ClickableImage;
 
 const ClickableSVG = styled.svg`
-  & * {
-    /* Block your circles from triggering 'add circle' */
-    pointer-events: none;
-  }
+    & * {
+        /* Block your circles from triggering 'add circle' */
+        pointer-events: none;
+    }
 `;
 

@@ -5,6 +5,7 @@ import { ImageContext } from './context/ImageContext';
 import FileForm from "./components/FileForm";
 import ImageEditor from "./components/ImageEditor"
 import ServerStatusContextProvider from "./context/ServerStatusContext";
+import ImageBrowser from "./components/ImageBrowser"
 
 function App() {
   
@@ -13,7 +14,8 @@ function App() {
   return (
     <div>
       <Header />
-      { !image && <FileForm />}
+      { !image && <ImageBrowser />}
+
       <ServerStatusContextProvider>
         { image && <ImageEditor/> }
       </ServerStatusContextProvider>
