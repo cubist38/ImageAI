@@ -22,7 +22,6 @@ const FileForm = () => {
     
     const handleSubmit = (event) => {
         event.preventDefault();
-        
         setImage(file);
     }
 

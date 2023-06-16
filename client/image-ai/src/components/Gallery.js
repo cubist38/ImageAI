@@ -2,7 +2,7 @@ import React from "react";
 import Image from "./Image";
 import NoImage from "./NoImage";
 
-const Gallery = ({ data }) => {
+const Gallery = ({ data, handleImageSelection }) => {
     const results = data;
     let images;
     let noImage;
@@ -15,7 +15,7 @@ const Gallery = ({ data }) => {
             let secret = image.secret;
             let title = image.title;
             let url = `https://farm${farm}.staticflickr.com/${server}/${id}_${secret}_m.jpg`;
-            return <Image url={url} key={id} alt={title} />;
+            return <Image url={url} key={id} alt={title} handleOnClick={handleImageSelection} />;
         });
 
     } else {

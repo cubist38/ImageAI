@@ -1,9 +1,12 @@
 import React from "react";
-
-const Header = () => {
+import { BiArrowBack } from "react-icons/bi"
+const Header = ({ back }) => {
     return (
         <div>
-            <h1>Image AI</h1>
+            {back && <div className="back" onClick={back}>{<BiArrowBack />}</div>}
+            <div style={{color: "transparent"}}>.</div>
+            
+            <h1 className="app-name">Image AI</h1>
         </div>
     )
 }

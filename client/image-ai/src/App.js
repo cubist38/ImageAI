@@ -11,9 +11,12 @@ function App() {
   
   const {image, setImage} = useContext(ImageContext);
 
+  const back = () => {
+    setImage(null);
+  }
   return (
     <div>
-      <Header />
+      <Header back={image ? back : null}/>
       { !image && <ImageBrowser />}
 
       <ServerStatusContextProvider>

@@ -1,6 +1,7 @@
 body {
   text-align: center;
   font-family: "Josefin Sans", Helvetica, Arial, sans-serif;
+  margin: 0;
 }
 
 h1 {
@@ -9,14 +10,26 @@ h1 {
     sans-serif;
   color: #3f4850;
   font-size: 100px;
+  margin-top: 0;
 }
 
 h2 {
   font-family: 'Josefin Sans', 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   color: #3f4850;
   font-size: 20px;
+}
+
+.back {
+  position: absolute;
+  cursor: pointer;
+  margin: 10px;
+  z-index: 2;
+}
+
+.app-name {
+  margin-top: 50px;
 }
 
 ul {
@@ -45,6 +58,7 @@ a {
   height: 165px;
   overflow: hidden;
   /* margin-bottom: 15px; */
+  cursor: pointer;
   margin: 15px
 }
 

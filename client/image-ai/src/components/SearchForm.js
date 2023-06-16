@@ -2,29 +2,34 @@ import React, { useContext, useEffect } from "react";
 import Input from "./Input";
 import styled from "styled-components";
 
-const SearchForm = () => {
+const SearchForm = ({ setQuery }) => {
     const [state, setState] = React.useState({
-        email: "",
-        password: "",
-        username: "",
-        birthday: ""
+        gdriveUrl: "",
+        query: "",
       });
+
+    const onSubmit = (event) => {
+      event.preventDefault();
+      setQuery(state.query);
+    }
 
     return (
         <SearchFormContainer>
-          <Input
-            label="Google Drive URL"
-            type="text"
-            value={state.email}
-            onChange={(val) => setState({ ...state, email: val })}
-          />
-          <Input
-            label="Query"
-            type="text"
-            value={state.username}
-            onChange={(val) => setState({ ...state, username: val })}
-          />
-          <button>Search</button>
+          <form onSubmit={onSubmit}>
+            <Input
+              label="Google Drive URL"
+              type="text"
+              value={state.gdriveUrl}
+              onChange={(val) => setState({ ...state, gdriveUrl: val })}
+            />
+            <Input
+              label="Query"
+              type="text"
+              value={state.query}
+              onChange={(val) => setState({ ...state, query: val })}
+            />
+            <button type="submit">Search</button>
+          </form>
         </SearchFormContainer>
       );
 };

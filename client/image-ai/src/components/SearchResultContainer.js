@@ -4,18 +4,25 @@ import Loader from "./Loader"
 import Gallery from "./Gallery"
 import styled from "styled-components";
 
-const SearchResultContainer = () => {
+const SearchResultContainer = ({ handleImageSelection, query }) => {
     const { results, loading, runSearch } = useContext(SearchResultContext);
 
     useEffect(() => {
-        runSearch("mountain");
-    }, []);
+        runSearch(query);
+    }, [query]);
 
-    return (
-        <div className="photo-container">
-                { loading ? <Loader /> : <Gallery data={results} /> }
-        </div>
-    );
+    if (query != "") {
+        return (
+            <div className="photo-container">
+                    { loading ? <Loader /> : <Gallery data={results} handleImageSelection={handleImageSelection}/> }
+            </div>
+        );
+    }
+    else {
+        return (
+            <div></div>
+        );
+    }
 };
 
 export default SearchResultContainer;
