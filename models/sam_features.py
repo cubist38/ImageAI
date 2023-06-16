@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 
 #sys.path.insert(0, str(Path(__file__).resolve().parent / "remove_anything"))
-from lama_model import load_lama_model, inpaint_img_with_builded_lama
+from lama_model import load_lama_model, inpaint_img_with_built_lama
 from sam_model import load_sam_model, predict_masks_with_sam
 from engine import dilate_mask
 
