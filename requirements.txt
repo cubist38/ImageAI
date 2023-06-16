@@ -27,3 +27,6 @@ jpeg4py
 lmdb
 timm
 clip-interrogator
+fastapi
+uvicorn
+pydantic[dotenv]
