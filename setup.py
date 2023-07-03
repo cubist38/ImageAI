@@ -1,6 +1,12 @@
-import setuptools
+from setuptools import find_packages, setup
 
-setuptools.setup(
-    name="mlproject",
-    packages=setuptools.find_packages(),
+setup(
+    name="segment_anything",
+    version="1.0",
+    install_requires=[],
+    packages=find_packages(exclude="notebooks"),
+    extras_require={
+        "all": ["matplotlib", "pycocotools", "opencv-python", "onnx", "onnxruntime"],
+        "dev": ["flake8", "isort", "black", "mypy"],
+    },
 )
