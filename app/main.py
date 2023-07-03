@@ -4,9 +4,6 @@ from app.features.gen_des import generate_description
 from PIL import Image
 import io
 from app.config import get_settings
-from fastapi.logger import logger
-from pyngrok import ngrok
-import sys
 
 
 app = FastAPI()
