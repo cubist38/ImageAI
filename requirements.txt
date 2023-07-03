@@ -27,3 +27,4 @@ clip-interrogator
 fastapi
 uvicorn
 pydantic[dotenv]
+python-multipart
