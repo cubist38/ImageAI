@@ -2,7 +2,7 @@ import os
 from pydantic import BaseSettings
 
 class Settings(BaseSettings):
-    BASE_URL: str = "http://localhost:800" 
+    BASE_URL: str = "http://localhost:80" 
     USE_NGROK: bool = (os.environ.get("USE_NGROK", "False") == "True")
     
 
