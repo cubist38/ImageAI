@@ -6,11 +6,12 @@ import yaml
 import numpy as np
 import sys
 from pathlib import Path
+from functools import lru_cache
 
-sys.path.insert(0, str(Path(__file__).resolve().parent / "lama"))
-from saicinpainting.evaluation.utils import move_to_device
-from saicinpainting.training.trainers import load_checkpoint
-from saicinpainting.evaluation.data import pad_tensor_to_modulo
+#sys.path.insert(0, str(Path(__file__).resolve().parent / "lama"))
+from lama.saicinpainting.evaluation.utils import move_to_device
+from lama.saicinpainting.training.trainers import load_checkpoint
+from lama.saicinpainting.evaluation.data import pad_tensor_to_modulo
 
 def build_lama_model(        
         config_p: str,
@@ -39,7 +40,7 @@ def build_lama_model(
     model.freeze()
     return model
 
-@st.cache_resource()
+@lru_cache
 def load_lama_model(
         config_p: str, 
         ckpt_p: str,
@@ -47,7 +48,7 @@ def load_lama_model(
     return build_lama_model(config_p, ckpt_p, device)
 
 @torch.no_grad()
-def inpaint_img_with_builded_lama(
+def inpaint_img_with_built_lama(
         model,
         img: np.ndarray,
         mask: np.ndarray,

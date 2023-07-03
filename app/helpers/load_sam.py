@@ -1,9 +1,9 @@
 from typing import List
 import numpy as np
-import streamlit as st
-from segment_anything import SamPredictor, sam_model_registry
+from models.segment_anything import SamPredictor, sam_model_registry
+from functools import lru_cache
 
-@st.cache_resource()
+@lru_cache
 def load_sam_model(sam_model_type, sam_model_path, device):
     sam = sam_model_registry[sam_model_type](checkpoint=sam_model_path)
     sam.to(device=device)

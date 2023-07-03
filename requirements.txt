@@ -1,8 +1,5 @@
-streamlit
 Pillow
-streamlit-image-coordinates
 opencv-python
-pyngrok
 pyyaml
 tqdm
 numpy
@@ -27,4 +24,7 @@ jpeg4py
 lmdb
 timm
 clip-interrogator
-diffusers
+fastapi
+uvicorn
+pydantic[dotenv]
+python-multipart
