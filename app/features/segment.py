@@ -6,7 +6,7 @@ import torch
 
 config = get_settings()
 
-def segment_selected_object_on_image(image, coords):
+def segment_selected_object_on_image(image, x, y):
     if image.mode == "RGBA":
         image = image.convert("RGB")   
     predictor = load_sam_model(config.sam_model_type, 
@@ -14,7 +14,7 @@ def segment_selected_object_on_image(image, coords):
                                 config.device)
     image =  np.array(image)
     masks, scores, logits = predict_masks_with_sam(image,
-                                                [[int(coords["x"]), int(coords["y"])]],
+                                                [[int(x), int(y)]],
                                                 [1],
                                                 predictor)
     masks = masks.astype(np.uint8) * 255

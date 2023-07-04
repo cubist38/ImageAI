@@ -37,10 +37,11 @@ async def generate_description(file: UploadFile = File(...)):
 
 @app.post("/segment_selected_object")
 async def segment_selected_object(file: UploadFile = File(...), 
-                                  coords: dict = None):
+                                  x: str = "0",
+                                  y: str = "0"):
     contents = await file.read()
     img = Image.open(io.BytesIO(contents)).convert("RGB")
-    img, mask, img_with_mask = segment_selected_object_on_image(img, coords)
+    img, mask, img_with_mask = segment_selected_object_on_image(img, x, y)
     buffered = io.BytesIO()
     img_with_mask.save(buffered, format="PNG")
     img_with_mask_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
