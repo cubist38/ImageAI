@@ -43,6 +43,7 @@ async def segment_selected_object(file: UploadFile = File(...),
     img = Image.open(io.BytesIO(contents)).convert("RGB")
     img, mask, img_with_mask = segment_selected_object_on_image(img, x, y)
     buffered = io.BytesIO()
+    print(img_with_mask)
     img_with_mask.save(buffered, format="PNG")
     img_with_mask_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
     return {"Masked image": img_with_mask_base64}
