@@ -6,6 +6,7 @@ from PIL import Image
 import io
 from app.config import get_settings
 import base64
+import cv2
 
 
 app = FastAPI()
@@ -42,10 +43,9 @@ async def segment_selected_object(file: UploadFile = File(...),
     contents = await file.read()
     img = Image.open(io.BytesIO(contents)).convert("RGB")
     img, mask, img_with_mask = segment_selected_object_on_image(img, x, y)
-    buffered = io.BytesIO()
-    print(img_with_mask)
-    img_with_mask.save(buffered, format="PNG")
-    img_with_mask_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
-    return {"Masked image": img_with_mask_base64}
+    _, img_with_mask = cv2.imencode('.jpg', img)  # im_arr: image in Numpy one-dim array format.
+    im_bytes = img_with_mask.tobytes()
+    im_b64 = base64.b64encode(im_bytes)
+    return {"Masked image": im_b64}
 
     
