@@ -1,5 +1,4 @@
 from clip_interrogator import Config, Interrogator
-import json
 from functools import lru_cache
 
 @lru_cache
