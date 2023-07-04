@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from app.features.gen_des import generate_description
 from app.features.segment import segment_selected_object_on_image
-from helpers.engine import numpy_to_base64
+from app.helpers.engine import numpy_to_base64
 from PIL import Image
 import io
 from app.config import get_settings
