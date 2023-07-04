@@ -1,6 +1,6 @@
 from typing import List
 import numpy as np
-from segment_anything import SamPredictor, sam_model_registry
+from segment_anything.segment_anything import SamPredictor, sam_model_registry
 from functools import lru_cache
 
 @lru_cache
