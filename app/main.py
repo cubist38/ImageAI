@@ -40,11 +40,6 @@ async def root():
 #     # You can use libraries like PIL, OpenCV, or any other image processing library
 #     return {"name": name}
 
-@app.get("/load_gen")
-async def load_gen():
-    load_clip_interrogator()
-    return {"name": "test"}
-
 @app.post("/generate_image")
 async def upload_file(file: UploadFile = File(...)):
     contents = await file.read()
