@@ -1,10 +1,11 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from app.features.gen_des import generate_description
-from app.helpers.load_gen import load_clip_interrogator
+from app.features.segment import segment_selected_object_on_image
 from PIL import Image
 import io
 from app.config import get_settings
+import base64
 
 
 app = FastAPI()
@@ -27,24 +28,22 @@ app.add_middleware(
 async def root():
     return config_settings
 
-# @app.post("/generate_image")
-# async def generate_image(file: bytes = File(...)):
-#     # image = Image.open(io.BytesIO(file)).convert("RGB")
-#     # results = generate_description(image)
-#     return {"name": "test"}
-
-# @app.post("/generate_image")
-# async def generate_image(name: str = "test"):
-#     # Your image generation logic here
-#     # This could involve processing data, generating an image, and returning it
-#     # You can use libraries like PIL, OpenCV, or any other image processing library
-#     return {"name": name}
-
 @app.post("/generate_description")
-async def upload_file(file: UploadFile = File(...)):
+async def generate_description(file: UploadFile = File(...)):
     contents = await file.read()
     img = Image.open(io.BytesIO(contents)).convert("RGB")
-    # Perform operations with the image using Pillow
-    # # For example, you can resize the image
-    des = generate_description(img, )
+    des = generate_description(img)
     return {"Description": des}
+
+@app.post("/segment_selected_object")
+async def segment_selected_object(file: UploadFile = File(...), 
+                                  coords: dict = None):
+    contents = await file.read()
+    img = Image.open(io.BytesIO(contents)).convert("RGB")
+    img, mask, img_with_mask = segment_selected_object_on_image(img, coords)
+    buffered = io.BytesIO()
+    img_with_mask.save(buffered, format="PNG")
+    img_with_mask_base64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+    return {"Masked image": img_with_mask_base64}
+
+    
