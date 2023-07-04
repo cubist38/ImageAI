@@ -8,7 +8,6 @@ import sys
 from pathlib import Path
 from functools import lru_cache
 
-#sys.path.insert(0, str(Path(__file__).resolve().parent / "lama"))
 from lama.saicinpainting.evaluation.utils import move_to_device
 from lama.saicinpainting.training.trainers import load_checkpoint
 from lama.saicinpainting.evaluation.data import pad_tensor_to_modulo

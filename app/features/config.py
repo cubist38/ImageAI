@@ -1,8 +1,9 @@
 from pydantic import BaseSettings
+import torch
 
 
 class Settings(BaseSettings):
-    device: str = "cpu"
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     sam_model_type: str = "vit_h"
     sam_model_ckpt_p: str = "/content/drive/MyDrive/InpaintAnything/Weights/sam_vit_h_4b8939.pth"
     lama_model_config_p: str = "./models/lama/configs/prediction/default.yaml"

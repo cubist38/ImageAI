@@ -1,6 +1,8 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from app.features.gen_des import generate_description
+from app.features.segment import segment_selected_object_on_image
+from app.helpers.engine import numpy_to_base64
 from PIL import Image
 import io
 from app.config import get_settings
@@ -26,24 +28,22 @@ app.add_middleware(
 async def root():
     return config_settings
 
-# @app.post("/generate_image")
-# async def generate_image(file: bytes = File(...)):
-#     # image = Image.open(io.BytesIO(file)).convert("RGB")
-#     # results = generate_description(image)
-#     return {"name": "test"}
-
-# @app.post("/generate_image")
-# async def generate_image(name: str = "test"):
-#     # Your image generation logic here
-#     # This could involve processing data, generating an image, and returning it
-#     # You can use libraries like PIL, OpenCV, or any other image processing library
-#     return {"name": name}
-
-@app.post("/generate_image")
-async def upload_file(file: UploadFile = File(...)):
+@app.post("/generate_description")
+async def generate_description(file: UploadFile = File(...)):
     contents = await file.read()
-    img = Image.open(io.BytesIO(contents))
-    # Perform operations with the image using Pillow
-    # For example, you can resize the image
+    img = Image.open(io.BytesIO(contents)).convert("RGB")
     des = generate_description(img)
     return {"Description": des}
+
+@app.post("/segment_selected_object")
+async def segment_selected_object(file: UploadFile = File(...), 
+                                  x: str = "0",
+                                  y: str = "0"):
+    contents = await file.read()
+    img = Image.open(io.BytesIO(contents)).convert("RGB")
+    img, mask, img_with_mask = segment_selected_object_on_image(img, x, y)
+    img_b64 = numpy_to_base64(img)
+    mask_b64 = numpy_to_base64(mask)
+    img_with_mask_b64 = numpy_to_base64(img_with_mask)
+    return {"Image": img_b64, "Mask": mask_b64, "Masked image": img_with_mask_b64}
+    

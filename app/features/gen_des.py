@@ -1,4 +1,4 @@
-from app.config import get_settings
+from app.features.config import get_settings
 from app.helpers.load_gen import load_clip_interrogator
 
 config = get_settings()
