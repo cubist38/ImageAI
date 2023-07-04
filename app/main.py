@@ -40,11 +40,11 @@ async def root():
 #     # You can use libraries like PIL, OpenCV, or any other image processing library
 #     return {"name": name}
 
-@app.post("/generate_image")
+@app.post("/generate_description")
 async def upload_file(file: UploadFile = File(...)):
     contents = await file.read()
     img = Image.open(io.BytesIO(contents)).convert("RGB")
     # Perform operations with the image using Pillow
     # # For example, you can resize the image
-    des = generate_description(img)
-    return {"Description": file.filename}
+    des = generate_description(img, )
+    return {"Description": des}

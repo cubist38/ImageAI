@@ -1,4 +1,4 @@
-from app.config import get_settings
+from app.features.config import get_settings
 from app.helpers.load_gen import load_clip_interrogator
 
 config = get_settings()
@@ -11,7 +11,5 @@ def generate_description(image):
     )
     model.config.chunk_size = 2048 if model.config.clip_model_name == "ViT-L-14/openai" else 1024
     model.config.flavor_intermediate_count = 2048 if model.config.clip_model_name == "ViT-L-14/openai" else 1024
-    print(model.interrogate_fast(image))
-    print(type(model.interrogate_fast(image)))
     return model.interrogate_fast(image)
     
