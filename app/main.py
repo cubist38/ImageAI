@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from app.features.gen_des import generate_description
+from app.helpers.load_gen import load_clip_interrogator
 from PIL import Image
 import io
 from app.config import get_settings
@@ -38,6 +39,11 @@ async def root():
 #     # This could involve processing data, generating an image, and returning it
 #     # You can use libraries like PIL, OpenCV, or any other image processing library
 #     return {"name": name}
+
+@app.get("/load_gen")
+async def load_gen():
+    load_clip_interrogator()
+    return {"name": "test"}
 
 @app.post("/generate_image")
 async def upload_file(file: UploadFile = File(...)):
