@@ -42,8 +42,8 @@ async def root():
 @app.post("/generate_image")
 async def upload_file(file: UploadFile = File(...)):
     contents = await file.read()
-    img = Image.open(io.BytesIO(contents))
+    img = Image.open(io.BytesIO(contents)).convert("RGB")
     # Perform operations with the image using Pillow
     # # For example, you can resize the image
-    # des = generate_description(img)
+    des = generate_description(img)
     return {"Description": file.filename}
