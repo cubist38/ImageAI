@@ -29,7 +29,7 @@ async def root():
     return config_settings
 
 @app.post("/generate_description")
-async def generate_description(file: UploadFile = File(...)):
+async def generate_description_from_image(file: UploadFile = File(...)):
     contents = await file.read()
     img = Image.open(io.BytesIO(contents)).convert("RGB")
     des = generate_description(img)
