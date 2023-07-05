@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.features.gen_des import generate_description
 from app.features.segment import segment_selected_object_on_image
 from app.features.remove import remove_selected_object_on_image
-from app.helpers.engine import numpy_to_base64, base64_to_numpy
+from app.features.gen_image import gen_image_from_prompt
+from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64
 from PIL import Image
 import io
 from app.config import get_settings
@@ -56,3 +57,8 @@ async def remove_selected_object(image, mask):
     img_inpainted_b64 = numpy_to_base64(img_inpainted)
     return {"Image": img_inpainted_b64}
 
+@app.post("/generate_image")
+async def generate_image_from_prompt(prompt: str):
+    image = gen_image_from_prompt(prompt)
+    image_b64 = pil_to_base64(image)
+    return {"Image": image_b64}

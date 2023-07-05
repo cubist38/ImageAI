@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     lama_model_ckpt_p: str = "/content/drive/MyDrive/InpaintAnything/Weights/big-lama"
     caption_model_name: str = "blip-large"
     clip_model_name: str = "ViT-L-14/openai"
+    gen_image_model_name: str = "runwayml/stable-diffusion-v1-5"
 
 def get_settings():
     return Settings()
