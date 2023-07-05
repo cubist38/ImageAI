@@ -2,7 +2,8 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from app.features.gen_des import generate_description
 from app.features.segment import segment_selected_object_on_image
-from app.helpers.engine import numpy_to_base64
+from app.features.remove import remove_selected_object_on_image
+from app.helpers.engine import numpy_to_base64, base64_to_numpy
 from PIL import Image
 import io
 from app.config import get_settings
@@ -46,4 +47,12 @@ async def segment_selected_object(file: UploadFile = File(...),
     mask_b64 = numpy_to_base64(mask)
     img_with_mask_b64 = numpy_to_base64(img_with_mask)
     return {"Image": img_b64, "Mask": mask_b64, "Masked image": img_with_mask_b64}
-    
+
+@app.post("/remove_selected_object")
+async def remove_selected_object(image, mask):
+    image = base64_to_numpy(image)
+    mask = base64_to_numpy(mask)
+    img_inpainted = remove_selected_object_on_image(image, mask)
+    img_inpainted_b64 = numpy_to_base64(img_inpainted)
+    return {"Image": img_inpainted_b64}
+

@@ -2,7 +2,6 @@ from app.helpers.load_sam import load_sam_model, predict_masks_with_sam
 from app.features.config import get_settings
 from app.helpers.engine import dilate_mask
 import numpy as np
-import torch
 
 config = get_settings()
 

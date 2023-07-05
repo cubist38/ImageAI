@@ -47,7 +47,6 @@ def inpaint_img_with_built_lama(
         model,
         img: np.ndarray,
         mask: np.ndarray,
-        config_p=None,
         mod=8,
         device="cuda"
 ):
