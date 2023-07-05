@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import torchvision
 
 from models.ade20k import ModelBuilder
-from saicinpainting.utils import check_and_warn_input_range
+from models.lama.saicinpainting.utils import check_and_warn_input_range
 
 
 IMAGENET_MEAN = torch.FloatTensor([0.485, 0.456, 0.406])[None, :, None, None]
