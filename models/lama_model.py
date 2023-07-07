@@ -8,9 +8,9 @@ import sys
 from pathlib import Path
 from functools import lru_cache
 
-from lama.saicinpainting.evaluation.utils import move_to_device
-from lama.saicinpainting.training.trainers import load_checkpoint
-from lama.saicinpainting.evaluation.data import pad_tensor_to_modulo
+from models.lama.saicinpainting.evaluation.utils import move_to_device
+from models.lama.saicinpainting.training.trainers import load_checkpoint
+from models.lama.saicinpainting.evaluation.data import pad_tensor_to_modulo
 
 def build_lama_model(        
         config_p: str,
