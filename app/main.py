@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.features.gen_des import generate_description
 from app.features.segment import segment_selected_object_on_image
 from app.features.remove import remove_selected_object_on_image
+from app.features.blur import blur_image 
 from app.features.gen_image import gen_image_from_prompt
 from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64
 from PIL import Image
@@ -62,3 +63,13 @@ async def generate_image_from_prompt(prompt: str):
     image = gen_image_from_prompt(prompt)
     image_b64 = pil_to_base64(image)
     return {"Image": image_b64}
+
+@app.post("/highlight_object") 
+async def highlight_object(file: UploadFile = File(...), 
+                                x: str = "0",
+                                y: str = "0"):
+    contents = await file.read()
+    img = Image.open(io.BytesIO(contents)).convert("RGB")
+    blurred_img = blur_image(img, x, y) 
+    img_b64 = numpy_to_base64(blurred_img)
+    return {"Image": img_b64}
