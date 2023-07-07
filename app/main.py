@@ -13,13 +13,18 @@ from app.config import get_settings
 app = FastAPI()
 config_settings = get_settings()
 
-allowed_origins = ['*']
+# Configure CORS
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    # Add more allowed origins as needed
+]
 allowed_methods = ['GET', 'POST']
 allowed_headers = ['*']
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=allowed_methods,
     allow_headers=allowed_headers,
