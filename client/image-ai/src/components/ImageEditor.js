@@ -6,7 +6,7 @@ import ReactLoading from "react-loading";
 import { ServerStatusContext } from "../context/ServerStatusContext";
 import styled from "styled-components";
 import axios from "axios";
-import { apiServer } from "../api/config";
+import { apiServer, apiKey } from "../api/config";
 
 const ImageEditor = () => {
     const {image, setImage} = useContext(ImageContext);
@@ -18,27 +18,27 @@ const ImageEditor = () => {
         console.log("Send to server image: " + image.src);
         console.log(selectedPoints);
 
-        const formData = new FormData();
-        formData.append('file', image);
+        // const endpoint = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=mountain&per_page=50&format=json&nojsoncallback=1`;
+        const endpoint = `${apiServer}/`;
 
-        // const response = await fetch(endpoint, {
-        //     method: "POST",
-        //     body: formData
-        // });
+        var data = new FormData();
+        data.append('file', image);
 
-        axios({
-            method: "post",
-            url: `${apiServer}/`,
-            // data: formData,
-            headers: { "Content-Type": "multipart/form-data" },
-          })
-          .then((response) => {
-                console.log(response);
-            if (response.status === 200) {
-                console.log(response);
-            }
-        });
+        var config = {
+            method: 'get',
+            url: endpoint, 
+            headers:{"Accept":"application/json, text/plain, /", "Content-Type": "multipart/form-data"},
+            data : data
+        };
 
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+            
         setTimeout( function() { setProcessing(false); }, 1000);
         setSelectedPoints([]);
     }
