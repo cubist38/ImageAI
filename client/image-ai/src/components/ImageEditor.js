@@ -27,7 +27,7 @@ const ImageEditor = () => {
         var config = {
             method: 'get',
             url: endpoint, 
-            headers:{"Accept":"application/json, text/plain, /", "Content-Type": "multipart/form-data"},
+            headers:{"Accept":"application/json, text/plain, /", "Content-Type": "multipart/form-data", 'ngrok-skip-browser-warning': true},
             data : data
         };
 
