@@ -44,11 +44,10 @@ async def segment_selected_object(file: UploadFile = File(...),
                                   y: str = "0"):
     contents = await file.read()
     img = Image.open(io.BytesIO(contents)).convert("RGB")
-    img, mask, img_with_mask = segment_selected_object_on_image(img, x, y)
+    img, mask = segment_selected_object_on_image(img, x, y)
     img_b64 = numpy_to_base64(img)
     mask_b64 = numpy_to_base64(mask)
-    img_with_mask_b64 = numpy_to_base64(img_with_mask)
-    return {"Image": img_b64, "Mask": mask_b64, "Masked image": img_with_mask_b64}
+    return {"Image": img_b64, "Mask": mask_b64}
 
 @app.post("/remove_selected_object")
 async def remove_selected_object(image, mask):
