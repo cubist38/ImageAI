@@ -17,6 +17,7 @@ const FileForm = () => {
             img.height = this.height;
         }
         img.src = fileObj;
+        img.raw = event.target.files[0];
         setFile(img);
     }
     

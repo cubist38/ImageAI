@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { apiServer, apiKey } from "../api/config";
+import axios from "axios";
 
 const ClickableImage = ({ image, selectedPoints, setSelectedPoints }) => {
     const getClickCoords = (event) => {
@@ -33,16 +35,19 @@ const ClickableImage = ({ image, selectedPoints, setSelectedPoints }) => {
         // as 'circles' is immutible and will not accept new info
         let allCircles = [...selectedPoints, newCircle];
 
+        var data = new FormData();
+        data.append('file', image.raw);
+
         // Send segment api request
-        const endpoint = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=mountain&per_page=50&format=json&nojsoncallback=1`;
-        
+        //const endpoint = `${apiServer}/segment_selected_object?x=0&y=0`;
+        const endpoint = `${apiServer}/`;
         var config = {
-            method: 'post',
+            method: 'get',
             url: endpoint, 
             headers:{
                 "Accept":"application/json, text/plain, /", 
                 "Content-Type": "multipart/form-data",
-                'ngrok-skip-browser-warning': true},
+                "ngrok-skip-browser-warning": true},
             data : data
         };
 

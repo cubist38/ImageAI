@@ -1,3 +1,8 @@
-export const base64ToImg = (imgBase64) => {
+export const base64ToImage = (base64img, callback) => {
+    var img = new Image();
+    img.onload = function() {
+        callback(img);
+    };
+    img.src = base64img;
     
 }
