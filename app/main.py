@@ -32,18 +32,16 @@ async def root():
     return config_settings
 
 @app.post("/generate_description")
-async def generate_description_from_image(file: UploadFile = File(...)):
-    contents = await file.read()
-    img = Image.open(io.BytesIO(contents)).convert("RGB")
-    des = generate_description(img)
+async def generate_description_from_image(image):
+    image = base64_to_numpy(image)
+    des = generate_description(image)
     return {"Description": des}
 
 @app.post("/segment_selected_object")
-async def segment_selected_object(file: UploadFile = File(...), 
+async def segment_selected_object(image, 
                                   x: str = "0",
                                   y: str = "0"):
-    contents = await file.read()
-    img = Image.open(io.BytesIO(contents)).convert("RGB")
+    image = base64_to_numpy(image)
     img, mask, img_with_mask = segment_selected_object_on_image(img, x, y)
     img_b64 = numpy_to_base64(img)
     mask_b64 = numpy_to_base64(mask)
@@ -65,11 +63,10 @@ async def generate_image_from_prompt(prompt: str):
     return {"Image": image_b64}
 
 @app.post("/highlight_object") 
-async def highlight_object(file: UploadFile = File(...), 
-                                x: str = "0",
-                                y: str = "0"):
-    contents = await file.read()
-    img = Image.open(io.BytesIO(contents)).convert("RGB")
-    blurred_img = blur_image(img, x, y) 
+async def highlight_object(image, 
+                            x: str = "0",
+                            y: str = "0"):
+    image = base64_to_numpy(image)
+    blurred_img = blur_image(image, x, y) 
     img_b64 = numpy_to_base64(blurred_img)
     return {"Image": img_b64}
