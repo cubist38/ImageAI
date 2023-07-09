@@ -62,7 +62,7 @@ async def inpaint_selected_object(request: InpaintRequest):
     return {"Image": img_inpainted_b64}
 
 @app.post("/generate_image")
-async def generate_image_from_prompt(request: GenerateDescriptionRequest):
+async def generate_image_from_prompt(request: GenerateImageRequest):
     prompt = request.prompt
     image = gen_image_from_prompt(prompt)
     image_b64 = pil_to_base64(image)
