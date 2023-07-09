@@ -9,8 +9,9 @@ def segment_selected_object_on_image(image, x, y):
     predictor = load_sam_model(config.sam_model_type, 
                                 config.sam_model_ckpt_p,
                                 config.device)
+    
     masks, scores, logits = predict_masks_with_sam(image,
-                                                [[int(x), int(y)]],
+                                                [[int(float(x)), int(float(y))]],
                                                 [1],
                                                 predictor)
     masks = masks.astype(np.uint8) * 255
