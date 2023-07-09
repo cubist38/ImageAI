@@ -31,7 +31,8 @@ const ImageEditor = () => {
             headers:{
                 "Accept":"application/json, text/plain, /", 
                 "Content-Type": "multipart/form-data",
-                'ngrok-skip-browser-warning': true},
+                'ngrok-skip-browser-warning': true
+            },
             data : data
         };
 
