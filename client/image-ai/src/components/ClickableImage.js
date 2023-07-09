@@ -39,10 +39,10 @@ const ClickableImage = ({ image, selectedPoints, setSelectedPoints }) => {
         data.append('file', image.raw);
 
         // Send segment api request
-        //const endpoint = `${apiServer}/segment_selected_object?x=0&y=0`;
-        const endpoint = `${apiServer}/`;
+        const endpoint = `${apiServer}/segment_selected_object?x=0&y=0`;
+        // const endpoint = `${apiServer}/`;
         var config = {
-            method: 'get',
+            method: 'POST',
             url: endpoint, 
             headers:{
                 "Accept":"application/json, text/plain, /", 
