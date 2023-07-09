@@ -6,12 +6,9 @@ import numpy as np
 config = get_settings()
 
 def segment_selected_object_on_image(image, x, y):
-    if image.mode == "RGBA":
-        image = image.convert("RGB")   
     predictor = load_sam_model(config.sam_model_type, 
                                 config.sam_model_ckpt_p,
                                 config.device)
-    image =  np.array(image)
     masks, scores, logits = predict_masks_with_sam(image,
                                                 [[int(x), int(y)]],
                                                 [1],
