@@ -6,6 +6,8 @@ from app.features.remove import remove_selected_object_on_image
 from app.features.blur import blur_image 
 from app.features.gen_image import gen_image_from_prompt
 from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64
+from app.models.request import (SegmentationRequest, HighlightRequest, 
+                                InpaintRequest, GenerateDescriptionRequest, GenerateImageRequest)
 from PIL import Image
 import io
 from app.config import get_settings
@@ -26,21 +28,22 @@ app.add_middleware(
     allow_headers=allowed_headers,
 )
 
-
 @app.get("/")
 async def root():
     return config_settings
 
 @app.post("/generate_description")
-async def generate_description_from_image(image):
+async def generate_description_from_image(request: GenerateDescriptionRequest):
+    image = request.image
     image = base64_to_numpy(image)
     des = generate_description(image)
     return {"Description": des}
 
 @app.post("/segment_selected_object")
-async def segment_selected_object(image, 
-                                  x: str = "0",
-                                  y: str = "0"):
+async def segment_selected_object(request: SegmentationRequest):
+    image = request.image
+    x = request.x
+    y = request.y
     image = base64_to_numpy(image)
     img, mask, img_with_mask = segment_selected_object_on_image(img, x, y)
     img_b64 = numpy_to_base64(img)
@@ -48,8 +51,10 @@ async def segment_selected_object(image,
     img_with_mask_b64 = numpy_to_base64(img_with_mask)
     return {"Image": img_b64, "Mask": mask_b64, "Masked image": img_with_mask_b64}
 
-@app.post("/remove_selected_object")
-async def remove_selected_object(image, mask):
+@app.post("/inpaint_selected_object")
+async def inpaint_selected_object(request: InpaintRequest):
+    image = request.image
+    mask = request.mask
     image = base64_to_numpy(image)
     mask = base64_to_numpy(mask)
     img_inpainted = remove_selected_object_on_image(image, mask)
@@ -57,16 +62,18 @@ async def remove_selected_object(image, mask):
     return {"Image": img_inpainted_b64}
 
 @app.post("/generate_image")
-async def generate_image_from_prompt(prompt: str):
+async def generate_image_from_prompt(request: GenerateDescriptionRequest):
+    prompt = request.prompt
     image = gen_image_from_prompt(prompt)
     image_b64 = pil_to_base64(image)
     return {"Image": image_b64}
 
 @app.post("/highlight_object") 
-async def highlight_object(image, 
-                            x: str = "0",
-                            y: str = "0"):
+async def highlight_object(request: HighlightRequest):
+    image = request.image
+    mask = request.mask
     image = base64_to_numpy(image)
-    blurred_img = blur_image(image, x, y) 
+    mask = base64_to_numpy(mask)
+    blurred_img = blur_image(image) 
     img_b64 = numpy_to_base64(blurred_img)
     return {"Image": img_b64}
