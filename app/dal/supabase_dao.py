@@ -98,7 +98,7 @@ class SupabaseDAO:
         
         try: 
             resize_image(image_path, 448, 448)
-            image_encode = pickle.dumps(ImageNTextEncoder.encode_image_by_path(image_path))
+            image_encode = pickle.dumps(ImageNTextEncoder().encode_image_by_path(image_path))
             image_id = self.save_image(ImageDTO(storage_url, image_name, image_encode)) 
             res = self.supabase.storage.from_('images').upload(f'{image_id}.{image_path.split(".")[-1]}', image_path)
             logging.info(f'Upload {storage_url}/{image_name} successful!!')
