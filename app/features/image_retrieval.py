@@ -1,29 +1,50 @@
 import gdown
 from tqdm import tqdm
-from app.helpers.encoder import ImageNTextEncoder
 import faiss
 import numpy as np
 from PIL import Image
 import os 
+import pickle
 
-class ImageRetrieval(): 
-  _instance = None
+from app.helpers.encoder import ImageNTextEncoder
+from app.dal.supabase_dao import SupabaseDAO
+from app.helpers.image_helper import base64_to_image
 
-  def __new__(cls, model_name = 'blip_feature_extractor', model_type='base'):
-    if cls._instance is None:
-      cls._instance = super().__new__(cls)
+PUBLIC_BUCKET = 'https://kghukcserwconiuwgboq.supabase.co/storage/v1/object/public/images/'
+NUM_IMAGE_EACH_PAGE = 30
 
-      cls._instance.encoder = ImageNTextEncoder(model_name=model_name, model_type=model_type) 
+def get_faiss_by_user(email):   
+  images_url = [] 
+  faiss_index = faiss.IndexFlatL2(256)
 
-    return cls._instance
+  images = SupabaseDAO().get_image_by_email(email) 
+  for image in images: 
+    embedded = pickle.loads(image.encode)  
+    faiss_index.add(embedded)
+    images_url.append(f'{PUBLIC_BUCKET}{image.id}.{image.image.split(".")[-1]}')
 
-  def insert_images(self, images, images_path): 
-    for id, image in tqdm(enumerate(images)): 
-      embedded = self.encoder.encode_image(image)
-      self.index.add(embedded) 
-      self.images_path.append(images_path[id]) 
+  return images_url, faiss_index
 
-  def search_images(self, text, limit = 10): 
-    text_feature = self.encoder.encode_text(text) 
-    dists, ids = self.index.search(text_feature, k = limit) 
-    return [self.images_path[id] if id != -1 else '' for id in ids[0]] 
+def retrieve_image_by_text(email, query, page): 
+  text_embedded = ImageNTextEncoder().encode_text(query) 
+  images_url, faiss_index = get_faiss_by_user(email) 
+  dists, ids = faiss_index.search(text_embedded) 
+  result = [] 
+  for i in range(page * NUM_IMAGE_EACH_PAGE, (page + 1) * NUM_IMAGE_EACH_PAGE):  
+    if (i >= len(ids)): 
+      break
+    result.append(images_url[ids[i]])
+  return result 
+
+def retrieve_image_by_image(email, image_b64, page): 
+  image = base64_to_image(image_b64)
+  image_embedded = ImageNTextEncoder().encode_image(image) 
+  images_url, faiss_index = get_faiss_by_user(email) 
+  dists, ids = faiss_index.search(image_embedded) 
+  result = [] 
+  for i in range(page * NUM_IMAGE_EACH_PAGE, (page + 1) * NUM_IMAGE_EACH_PAGE):  
+    if (i >= len(ids)): 
+      break
+    result.append(images_url[ids[i]])
+  return result 
+    

@@ -30,4 +30,13 @@ class ImageStorageRequest(BaseModel):
 class ImportStorageRequest(BaseModel): 
     access_token: str 
     storage_url: str
-    
+
+class TextSearchRequest(BaseModel): 
+    access_token: str 
+    query: str
+    page: int 
+
+class VisualSearchRequest(BaseModel): 
+    access_token: str 
+    image: str
+    page: int

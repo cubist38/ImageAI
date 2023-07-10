@@ -5,6 +5,8 @@ import logging
 from app.dal.image_dto import ImageDTO
 from app.dal.storage_dto import StorageDTO
 from app.helpers.image_helper import resize_image
+from app.helpers.encoder import ImageNTextEncoder
+import pickle
 
 load_dotenv()
 
@@ -43,7 +45,8 @@ class SupabaseDAO:
         table = "images"
         image_data = {
             "storage_url": image.storage_url,
-            "image": image.image
+            "image": image.image,
+            "encode": image.encode
         }
         data, count = self.supabase.table(table).insert(image_data).execute()
 
@@ -74,7 +77,19 @@ class SupabaseDAO:
         logging.info(f'Get image by storage URL {storage_url} result: {data}')
 
         data = data[1]
-        return [ImageDTO(item['storage_url'], item['image'], item['id']) for item in data]
+        return [ImageDTO(item['storage_url'], item['image'], item['encode'], item['id']) for item in data]
+    
+    def get_image_by_email(self, email): 
+        storages = self.get_storage_by_email(email) 
+        storages_url = [item.storage_url for item in storages]
+
+        images = [] 
+        for storage_url in storages_url: 
+            images_in_storage = self.get_image_by_storage_url(storage_url) 
+            for image in images_in_storage: 
+                images.append(image)
+        
+        return images
 
     def upload_image(self, image_path, image_name, storage_url): 
         if (not os.path.isfile(image_path)): 
@@ -83,7 +98,8 @@ class SupabaseDAO:
         
         try: 
             resize_image(image_path, 448, 448)
-            image_id = self.save_image(ImageDTO(storage_url, image_name)) 
+            image_encode = pickle.dumps(ImageNTextEncoder.encode_image_by_path(image_path))
+            image_id = self.save_image(ImageDTO(storage_url, image_name, image_encode)) 
             res = self.supabase.storage.from_('images').upload(f'{image_id}.{image_path.split(".")[-1]}', image_path)
             logging.info(f'Upload {storage_url}/{image_name} successful!!')
             return f'https://kghukcserwconiuwgboq.supabase.co/storage/v1/object/public/images/{image_id}.{image_path.split(".")[-1]}'
