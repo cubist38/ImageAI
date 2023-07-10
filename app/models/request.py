@@ -27,3 +27,7 @@ class ImageStorageRequest(BaseModel):
     access_token: str 
     storage_url: str
 
+class ImportStorageRequest(BaseModel): 
+    access_token: str 
+    storage_url: str
+    

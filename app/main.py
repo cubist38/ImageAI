@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Response
 from fastapi.middleware.cors import CORSMiddleware
 from app.features.gen_des import generate_description
 from app.features.segment import segment_selected_object_on_image
@@ -10,6 +10,7 @@ from app.models.request import (SegmentationRequest, HighlightRequest,
                                 InpaintRequest, GenerateDescriptionRequest, GenerateImageRequest,
                                 StorageRequest, ImageStorageRequest)
 from app.dal.supabase_dao import SupabaseDAO
+from app.helpers.google_helper import GoogleHelper
 
 from PIL import Image
 import io
@@ -86,10 +87,22 @@ async def highlight_object(request: HighlightRequest):
 async def storage(request: StorageRequest):
     # TODO: Check authorization
     storages_url = SupabaseDAO().get_storage_by_email('temp_email')
-    return {"urls": storages_url}
+    return {"urls": [item.storage_url for item in storages_url]}
     
-@app.get("/images")
+@app.post("/images")
 async def process_images(request: ImageStorageRequest):
     # TODO: Check authorization
     images_url = SupabaseDAO().get_image_by_storage_url(request.storage_url)
     return {"urls": [f'{PUBLIC_BUCKET}{item.id}.{item.image.split(".")[-1]}' for item in images_url]}
+
+@app.post("/import_storage")
+async def import_storage(request: ImageStorageRequest, response: Response):
+    # TODO: Check authorization
+    result = GoogleHelper().import_storage('temp_email', request.storage_url)
+    
+    if (result): 
+        response.status_code = 200
+        return {"message": "Import storage completed"}
+    else: 
+        response.status_code = 400
+        return {"message": "Fail to import storage"}

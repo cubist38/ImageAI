@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # Configure the logging settings
 load_dotenv()
 
-class GoogleGHelper:
+class GoogleHelper:
     _instance = None
 
     def __new__(cls):
@@ -171,8 +171,12 @@ class GoogleGHelper:
             return None
         
     def import_storage(self, email, link): 
-        uniq_id = self.extract_drive_id([link])
-        if ((uniq_id is None) or (len(uniq_id) == 0)): 
-            return 
-        SupabaseDAO().save_storage(StorageDTO(email, link))
-        self.download_folder(email, link, uniq_id[0])
+        try: 
+            uniq_id = self.extract_drive_id([link])
+            if ((uniq_id is None) or (len(uniq_id) == 0)): 
+                return 
+            SupabaseDAO().save_storage(StorageDTO(email, link))
+            self.download_folder(email, link, uniq_id[0])
+            return True
+        except Exception as e: 
+            return False
