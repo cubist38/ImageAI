@@ -7,7 +7,7 @@ device = torch.device('cuda') if torch.cuda.is_available() else 'cpu'
 class ImageNTextEncoder():
   _instance = None
 
-  def __new__(cls, model_name='blip2_t5', model_type='pretrain_flant5xxl'):
+  def __new__(cls, model_name='blip_feature_extractor', model_type='base'):
     if cls._instance is None:
       cls._instance = super().__new__(cls)
       cls._instance.model, cls._instance.vis_processors, cls._instance.txt_processors = load_model_and_preprocess(name=model_name, model_type=model_type, is_eval=True, device=device)
