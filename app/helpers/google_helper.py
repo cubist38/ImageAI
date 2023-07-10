@@ -187,5 +187,3 @@ class GoogleHelper:
             return True
         except Exception as e: 
             return False
-
-GoogleHelper()
