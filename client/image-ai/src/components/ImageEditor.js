@@ -20,8 +20,8 @@ const ImageEditor = () => {
         console.log(selectedPoints);
 
         // Send inpaint api request
-        const endpoint = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=mountain&per_page=50&format=json&nojsoncallback=1`;
-        //const endpoint = `${apiServer}/`;
+        //const endpoint = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=mountain&per_page=50&format=json&nojsoncallback=1`;
+        const endpoint = `${apiServer}/inpaint_selected_object`;
 
         var data = new FormData();
         data.append('file', image);

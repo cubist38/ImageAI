@@ -37,7 +37,7 @@ const ClickableImage = ({ image, onClickCallback, selectedPoints, setSelectedPoi
         // as 'circles' is immutible and will not accept new info
         let allCircles = [...selectedPoints, newCircle];
     
-        onClickCallback(x * ratio, y * ratio, allCircles);
+        onClickCallback(x / ratio, y / ratio, allCircles);
 
         // update 'circles'
         setSelectedPoints(allCircles);
