@@ -44,7 +44,7 @@ async def segment_selected_object(request: SegmentationRequest):
     image = request.image
     x = request.x
     y = request.y
-    image = base64_to_pil(image)
+    image = base64_to_numpy(image)
     image, mask, img_with_mask = segment_selected_object_on_image(image, x, y)
     img_b64 = numpy_to_base64(image)
     mask_b64 = numpy_to_base64(mask)
