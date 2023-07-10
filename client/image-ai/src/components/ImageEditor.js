@@ -7,9 +7,10 @@ import { ServerStatusContext } from "../context/ServerStatusContext";
 import styled from "styled-components";
 import axios from "axios";
 import { apiServer, apiKey } from "../api/config";
+import { base64ToImage } from "../utils/utils";
 
 const ImageEditor = () => {
-    const {image, setImage} = useContext(ImageContext);
+    const {image, setImage, imageStack, setImageStack} = useContext(ImageContext);
     const {processing, setProcessing} = useContext(ServerStatusContext);
     
     const [selectedPoints, setSelectedPoints] = useState([]);
@@ -87,6 +88,41 @@ const ImageEditor = () => {
         setSelectedPoints(tempPoints);
     }
 
+    const segment = (x, y, allCircles) => {
+        console.log(image.base64);
+        console.log(x, y);
+
+        var data = new FormData();
+        data.append('image', image.base64);
+        data.append('x', x);
+        data.append('y', y);
+
+        // Send segment api request
+        // const endpoint = `${apiServer}/segment_selected_object`;
+        const endpoint = `${apiServer}/`;
+        var config = {
+            // method: 'post',
+            method: 'get',
+            url: endpoint, 
+            headers:{
+                "Accept":"application/json, text/plain, /", 
+                "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": true},
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                base64ToImage(response.data.Masked_image, (img) => {
+                    setImage(img);
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     return (
         <div>
             <Toolbar inpaint={inpaint}
@@ -94,7 +130,7 @@ const ImageEditor = () => {
                     undo={undo}/>
             <MyContainer>
                 { processing && <ReactLoading type="bubbles" color="#0000FF" height={100} width={50}/> }
-                <ClickableImage image={image} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints}/>
+                <ClickableImage image={image} onClickCallback={segment} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints}/>
             </MyContainer>
         </div>
     );

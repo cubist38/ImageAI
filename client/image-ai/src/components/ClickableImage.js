@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { apiServer, apiKey } from "../api/config";
-import axios from "axios";
 
-const ClickableImage = ({ image, selectedPoints, setSelectedPoints }) => {
+const ClickableImage = ({ image, onClickCallback, selectedPoints, setSelectedPoints }) => {
     const getClickCoords = (event) => {
         // from: https://stackoverflow.com/a/29296049/14198287
         var e = event.target;
@@ -35,29 +34,7 @@ const ClickableImage = ({ image, selectedPoints, setSelectedPoints }) => {
         // as 'circles' is immutible and will not accept new info
         let allCircles = [...selectedPoints, newCircle];
 
-        var data = new FormData();
-        data.append('file', image.raw);
-
-        // Send segment api request
-        //const endpoint = `${apiServer}/segment_selected_object?x=0&y=0`;
-        const endpoint = `${apiServer}/`;
-        var config = {
-            method: 'get',
-            url: endpoint, 
-            headers:{
-                "Accept":"application/json, text/plain, /", 
-                "Content-Type": "multipart/form-data",
-                "ngrok-skip-browser-warning": true},
-            data : data
-        };
-
-        axios(config)
-            .then(function (response) {
-                console.log(JSON.stringify(response.data));
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        onClickCallback(x, y, allCircles);
 
         // update 'circles'
         setSelectedPoints(allCircles);
