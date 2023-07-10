@@ -26,15 +26,31 @@ class GoogleHelper:
             cls._instance = super().__new__(cls)
 
             # Google Drive API
-            try:
-                flow = InstalledAppFlow.from_client_secrets_file(os.getenv('GOOGLE_SERVICE_CREDENTIALS'), ["https://www.googleapis.com/auth/drive"])
-                flow.redirect_uri = flow._OOB_REDIRECT_URI
-                auth_url, _ = flow.authorization_url(prompt='consent')
-                print(f'Please visit this URL to authorize this application: {auth_url}')
-                code = input("Enter the authorization code: ")
-                flow.fetch_token(code=code)
-                cred = flow.credentials
+            cred = None
 
+            pickle_file = f"token_drive_v3.pickle"
+
+            if os.path.exists(pickle_file):
+                with open(pickle_file, "rb") as token:
+                    cred = pickle.load(token)
+
+            if not cred or not cred.valid:
+                if cred and cred.expired and cred.refresh_token:
+                    cred.refresh(Request())
+                else:
+                    flow = InstalledAppFlow.from_client_secrets_file(os.getenv('GOOGLE_SERVICE_CREDENTIALS'), ["https://www.googleapis.com/auth/drive"])
+                    flow.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
+                    auth_url, _ = flow.authorization_url(prompt='consent')
+                    print(f'Please visit this URL to authorize this application: {auth_url}')
+                    code = input("Enter the authorization code: ")
+                    flow.fetch_token(code=code)
+                    cred = flow.credentials
+
+
+                with open(pickle_file, "wb") as token:
+                    pickle.dump(cred, token)
+
+            try:
                 service = build('drive', 'v3', credentials=cred)
                 cls._instance.service = service
                 logging.info('Google Drive service created successfully')
