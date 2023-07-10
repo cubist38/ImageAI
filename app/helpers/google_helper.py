@@ -1,6 +1,7 @@
 import pickle
 import os
 from google_auth_oauthlib.flow import InstalledAppFlow
+import google.auth
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 import io
@@ -25,25 +26,15 @@ class GoogleHelper:
             cls._instance = super().__new__(cls)
 
             # Google Drive API
-            cred = None
-
-            pickle_file = f"token_drive_v3.pickle"
-
-            if os.path.exists(pickle_file):
-                with open(pickle_file, "rb") as token:
-                    cred = pickle.load(token)
-
-            if not cred or not cred.valid:
-                if cred and cred.expired and cred.refresh_token:
-                    cred.refresh(Request())
-                else:
-                    flow = InstalledAppFlow.from_client_secrets_file(os.getenv('GOOGLE_SERVICE_CREDENTIALS'), ["https://www.googleapis.com/auth/drive"])
-                    cred = flow.run_local_server()
-
-                with open(pickle_file, "wb") as token:
-                    pickle.dump(cred, token)
-
             try:
+                flow = InstalledAppFlow.from_client_secrets_file(os.getenv('GOOGLE_SERVICE_CREDENTIALS'), ["https://www.googleapis.com/auth/drive"])
+                flow.redirect_uri = flow._OOB_REDIRECT_URI
+                auth_url, _ = flow.authorization_url(prompt='consent')
+                print(f'Please visit this URL to authorize this application: {auth_url}')
+                code = input("Enter the authorization code: ")
+                flow.fetch_token(code=code)
+                cred = flow.credentials
+
                 service = build('drive', 'v3', credentials=cred)
                 cls._instance.service = service
                 logging.info('Google Drive service created successfully')
@@ -180,3 +171,5 @@ class GoogleHelper:
             return True
         except Exception as e: 
             return False
+
+GoogleHelper()
