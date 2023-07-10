@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { apiServer, apiKey } from "../api/config";
 
 const ClickableImage = ({ image, onClickCallback, selectedPoints, setSelectedPoints }) => {
+    var ratio = 500 / image.height;
+    var resizedWidth = ratio * image.width;
+
     const getClickCoords = (event) => {
         // from: https://stackoverflow.com/a/29296049/14198287
         var e = event.target;
@@ -33,15 +36,12 @@ const ClickableImage = ({ image, onClickCallback, selectedPoints, setSelectedPoi
         // update the array of circles; you HAVE to spread the current array
         // as 'circles' is immutible and will not accept new info
         let allCircles = [...selectedPoints, newCircle];
-        
-        onClickCallback(x, y, allCircles);
+    
+        onClickCallback(x * ratio, y * ratio, allCircles);
 
         // update 'circles'
         setSelectedPoints(allCircles);
     };
-
-
-    var resizedWidth = (500 / image.height) * image.width;
 
     return (
         <div>
