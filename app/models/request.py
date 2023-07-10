@@ -19,3 +19,11 @@ class GenerateDescriptionRequest(BaseModel):
 
 class GenerateImageRequest(BaseModel):
     prompt: str
+
+class StorageRequest(BaseModel): 
+    access_token: str 
+
+class ImageStorageRequest(BaseModel): 
+    access_token: str 
+    storage_url: str
+

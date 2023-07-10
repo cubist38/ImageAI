@@ -64,7 +64,6 @@ class SupabaseDAO:
         
         data = data[1]
         return [StorageDTO(item['email'], item['storage_url']) for item in data]
-        
 
     def get_image_by_storage_url(self, storage_url):
         logging.info(f'Get image by storage URL {storage_url}')

@@ -7,11 +7,15 @@ from app.features.blur import blur_image
 from app.features.gen_image import gen_image_from_prompt
 from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64
 from app.models.request import (SegmentationRequest, HighlightRequest, 
-                                InpaintRequest, GenerateDescriptionRequest, GenerateImageRequest)
+                                InpaintRequest, GenerateDescriptionRequest, GenerateImageRequest,
+                                StorageRequest, ImageStorageRequest)
+from app.dal.supabase_dao import SupabaseDAO
+
 from PIL import Image
 import io
 from app.config import get_settings
 
+PUBLIC_BUCKET = 'https://kghukcserwconiuwgboq.supabase.co/storage/v1/object/public/images/'
 
 app = FastAPI()
 config_settings = get_settings()
@@ -77,3 +81,15 @@ async def highlight_object(request: HighlightRequest):
     blurred_img = blur_image(image) 
     img_b64 = numpy_to_base64(blurred_img)
     return {"Image": img_b64}
+
+@app.post("/storage") 
+async def storage(request: StorageRequest):
+    # TODO: Check authorization
+    storages_url = SupabaseDAO().get_storage_by_email('temp_email')
+    return {"urls": storages_url}
+    
+@app.get("/images")
+async def process_images(request: ImageStorageRequest):
+    # TODO: Check authorization
+    images_url = SupabaseDAO().get_image_by_storage_url(request.storage_url)
+    return {"urls": [f'{PUBLIC_BUCKET}{item.id}.{item.image.split(".")[-1]}' for item in images_url]}

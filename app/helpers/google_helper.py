@@ -10,6 +10,7 @@ import re
 from dotenv import load_dotenv
 import logging
 from app.dal.supabase_dao import SupabaseDAO
+from app.dal.storage_dto import StorageDTO
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -173,5 +174,5 @@ class GoogleGHelper:
         uniq_id = self.extract_drive_id([link])
         if ((uniq_id is None) or (len(uniq_id) == 0)): 
             return 
-        SupabaseDAO().save_storage(email, link)
+        SupabaseDAO().save_storage(StorageDTO(email, link))
         self.download_folder(email, link, uniq_id[0])
