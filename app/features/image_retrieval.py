@@ -36,10 +36,10 @@ def get_faiss_by_user(email):
 
 def retrieve_image_by_text(email, query, page): 
   ids = RedisHelper().load_search_result(email, query)
+  images_url, faiss_index = get_faiss_by_user(email) 
 
   if (ids is None): 
     text_embedded = ImageNTextEncoder().encode_text(query)
-    images_url, faiss_index = get_faiss_by_user(email) 
     dists, ids = faiss_index.search(text_embedded, faiss_index.ntotal) 
     ids = ids[0]
 
@@ -56,11 +56,11 @@ def retrieve_image_by_text(email, query, page):
 
 def retrieve_image_by_image(email, image_b64, page): 
   ids = RedisHelper().load_search_result(email, image_b64)
+  images_url, faiss_index = get_faiss_by_user(email) 
 
   if (ids is None): 
     image = base64_to_image(image_b64)
     image_embedded = np.array([ImageNTextEncoder().encode_image(image)], dtype=np.float64)
-    images_url, faiss_index = get_faiss_by_user(email) 
     dists, ids = faiss_index.search(image_embedded, faiss_index.ntotal) 
     ids = ids[0]
 
