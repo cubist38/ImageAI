@@ -148,11 +148,8 @@ const ImageEditor = () => {
 
         axios(config)
             .then(function (response) {
-                response.data.displayImage = response.data.maskedImage;
-                let newImageStack = [...imageStack, response.data];
                 console.log(response.data);
-                
-                setImageStack(newImageStack);
+                setImageCaption(response.data.Description);
             })
             .catch(function (error) {
                 console.log(error);
@@ -175,6 +172,7 @@ const ImageEditor = () => {
                 {image && <ClickableImage image={image} onClickCallback={segment} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints}/>}
                 {(imageCaption !== "") && <Caption caption={imageCaption}/>}
             </MyContainer>
+            <div style={{margin: 2 + 'em'}}></div>
         </div>
     );
 }
