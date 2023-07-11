@@ -5,7 +5,8 @@ from app.features.segment import segment_selected_object_on_image
 from app.features.remove import remove_selected_object_on_image
 from app.features.blur import blur_image 
 from app.features.gen_image import gen_image_from_prompt
-from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64, mask_to_bas64, base64_to_mask
+from app.helpers.engine import (numpy_to_base64, base64_to_numpy, pil_to_base64, 
+                                mask_to_bas64, base64_to_mask, base64_to_pil)
 from app.models.request import (SegmentationRequest, HighlightRequest, 
                                 InpaintRequest, GenerateDescriptionRequest, GenerateImageRequest)
 from PIL import Image
