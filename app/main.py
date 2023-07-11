@@ -139,3 +139,4 @@ async def visual_search(request: VisualSearchRequest, response: Response):
 # Initialization for singleton 
 temp = GoogleHelper() 
 temp = ImageNTextEncoder() 
+temp = SupabaseDAO()
