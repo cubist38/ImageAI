@@ -35,7 +35,9 @@ async def root():
 @app.post("/generate_description")
 async def generate_description_from_image(request: GenerateDescriptionRequest):
     image = request.image
-    image = base64_to_numpy(image)
+    image = base64_to_pil(image)
+    if image.mode == "RGBA":
+        image = image.convert("RGB") 
     des = generate_description(image)
     return {"Description": des}
 
