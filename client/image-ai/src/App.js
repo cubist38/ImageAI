@@ -10,18 +10,18 @@ import ImageBrowser from "./components/ImageBrowser"
 
 function App() {
   
-  const {image, setImage} = useContext(ImageContext);
+  const {imageStack, setImageStack} = useContext(ImageContext);
 
   const back = () => {
-    setImage(null);
+    setImageStack([]);
   }
   return (
     <div>
-      <Header back={image ? back : null}/>
-      { !image && <ImageBrowser />}
+      <Header back={imageStack.length > 0 ? back : null}/>
+      { imageStack.length === 0 && <ImageBrowser />}
 
       <ServerStatusContextProvider>
-        { image && <ImageEditor/> }
+        { imageStack.length > 0 && <ImageEditor/> }
       </ServerStatusContextProvider>
       
     </div>

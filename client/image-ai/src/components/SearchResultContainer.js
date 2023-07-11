@@ -11,7 +11,7 @@ const SearchResultContainer = ({ handleImageSelection, query }) => {
         runSearch(query);
     }, [query]);
 
-    if (query != "") {
+    if (query !== null) {
         return (
             <div className="photo-container">
                     { loading ? <Loader /> : <Gallery data={results} handleImageSelection={handleImageSelection}/> }

@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { ImageContext } from "../context/ImageContext";
 import Toolbar from "./Toolbar";
 import ClickableImage from "./ClickableImage";
+import Caption from "./Caption";
 import ReactLoading from "react-loading";
 import { ServerStatusContext } from "../context/ServerStatusContext";
 import styled from "styled-components";
@@ -10,28 +11,29 @@ import { apiServer, apiKey } from "../api/config";
 import { base64ToImage } from "../utils/utils";
 
 const ImageEditor = () => {
-    const {image, setImage, imageStack, setImageStack} = useContext(ImageContext);
+    const { image, setImage, imageStack, setImageStack} = useContext(ImageContext);
     const {processing, setProcessing} = useContext(ServerStatusContext);
     
     const [selectedPoints, setSelectedPoints] = useState([]);
+    const [imageCaption, setImageCaption] = useState("");
+
     const inpaint = () => {
         setProcessing(true);
-        console.log("Send to server image: " + image.src);
-        console.log(selectedPoints);
-
-        // Send inpaint api request
-        //const endpoint = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=mountain&per_page=50&format=json&nojsoncallback=1`;
         const endpoint = `${apiServer}/inpaint_selected_object`;
 
+        console.log('image: ' + imageStack[imageStack.length - 1].Image);
+        console.log('mask: ' + imageStack[imageStack.length - 1].Mask);
+
         var data = new FormData();
-        data.append('file', image);
+        data.append('image', imageStack[imageStack.length - 1].Image);
+        data.append('mask', imageStack[imageStack.length - 1].Mask);
 
         var config = {
-            method: 'get',
+            method: 'post',
             url: endpoint, 
             headers:{
                 "Accept":"application/json, text/plain, /", 
-                "Content-Type": "multipart/form-data",
+                "Content-Type": "application/json",
                 'ngrok-skip-browser-warning': true
             },
             data : data
@@ -39,41 +41,42 @@ const ImageEditor = () => {
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
+                console.log(response.data);
+                setProcessing(false);
+                setSelectedPoints([]);
             })
             .catch(function (error) {
                 console.log(error);
             });
 
-        setTimeout( function() { setProcessing(false); }, 1000);
-        setSelectedPoints([]);
     }
 
     const highlight = () => {
         setProcessing(true);
-        console.log("Send to server image: " + image.src);
-        console.log(selectedPoints);
-
-        // Send highlight api request
-        const endpoint = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=mountain&per_page=50&format=json&nojsoncallback=1`;
-        //const endpoint = `${apiServer}/`;
+        const endpoint = `${apiServer}/highlight_object`;
 
         var data = new FormData();
-        data.append('file', image);
+        data.append('image', imageStack[imageStack.length - 1].Image);
+        data.append('mask', imageStack[imageStack.length - 1].Mask);
 
         var config = {
             method: 'post',
             url: endpoint, 
             headers:{
                 "Accept":"application/json, text/plain, /", 
-                "Content-Type": "multipart/form-data",
+                "Content-Type": "application/json",
                 'ngrok-skip-browser-warning': true},
             data : data
         };
 
         axios(config)
             .then(function (response) {
-                console.log(JSON.stringify(response.data));
+                console.log(response.data);
+
+                let newImageStack = [...imageStack, response.data];
+
+                setImageStack(newImageStack);
+
             })
             .catch(function (error) {
                 console.log(error);
@@ -86,23 +89,24 @@ const ImageEditor = () => {
     const undo = () => {
         var tempPoints = selectedPoints.slice(0, -1);
         setSelectedPoints(tempPoints);
+
+        var tempImageStack = imageStack.slice(0, -1);
+        setImageStack(tempImageStack);
     }
 
     const segment = (x, y, allCircles) => {
-        console.log(image.base64);
+        // console.log(image.base64);
         console.log(x, y);
 
         var data = new FormData();
-        data.append('image', image.base64);
+        data.append('image', imageStack[imageStack.length - 1].displayImage);
         data.append('x', x);
         data.append('y', y);
 
         // Send segment api request
         const endpoint = `${apiServer}/segment_selected_object`;
-        //const endpoint = `${apiServer}/`;
         var config = {
             method: 'post',
-            //method: 'get',
             url: endpoint, 
             headers:{
                 "Accept":"application/json, text/plain, /", 
@@ -113,24 +117,63 @@ const ImageEditor = () => {
 
         axios(config)
             .then(function (response) {
+                response.data.displayImage = response.data.maskedImage;
+                let newImageStack = [...imageStack, response.data];
                 console.log(response.data);
-                base64ToImage(response.data.maskedImage, (img) => {
-                    setImage(img);
-                });
+                
+                setImageStack(newImageStack);
             })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
+    const caption = () => {
+        console.log("Generating caption...");
+        setImageCaption("Generating image description...");
+        var data = new FormData();
+        data.append('image', imageStack[imageStack.length - 1].displayImage);
+
+        // Send segment api request
+        const endpoint = `${apiServer}/generate_description`;
+        var config = {
+            method: 'post',
+            url: endpoint, 
+            headers:{
+                "Accept":"application/json, text/plain, /", 
+                "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": true},
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                response.data.displayImage = response.data.maskedImage;
+                let newImageStack = [...imageStack, response.data];
+                console.log(response.data);
+                
+                setImageStack(newImageStack);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    // Always show displayImage of the last element of imageStack
+    base64ToImage(imageStack[imageStack.length - 1].displayImage, (img) => {
+        setImage(img);
+    });
+
     return (
         <div>
             <Toolbar inpaint={inpaint}
                     highlight={highlight}
-                    undo={undo}/>
+                    undo={undo}
+                    caption={caption}/>
             <MyContainer>
                 { processing && <ReactLoading type="bubbles" color="#0000FF" height={100} width={50}/> }
-                <ClickableImage image={image} onClickCallback={segment} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints}/>
+                {image && <ClickableImage image={image} onClickCallback={segment} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints}/>}
+                {(imageCaption !== "") && <Caption caption={imageCaption}/>}
             </MyContainer>
         </div>
     );
