@@ -10,9 +10,6 @@ def segment_selected_object_on_image(image, x, y):
     predictor = load_sam_model(config.sam_model_type, 
                                 config.sam_model_ckpt_p,
                                 config.device)
-    # if image.mode == 'RGBA':
-    #     image = image.convert('RGB')
-    # image = np.array(image)
     masks, scores, logits = predict_masks_with_sam(image,
                                                 [[int(float(x)), int(float(y))]],
                                                 [1],
