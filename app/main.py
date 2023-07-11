@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.helpers.encoder import ImageNTextEncoder
-from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64
+from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64, base64_to_mask, base64_to_pil, mask_to_bas64
 from app.helpers.google_helper import GoogleHelper
 
 from app.features.gen_des import generate_description
