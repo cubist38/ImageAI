@@ -29,3 +29,13 @@ uvicorn
 pydantic[dotenv]
 python-multipart
 diffusers[torch]
+supabase
+gdown
+google-api-python-client 
+google-auth-httplib2 
+google-auth-oauthlib
+salesforce-lavis
+opencv-contrib-python
+faiss-cpu 
+faiss-gpu
+redis

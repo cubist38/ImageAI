@@ -24,3 +24,24 @@ class GenerateDescriptionRequest(BaseModel):
 
 class GenerateImageRequest(BaseModel):
     prompt: str
+
+class StorageRequest(BaseModel): 
+    access_token: str 
+
+class ImageStorageRequest(BaseModel): 
+    access_token: str 
+    storage_url: str
+
+class ImportStorageRequest(BaseModel): 
+    access_token: str 
+    storage_url: str
+
+class TextSearchRequest(BaseModel): 
+    access_token: str 
+    query: str
+    page: int 
+
+class VisualSearchRequest(BaseModel): 
+    access_token: str 
+    image: str
+    page: int

@@ -129,3 +129,8 @@ client/
 
 # Pyre type checker
 .pyre/
+
+temp/
+*.pickle
+*.jpg
+*.png
