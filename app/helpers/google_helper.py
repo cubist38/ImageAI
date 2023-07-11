@@ -8,15 +8,14 @@ import io
 from tqdm import tqdm
 from googleapiclient.http import MediaIoBaseDownload
 import re
-from dotenv import load_dotenv
+import json
 import logging
 from app.dal.supabase_dao import SupabaseDAO
 from app.dal.storage_dto import StorageDTO
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Configure the logging settings
-load_dotenv()
+connect_config = json.load(open('./app/connection_config.json'))
 
 class GoogleHelper:
     _instance = None
@@ -38,7 +37,7 @@ class GoogleHelper:
                 if cred and cred.expired and cred.refresh_token:
                     cred.refresh(Request())
                 else:
-                    flow = InstalledAppFlow.from_client_secrets_file(os.getenv('GOOGLE_SERVICE_CREDENTIALS'), ["https://www.googleapis.com/auth/drive"])
+                    flow = InstalledAppFlow.from_client_secrets_file(connect_config["GOOGLE_SERVICE_CREDENTIALS"], ["https://www.googleapis.com/auth/drive"])
                     flow.redirect_uri = "urn:ietf:wg:oauth:2.0:oob"
                     auth_url, _ = flow.authorization_url(prompt='consent')
                     print(f'Please visit this URL to authorize this application: {auth_url}')

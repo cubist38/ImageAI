@@ -136,3 +136,6 @@ async def visual_search(request: VisualSearchRequest, response: Response):
     result = retrieve_image_by_image('temp_email', request.image, request.page)
     return {'urls': result}
     
+# Initialization for singleton 
+temp = GoogleHelper() 
+temp = ImageNTextEncoder() 

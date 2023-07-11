@@ -1,6 +1,6 @@
 import supabase
 import os 
-from dotenv import load_dotenv
+import json
 import logging
 from app.dal.image_dto import ImageDTO
 from app.dal.storage_dto import StorageDTO
@@ -8,7 +8,7 @@ from app.helpers.image_helper import resize_image
 from app.helpers.encoder import ImageNTextEncoder
 import pickle
 
-load_dotenv()
+connect_config = json.load(open('./app/connection_config.json'))
 
 class SupabaseDAO:
     _instance = None
@@ -19,7 +19,7 @@ class SupabaseDAO:
             try: 
                 cls._instance.supabase = supabase.create_client(
                     "https://kghukcserwconiuwgboq.supabase.co",
-                    os.getenv('SUPABASE_PUBLIC_KEY')
+                    connect_config['SUPABASE_PUBLIC_KEY']
                 )
                 logging.info('Connected to Supabase!!')
             except Exception as e:
