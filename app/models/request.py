@@ -1,5 +1,10 @@
 from typing import *
 from pydantic import BaseModel
+import numpy
+
+class Mask(BaseModel):
+    mask_b64: str
+    shape: tuple
 
 class SegmentationRequest(BaseModel):
     image: str
@@ -8,11 +13,11 @@ class SegmentationRequest(BaseModel):
 
 class HighlightRequest(BaseModel):
     image: str
-    mask: str
+    mask: Mask
 
 class InpaintRequest(BaseModel):
     image: str
-    mask: str
+    mask: Mask
 
 class GenerateDescriptionRequest(BaseModel):
     image: str
