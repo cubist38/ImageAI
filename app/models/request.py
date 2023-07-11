@@ -1,5 +1,6 @@
 from typing import *
 from pydantic import BaseModel
+import numpy
 
 class SegmentationRequest(BaseModel):
     image: str
@@ -8,11 +9,11 @@ class SegmentationRequest(BaseModel):
 
 class HighlightRequest(BaseModel):
     image: str
-    mask: list
+    mask: list[str, numpy.ndarray]
 
 class InpaintRequest(BaseModel):
     image: str
-    mask: list
+    mask: list[str, numpy.ndarray]
 
 class GenerateDescriptionRequest(BaseModel):
     image: str
