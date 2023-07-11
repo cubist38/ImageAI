@@ -4,7 +4,7 @@ import numpy
 
 class Mask(BaseModel):
     mask_b64: str
-    shape: list[int, int]
+    shape: list[int] = []
 
 class SegmentationRequest(BaseModel):
     image: str

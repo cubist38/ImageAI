@@ -49,7 +49,7 @@ async def segment_selected_object(request: SegmentationRequest):
     img_b64 = numpy_to_base64(image)
     mask_b64, shape = mask_to_bas64(mask) 
     img_with_mask_b64 = numpy_to_base64(img_with_mask)
-    return {"Image": img_b64, "Mask": [mask_b64, shape.tolist()], "maskedImage": img_with_mask_b64}
+    return {"Image": img_b64, "Mask": {"mask_b64": mask_b64, "shape": shape.tolist()}, "maskedImage": img_with_mask_b64}
 
 @app.post("/inpaint_selected_object")
 async def inpaint_selected_object(request: InpaintRequest):
