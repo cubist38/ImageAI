@@ -48,13 +48,13 @@ async def segment_selected_object(request: SegmentationRequest):
     image, mask, img_with_mask = segment_selected_object_on_image(image, x, y)
     img_b64 = numpy_to_base64(image)
     img_with_mask_b64 = numpy_to_base64(img_with_mask)
-    return {"Image": img_b64, "Mask": np.array2string(mask), "maskedImage": img_with_mask_b64}
+    return {"Image": img_b64, "Mask": mask.tolist(), "maskedImage": img_with_mask_b64}
 
 @app.post("/inpaint_selected_object")
 async def inpaint_selected_object(request: InpaintRequest):
     image = request.image
     mask = request.mask
-    mask = np.array(mask)
+    mask = np.array(mask, dtype = np.uint8)
     image = base64_to_numpy(image)
     img_inpainted = remove_selected_object_on_image(image, mask)
     img_inpainted_b64 = numpy_to_base64(img_inpainted)
@@ -71,7 +71,7 @@ async def generate_image_from_prompt(request: GenerateImageRequest):
 async def highlight_object(request: HighlightRequest):
     image = request.image
     mask = request.mask
-    mask = np.array(mask)
+    mask = np.array(mask, dtype = np.uint8)
     image = base64_to_numpy(image)
     blurred_img = blur_image(image, mask) 
     img_b64 = numpy_to_base64(blurred_img)
