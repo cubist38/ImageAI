@@ -8,11 +8,11 @@ class SegmentationRequest(BaseModel):
 
 class HighlightRequest(BaseModel):
     image: str
-    mask: str
+    mask: list
 
 class InpaintRequest(BaseModel):
     image: str
-    mask: str
+    mask: list
 
 class GenerateDescriptionRequest(BaseModel):
     image: str

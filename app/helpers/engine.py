@@ -40,7 +40,7 @@ def base64_to_numpy(img):
 
 def mask_to_bas64(mask):
     mask_bytes = mask.tobytes()
-    mask_b64 = base64.b64encode(mask_bytes).decode('utf-8')
+    mask_b64 = base64.b64encode(mask_bytes)
     return mask_b64, mask.shape
 
 def base64_to_mask(mask_b64, shape):
