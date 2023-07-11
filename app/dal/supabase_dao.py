@@ -96,15 +96,10 @@ class SupabaseDAO:
             return None
         
         try: 
-            logging.info('hello1')
             resize_image(image_path, 448, 448)
-            logging.info('hello2')
             image_embedded = ImageNTextEncoder().encode_image_by_path(image_path).tolist()
-            logging.info('hello3')
             image_id = self.save_image(ImageDTO(storage_url, image_name, image_embedded)) 
-            logging.info('hello4')
             res = self.supabase.storage.from_('images').upload(f'{image_id}.{image_path.split(".")[-1]}', image_path)
-            logging.info('hello5')
             logging.info(f'Upload {storage_url}/{image_name} successful!!')
             return f'https://kghukcserwconiuwgboq.supabase.co/storage/v1/object/public/images/{image_id}.{image_path.split(".")[-1]}'
         except Exception as e: 

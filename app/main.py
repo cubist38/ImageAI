@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.helpers.encoder import ImageNTextEncoder
 from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64, base64_to_mask, base64_to_pil, mask_to_bas64
 from app.helpers.google_helper import GoogleHelper
+from app.helpers.redis_helper import RedisHelper
 
 from app.features.gen_des import generate_description
 from app.features.segment import segment_selected_object_on_image
@@ -21,10 +22,6 @@ from app.models.request import (SegmentationRequest, HighlightRequest,
 from PIL import Image
 import numpy as np
 from app.config import get_settings
-
-# Initialize for singleton instance 
-GoogleHelper()
-ImageNTextEncoder()
 
 PUBLIC_BUCKET = 'https://kghukcserwconiuwgboq.supabase.co/storage/v1/object/public/images/'
 
@@ -144,3 +141,4 @@ async def visual_search(request: VisualSearchRequest, response: Response):
 temp = GoogleHelper() 
 temp = ImageNTextEncoder() 
 temp = SupabaseDAO()
+temp = RedisHelper()
