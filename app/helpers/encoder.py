@@ -1,6 +1,7 @@
 import torch
 from lavis.models import load_model_and_preprocess
 from app.helpers.image_helper import load_image_from_path
+import numpy as np
 
 device = torch.device('cuda') if torch.cuda.is_available() else 'cpu'
 
@@ -18,7 +19,7 @@ class ImageNTextEncoder():
     text_input = self.txt_processors['eval'](text)
     sample = {'text_input': [text_input]}
     features_text = self.model.extract_features(sample, mode='text')
-    return features_text.text_embeds_proj[0, 0:1, :]
+    return (features_text.text_embeds_proj[0, 0:1, :]).numpy()
   
   def encode_image_by_path(self, image_path): 
     image = load_image_from_path(image_path)
@@ -28,7 +29,7 @@ class ImageNTextEncoder():
     image = self.vis_processors['eval'](image).unsqueeze(0).to(device)
     sample = {'image': image}
     features_image = self.model.extract_features(sample, mode='image')
-    return features_image.image_embeds_proj[0, 0:1, :]
+    return (features_image.image_embeds_proj[0, 0:1, :]).numpy()[0]
 
   @staticmethod
   def calc_similarity(features_image, features_text): 
