@@ -38,13 +38,7 @@ def base64_to_numpy(img):
     img = cv2.imdecode(im_arr, flags=cv2.IMREAD_COLOR)
     return img
 
-def mask_to_bas64(mask):
-    mask_bytes = mask.tobytes()
-    mask_b64 = base64.b64encode(mask_bytes)
-    return mask_b64, mask.shape
-
-def base64_to_mask(mask_b64, shape):
-    mask_bytes = base64.b64decode(mask_b64)
-    mask = np.frombuffer(mask_bytes, dtype=np.uint8)
-    mask = mask.reshape(shape)
+def expand_dim_mask(mask):
+    mask = np.expand_dims(mask, axis=-1)
+    mask = np.tile(mask, (1, 1, 3))
     return mask

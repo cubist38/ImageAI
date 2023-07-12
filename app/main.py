@@ -2,7 +2,8 @@ from fastapi import FastAPI, UploadFile, File, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.helpers.encoder import ImageNTextEncoder
-from app.helpers.engine import numpy_to_base64, base64_to_numpy, pil_to_base64, base64_to_mask, base64_to_pil, mask_to_bas64
+from app.helpers.engine import (numpy_to_base64, base64_to_numpy, 
+                                pil_to_base64, base64_to_pil, expand_dim_mask)
 from app.helpers.google_helper import GoogleHelper
 
 from app.features.gen_des import generate_description
@@ -64,19 +65,20 @@ async def segment_selected_object(request: SegmentationRequest):
     y = request.y
     image = base64_to_numpy(image)
     image, mask, img_with_mask = segment_selected_object_on_image(image, x, y)
+    mask = expand_dim_mask(mask)
     img_b64 = numpy_to_base64(image)
-    mask_b64, shape = mask_to_bas64(mask) 
+    mask_b64 = numpy_to_base64(mask)
     img_with_mask_b64 = numpy_to_base64(img_with_mask)
-    return {"Image": img_b64, "Mask": {"mask_b64": mask_b64, "shape": list(shape)}, "maskedImage": img_with_mask_b64}
+    return {"Image": img_b64, "Mask": mask_b64, "maskedImage": img_with_mask_b64}
 
 
 @app.post("/inpaint_selected_object")
 async def inpaint_selected_object(request: InpaintRequest):
     image = request.image
-    mask_b64 = request.mask.mask_b64
-    shape = request.mask.shape
+    mask = request.mask
     image = base64_to_numpy(image)
-    mask = base64_to_mask(mask_b64, shape)
+    mask = base64_to_numpy(mask)
+    mask = mask[:, :, 0]
     img_inpainted = remove_selected_object_on_image(image, mask)
     img_inpainted_b64 = numpy_to_base64(img_inpainted)
     return {"Image": img_inpainted_b64}
@@ -93,10 +95,10 @@ async def generate_image_from_prompt(request: GenerateImageRequest):
 @app.post("/highlight_object")
 async def highlight_object(request: HighlightRequest):
     image = request.image
-    mask_b64 = request.mask.mask_b64
-    shape = request.mask.shape
+    mask = request.mask
     image = base64_to_numpy(image)
-    mask = base64_to_mask(mask_b64, shape)
+    mask = base64_to_numpy(mask)
+    mask = mask[:, :, 0]
     blurred_img = blur_image(image, mask) 
     img_b64 = numpy_to_base64(blurred_img)
     return {"Image": img_b64}
