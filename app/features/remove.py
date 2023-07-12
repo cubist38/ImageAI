@@ -50,6 +50,5 @@ def remove_selected_object_on_image(image, mask):
                 )
     img_inpainted = inpaint_img_with_built_lama(lama_model, 
                                                 image, 
-                                                mask
-                                            )      
+                                                mask)      
     return img_inpainted
