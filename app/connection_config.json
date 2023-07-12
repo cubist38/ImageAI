@@ -1,5 +1,7 @@
 {
   "SUPABASE_PUBLIC_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnaHVrY3Nlcndjb25pdXdnYm9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODg5NTg2NTksImV4cCI6MjAwNDUzNDY1OX0.5kbVfAx6zs50jn0VluKpo--57dJ7g_u5PjPMMOWrZr4",
   "GOOGLE_SERVICE_CREDENTIALS": "./app/credentials.json",
-  "TEMP_FOLDER": "./temp"
+  "TEMP_FOLDER": "./temp",
+  "REDIS_HOST": "localhost", 
+  "REDIS_PORT": 6379
 }
