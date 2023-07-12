@@ -18,8 +18,6 @@ from app.models.request import (SegmentationRequest, HighlightRequest,
                                 StorageRequest, ImportStorageRequest, ImageStorageRequest, 
                                 TextSearchRequest, VisualSearchRequest)
 
-from PIL import Image
-import numpy as np
 from app.config import get_settings
 
 # Initialize for singleton instance 
@@ -69,7 +67,7 @@ async def segment_selected_object(request: SegmentationRequest):
     img_b64 = numpy_to_base64(image)
     mask_b64, shape = mask_to_bas64(mask) 
     img_with_mask_b64 = numpy_to_base64(img_with_mask)
-    return {"Image": img_b64, "Mask": {"mask_b64": mask_b64, "shape": shape}, "maskedImage": img_with_mask_b64}
+    return {"Image": img_b64, "Mask": {"mask_b64": mask_b64, "shape": list(shape)}, "maskedImage": img_with_mask_b64}
 
 
 @app.post("/inpaint_selected_object")
