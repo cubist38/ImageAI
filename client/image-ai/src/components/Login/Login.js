@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,22 +13,32 @@ import { Alert, AlertTitle, Divider } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../redux/slices/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 import { apiServer } from "../../api/config";
+import axios from 'axios';
 
 const Login = () => {
+
     const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
 
     const [identifierValidate, setIdentifierValidate] = useState({ error: false, helperText: "" });
     const [passwordValidate, setPasswordValidate] = useState({ error: false, helperText: "" });
 
-    const [login, loggingIn, loginError] = useFetch();
     const [loginSuccess, setLoginSuccess] = useState(false);
+    const [loggingIn, setLoggingIn] = useState(false); 
+    const [errorMessage, setErrorMessage] = useState('');
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => { 
+        console.log(localStorage.getItem('access_token'))
+        if (localStorage.getItem('access_token'))  { 
+            navigate("/");
+        }
+    }, [])
 
     const validateIdentifier = (identifier) => {
         if (!identifier || identifier.trim().length === 0) {
@@ -69,29 +79,47 @@ const Login = () => {
         if (!(validIdentifier && validPassword)) return;
 
         // Send API request
-        // const loginResponse = await login(`${apiServer.BASE_API_URL}/api/auth/local`, {
-        //     method: "POST",
-        //     body: JSON.stringify({ identifier, password }),
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        // });
+        var data = new FormData();
+        data.append('email', identifier);
+        data.append('password', password);
 
-        var loginResponse = {
-            "jwt": "adfsfafdscre",
-            "user": {
-                "name": "Tri Le"
-            }
+        var config = {
+            method: 'post',
+            url: `${apiServer}/sign_in`, 
+            headers:{
+                "Accept":"application/json, text/plain, /", 
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning': true
+            },
+            data : data
         };
 
-        if (!loginResponse) return;
-        setLoginSuccess(true);
+        setLoggingIn(true);
 
-        dispatch(authActions.login(loginResponse));
-        localStorage.setItem("token", loginResponse.jwt);
-        localStorage.setItem("user", JSON.stringify(loginResponse.user));
+        axios(config)
+            .then(function (response) {
+                console.log(response.data);
 
-        navigate("/");
+                setErrorMessage('');
+                setLoginSuccess(true);
+
+                let response_data = {...response.data, 'email': identifier}
+
+                dispatch(authActions.login(response_data));
+                localStorage.setItem("access_token", response.data.access_token);
+
+                setLoggingIn(false); 
+
+                navigate("/");
+            })
+            .catch(function (error) {
+                console.log(error);
+
+                setLoginSuccess(false); 
+                setErrorMessage(error.response.data.message);
+
+                setLoggingIn(false); 
+            });
     };
 
     return (
@@ -107,13 +135,13 @@ const Login = () => {
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField value={identifier} onChange={(event) => setIdentifier(event.target.value)} onKeyUp={(event) => validateIdentifier(event.target.value)} onBlur={(event) => validateIdentifier(event.target.value)} error={identifierValidate.error} helperText={identifierValidate.helperText} margin="normal" required fullWidth id="identifier" label="Email or Username" name="identifier" autoComplete="email" />
                     <TextField value={password} onChange={(event) => setPassword(event.target.value)} onKeyUp={(event) => validatePassword(event.target.value)} onBlur={(event) => validatePassword(event.target.value)} error={passwordValidate.error} helperText={passwordValidate.helperText} margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />
-                    {loginError && (
+                    {errorMessage != '' && (
                         <Alert severity="error" sx={{ mt: 3 }}>
                             <AlertTitle>Login Failed!</AlertTitle>
-                            {loginError}
+                            {errorMessage}
                         </Alert>
                     )}
-                    {!loginError && loginSuccess && (
+                    {errorMessage == '' && loginSuccess && (
                         <Alert severity="success" sx={{ mt: 3 }}>
                             <AlertTitle>Logged In Successfully!</AlertTitle>
                             You have been successfully logged in! Welcome...

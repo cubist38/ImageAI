@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-let authState = { isAuthenticated: false, user: null, jwt: null };
+let authState = { isAuthenticated: false, accessToken: '', email: '' };
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
 if (token && user) {
@@ -16,16 +16,16 @@ export const authSlice = createSlice({
     initialState: authState,
     reducers: {
         login(state, action) {
-            state.user = action.payload.user;
-            state.jwt = action.payload.jwt;
+            console.log(action)
+            state.accessToken = action.payload.access_token;
+            state.email = action.payload.email;
             state.isAuthenticated = true;
         },
         logout(state) {
+            state.accessToken = "";
+            state.email = "";
             state.isAuthenticated = false;
-            state.user = null;
-            state.jwt = null;
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
+            localStorage.removeItem("access_token");
         }
     }
 });

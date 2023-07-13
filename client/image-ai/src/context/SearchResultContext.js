@@ -6,7 +6,7 @@ export const SearchResultContext = createContext();
 
 const getAllImages = ({setResults, setLoading}) => {
     var data = new FormData();
-    data.append('access_token', 'abc');
+    data.append('access_token', localStorage.getItem('access_token'));
     
     let endpoint = `${apiServer}/storage`;
 
@@ -25,7 +25,7 @@ const getAllImages = ({setResults, setLoading}) => {
         .then(function (response) {
             var storage = response.data.urls[0];
             var data = new FormData();
-            data.append('access_token', 'abc');
+            data.append('access_token', localStorage.getItem('access_token'));
             data.append('storage_url', storage);
 
             var config = {
@@ -59,7 +59,7 @@ const SearchResultContextProvider = props => {
     
     const runSearch = (query) => {
         var data = new FormData();
-        data.append('access_token', 'abc');
+        data.append('access_token', localStorage.getItem('access_token'));
         data.append('query', query);
         data.append('page', 0);
 
@@ -86,7 +86,7 @@ const SearchResultContextProvider = props => {
 
     const runVisualSearch = (imageBase64) => {
         var data = new FormData();
-        data.append('access_token', 'abc');
+        data.append('access_token', localStorage.getItem('access_token'));
         data.append('image', imageBase64);
         data.append('page', 0);
 

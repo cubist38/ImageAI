@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import { ImageContext } from './context/ImageContext';
 import ImageEditor from "./components/ImageEditor"
@@ -23,8 +23,17 @@ const MyApp = () => {
 }
 
 function App() {
-  const authenticated = useSelector((store) => store.authSlice.isAuthenticated);
-  if (!authenticated) return <Navigate to="/auth/login" />;
+  // const authenticated = useSelector((store) => store.authSlice.isAuthenticated);
+  // if (!authenticated) return <Navigate to="/auth/login" />;
+
+  const navigate = useNavigate();
+  
+  useEffect(() => { 
+    if (!localStorage.getItem('access_token'))  { 
+        navigate("/auth/login");
+    } 
+  }, [])
+
   return (
       <React.Fragment>
           <AppAppBar />
