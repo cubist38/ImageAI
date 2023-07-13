@@ -21,8 +21,10 @@ const ImageEditor = () => {
         setProcessing(true);
         const endpoint = `${apiServer}/inpaint_selected_object`;
 
-        console.log('image: ' + imageStack[imageStack.length - 1].Image);
-        console.log('mask: ' + imageStack[imageStack.length - 1].Mask);
+        console.log({
+            'image': imageStack[imageStack.length - 1].Image,
+            'mask': imageStack[imageStack.length - 1].Mask
+        });
 
         var data = new FormData();
         data.append('image', imageStack[imageStack.length - 1].Image);
@@ -44,6 +46,11 @@ const ImageEditor = () => {
                 console.log(response.data);
                 setProcessing(false);
                 setSelectedPoints([]);
+                response.data.displayImage = response.data.Image;
+                console.log(response.data);               
+
+                let newImageStack = [...imageStack, response.data];
+                setImageStack(newImageStack);
             })
             .catch(function (error) {
                 console.log(error);
@@ -58,7 +65,7 @@ const ImageEditor = () => {
         var data = new FormData();
         data.append('image', imageStack[imageStack.length - 1].Image);
         data.append('mask', imageStack[imageStack.length - 1].Mask);
-
+        
         var config = {
             method: 'post',
             url: endpoint, 
@@ -68,22 +75,23 @@ const ImageEditor = () => {
                 'ngrok-skip-browser-warning': true},
             data : data
         };
-
+        console.log(config);
         axios(config)
             .then(function (response) {
-                console.log(response.data);
+                setProcessing(false);
+                setSelectedPoints([]);
+                response.data.displayImage = response.data.Image;
+                console.log(response.data);               
 
                 let newImageStack = [...imageStack, response.data];
 
                 setImageStack(newImageStack);
-
             })
             .catch(function (error) {
                 console.log(error);
+                alert("Error!!!");
             });
 
-        setTimeout( function() { setProcessing(false); }, 1000);
-        setSelectedPoints([]);
     }
 
     const undo = () => {
@@ -114,7 +122,7 @@ const ImageEditor = () => {
                 "ngrok-skip-browser-warning": true},
             data: data
         };
-
+        console.log(config);
         axios(config)
             .then(function (response) {
                 response.data.displayImage = response.data.maskedImage;
