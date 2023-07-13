@@ -6,6 +6,7 @@ from app.helpers.engine import (numpy_to_base64, base64_to_numpy,
                                 pil_to_base64, base64_to_pil, expand_dim_mask)
 from app.helpers.google_helper import GoogleHelper
 from app.helpers.redis_helper import RedisHelper
+from app.helpers.jwt_helper import JwtHelper
 
 from app.features.gen_des import generate_description
 from app.features.segment import segment_selected_object_on_image
@@ -16,9 +17,12 @@ from app.features.image_retrieval import retrieve_image_by_image, retrieve_image
 
 from app.dal.supabase_dao import SupabaseDAO
 from app.models.request import (SegmentationRequest, HighlightRequest,
-                                InpaintRequest, GenerateDescriptionRequest, GenerateImageRequest,
-                                StorageRequest, ImportStorageRequest, ImageStorageRequest, 
-                                TextSearchRequest, VisualSearchRequest)
+                                InpaintRequest, GenerateDescriptionRequest, 
+                                GenerateImageRequest, StorageRequest, 
+                                ImportStorageRequest, RemoveStorageRequest, 
+                                ImageStorageRequest, TextSearchRequest, 
+                                VisualSearchRequest, SignInRequest, 
+                                SignUpRequest)
 
 from app.config import get_settings
 
@@ -102,23 +106,37 @@ async def highlight_object(request: HighlightRequest):
 
 
 @app.post("/storage")
-async def storage(request: StorageRequest):
-    # TODO: Check authorization
-    storages_url = SupabaseDAO().get_storage_by_email('temp_email')
+async def storage(request: StorageRequest, response: Response):
+    result = JwtHelper().verify_jwt(request.access_token)
+    if ('error' in result.keys()):
+        response.status_code = 401
+        return {"message": result['error']}
+    
+    email = result['email']
+    storages_url = SupabaseDAO().get_storage_by_email(email)
     return {"urls": [item.storage_url for item in storages_url]}
 
 
 @app.post("/images")
-async def process_images(request: ImageStorageRequest):
-    # TODO: Check authorization
+async def process_images(request: ImageStorageRequest, response: Response):
+    result = JwtHelper().verify_jwt(request.access_token)
+    if ('error' in result.keys()):
+        response.status_code = 401
+        return {"message": result['error']}
+    
     images_url = SupabaseDAO().get_image_by_storage_url(request.storage_url)
     return {"urls": [f'{PUBLIC_BUCKET}{item.id}.{item.image.split(".")[-1]}' for item in images_url]}
 
 
 @app.post("/import_storage")
 async def import_storage(request: ImportStorageRequest, response: Response):
-    # TODO: Check authorization
-    result = GoogleHelper().import_storage('temp_email', request.storage_url)
+    result = JwtHelper().verify_jwt(request.access_token)
+    if ('error' in result.keys()):
+        response.status_code = 401
+        return {"message": result['error']}
+    
+    email = result['email']
+    result = GoogleHelper().import_storage(email, request.storage_url)
 
     if (result):
         response.status_code = 200
@@ -126,16 +144,57 @@ async def import_storage(request: ImportStorageRequest, response: Response):
     else:
         response.status_code = 400
         return {"message": "Fail to import storage"}
+    
+@app.post("/remove_storage")
+async def remove_storage(request: RemoveStorageRequest, response: Response):
+    result = JwtHelper().verify_jwt(request.access_token)
+    if ('error' in result.keys()):
+        response.status_code = 401
+        return {"message": result['error']}
+    
+    email = result['email']
+    result = SupabaseDAO().delete_storage(email, request.storage_url)
+
+    if (result):
+        response.status_code = 200
+        return {"message": "Remove storage completed"}
+    else:
+        response.status_code = 400
+        return {"message": "Fail to remove storage"}
 
 @app.post("/text_search")
 async def text_search(request: TextSearchRequest, response: Response):
-    result = retrieve_image_by_text('temp_email', request.query, request.page)
+    result = JwtHelper().verify_jwt(request.access_token)
+    if ('error' in result.keys()):
+        response.status_code = 401
+        return {"message": result['error']}
+    
+    email = result['email']
+    result = retrieve_image_by_text(email, request.query, request.page)
     return {'urls': result}
 
 @app.post("/visual_search")
 async def visual_search(request: VisualSearchRequest, response: Response):
-    result = retrieve_image_by_image('temp_email', request.image, request.page)
+    result = JwtHelper().verify_jwt(request.access_token)
+    if ('error' in result.keys()):
+        response.status_code = 401
+        return {"message": result['error']}
+    
+    email = result['email']
+    result = retrieve_image_by_image(email, request.image, request.page)
     return {'urls': result}
+
+@app.post("/sign_in")
+async def sign_in(request: SignInRequest, response: Response):
+    result = SupabaseDAO().sign_in(request.email, request.password) 
+    response.status_code(result['status_code'])
+    return {'message': result['message']}
+
+@app.post("/sign_up")
+async def sign_up(request: SignUpRequest, response: Response):
+    result = SupabaseDAO().sign_up(request.email, request.password) 
+    response.status_code(result['status_code'])
+    return {'message': result['message']}
     
 # Initialization for singleton 
 temp = GoogleHelper() 

@@ -32,6 +32,10 @@ class ImportStorageRequest(BaseModel):
     access_token: str 
     storage_url: str
 
+class RemoveStorageRequest(BaseModel): 
+    access_token: str 
+    storage_url: str
+
 class TextSearchRequest(BaseModel): 
     access_token: str 
     query: str
@@ -41,3 +45,11 @@ class VisualSearchRequest(BaseModel):
     access_token: str 
     image: str
     page: int
+
+class SignInRequest(BaseModel): 
+    email: str 
+    password: str
+
+class SignUpRequest(BaseModel): 
+    email: str 
+    password: str

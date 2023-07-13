@@ -6,6 +6,7 @@ from app.dal.image_dto import ImageDTO
 from app.dal.storage_dto import StorageDTO
 from app.helpers.image_helper import resize_image
 from app.helpers.encoder import ImageNTextEncoder
+from app.helpers.jwt_helper import JwtHelper
 
 connect_config = json.load(open('./app/connection_config.json'))
 
@@ -106,3 +107,41 @@ class SupabaseDAO:
             logging.error(f'Error to upload {storage_url}/{image_name}')
             return None
     
+    def sign_up(self, email, password): 
+        try: 
+            result = self.supabase.auth.sign_up({
+                "email": email,
+                "password": password,
+            })
+            self.supabase.auth.sign_out() # signout to disconnect current session
+
+            return {'status_code': 200, 'message': 'Create account successfully'} 
+        except Exception as e: 
+            return {'status_code': 400, 'message': str(e)}
+        
+    def sign_in(self, email, password): 
+        try: 
+            data = self.supabase.auth.sign_in_with_password({
+                "email": email, 
+                "password": password
+            })
+            self.supabase.auth.sign_out() # signout to disconnect current session
+
+            return {'status_code': 200, 'access_token': JwtHelper().sign_jwt(email)} 
+        except Exception as e: 
+            return {'status_code': 400, 'message': str(e)}
+    
+    def delete_storage(self, email, storage_url): 
+        table = "storages"
+        
+        try: 
+            data, count = self.supabase.table(table).delete()\
+                .eq('email', email).eq('storage_url', storage_url)\
+                .execute()
+
+            logging.info(f'Delete storage {email}, {storage_url} result: {data}')
+            return data[1]
+        except Exception as e:
+            logging.error(f'Fail to delete storage {email}, {storage_url} ')
+            return None
+        
