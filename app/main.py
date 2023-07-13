@@ -187,13 +187,16 @@ async def visual_search(request: VisualSearchRequest, response: Response):
 @app.post("/sign_in")
 async def sign_in(request: SignInRequest, response: Response):
     result = SupabaseDAO().sign_in(request.email, request.password) 
-    response.status_code(result['status_code'])
-    return {'message': result['message']}
+    response.status_code = result['status_code']
+    if (result['status_code'] == 200):
+        return {'access_token': result['access_token']}
+    else:
+        return {'message': result['message']}
 
 @app.post("/sign_up")
 async def sign_up(request: SignUpRequest, response: Response):
     result = SupabaseDAO().sign_up(request.email, request.password) 
-    response.status_code(result['status_code'])
+    response.status_code = result['status_code']
     return {'message': result['message']}
     
 # Initialization for singleton 
