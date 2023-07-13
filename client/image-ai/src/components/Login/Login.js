@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Alert, AlertTitle } from "@mui/material";
+import { Alert, AlertTitle, Divider } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../redux/slices/authSlice";
@@ -98,11 +98,11 @@ const Login = () => {
         <Container component="main" maxWidth="sm">
             <CssBaseline />
             <Box sx={{ marginTop: 8, marginBottom: 8, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-                    <LockOutlinedIcon />
-                </Avatar>
+                <Typography component="h1" variant="title">
+                    Image AI
+                </Typography>
                 <Typography component="h1" variant="h5">
-                    Sign in to VCs
+                    Please sign in to continue
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField value={identifier} onChange={(event) => setIdentifier(event.target.value)} onKeyUp={(event) => validateIdentifier(event.target.value)} onBlur={(event) => validateIdentifier(event.target.value)} error={identifierValidate.error} helperText={identifierValidate.helperText} margin="normal" required fullWidth id="identifier" label="Email or Username" name="identifier" autoComplete="email" />
@@ -124,12 +124,7 @@ const Login = () => {
                         {loggingIn && <CircularProgress color="inherit" />}
                     </Button>
                     <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
-                        </Grid>
-                        <Grid item>
+                        <Grid item sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
                             <Link href="/auth/register" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>

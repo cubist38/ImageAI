@@ -6,6 +6,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Link from '@mui/material/Link';
+import { Button } from '@mui/material';
 
 const rightLink = {
     fontSize: 16,
@@ -72,15 +73,16 @@ function AppAppBar({ pages = DEFAULT_PAGES, settings = [] }) {
                     {'Image AI'}
                 </Link>
                 <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                    <Link
+                    <Button
                         color="inherit"
                         variant="h6"
                         underline="none"
                         href="/premium-themes/onepirate/sign-in/"
                         sx={rightLink}
+                        onClick={handleLogout}
                         >
                         {'Log out'}
-                    </Link>
+                    </Button>
                     
                 </Box>
                 </Toolbar>

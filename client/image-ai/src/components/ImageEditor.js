@@ -102,14 +102,19 @@ const ImageEditor = () => {
     }
 
     const segment = (x, y, allCircles) => {
-        // console.log(image.base64);
-        console.log(x, y);
-
+        
+        
         var data = new FormData();
         data.append('image', imageStack[imageStack.length - 1].displayImage);
         data.append('x', x);
         data.append('y', y);
-
+        
+        console.log({
+            "image": imageStack[imageStack.length - 1].displayImage,
+            "x": x,
+            "y": y
+        });
+        
         // Send segment api request
         const endpoint = `${apiServer}/segment_selected_object`;
         var config = {

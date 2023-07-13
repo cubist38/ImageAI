@@ -172,11 +172,11 @@ const Register = () => {
         <Container component="main" maxWidth="sm">
             <CssBaseline />
             <Box sx={{ marginTop: 8, marginBottom: 8, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-                    <LockOutlinedIcon />
-                </Avatar>
+                <Typography component="h1" variant="title">
+                    Image AI
+                </Typography>
                 <Typography component="h1" variant="h5">
-                    Sign up for VCs
+                    Create a new account
                 </Typography>
                 <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
@@ -194,15 +194,6 @@ const Register = () => {
                         </Grid>
                         <Grid item xs={12} lg={6}>
                             <TextField value={passwordConfirm} onChange={(event) => setPasswordConfirm(event.target.value)} onBlur={(event) => validatePasswordConfirm(event.target.value)} onKeyUp={(event) => validatePasswordConfirm(event.target.value)} error={passwordConfirmValidate.error} helperText={passwordConfirmValidate.helperText} required fullWidth name="passwordConfirm" label="Confirm Password" type="password" id="passwordConfirm" />
-                        </Grid>
-                        <Grid item xs={12} lg={6}>
-                            <TextField id="account-type-select" select label="Account Type" value={type} onChange={(event) => setType(event.target.value)} fullWidth>
-                                <MenuItem value="indi"> Individual</MenuItem>
-                                <MenuItem value="org"> Organization</MenuItem>
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12} lg={6}>
-                            <TextField value={publicKey} onChange={(event) => setPublicKey(event.target.value)} onBlur={(event) => validatePublicKey(event.target.value)} onKeyUp={(event) => validatePublicKey(event.target.value)} error={publicKeyValidate.error} helperText={publicKeyValidate.helperText} name="publickey" required fullWidth id="publickey" label="Public Key" />
                         </Grid>
                     </Grid>
                     {registerError && (
