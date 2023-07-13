@@ -21,7 +21,6 @@ const ImageBrowser = () => {
                 <div style={{marginBottom: 2 + 'em'}}>Upload image</div>
                 <FileForm onSubmit={onFileFormSubmit}/>
             </FileUploadContainer>
-            <h2> Or </h2>
             <SearchResultContextProvider>
                 <ImageSearch />
             </SearchResultContextProvider>

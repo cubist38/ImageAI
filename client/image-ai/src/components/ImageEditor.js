@@ -55,7 +55,6 @@ const ImageEditor = () => {
             .catch(function (error) {
                 console.log(error);
             });
-
     }
 
     const highlight = () => {
@@ -164,14 +163,22 @@ const ImageEditor = () => {
             });
     }
 
+    const newImage = () => {
+        setSelectedPoints([]);
+        setImageStack([]);
+    }
+
     // Always show displayImage of the last element of imageStack
     base64ToImage(imageStack[imageStack.length - 1].displayImage, (img) => {
         setImage(img);
     });
 
     return (
-        <div>
-            <Toolbar inpaint={inpaint}
+        <div >
+            <div style={{margin: -5 + 'em'}}></div>
+            <Toolbar
+                    newImage={newImage} 
+                    inpaint={inpaint}
                     highlight={highlight}
                     undo={undo}
                     caption={caption}/>
