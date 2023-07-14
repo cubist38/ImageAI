@@ -8,17 +8,22 @@ import { apiServer, apiKey } from "../api/config";
 
 const SearchForm = ({ setQuery }) => {
     const { runVisualSearch } = useContext(SearchResultContext);
-
+    
     const [state, setState] = React.useState({
         gdriveUrl: "",
         query: "",
+        submitStorageMessage: ""
       });
 
     const onSubmitStorage = (event) => {
       event.preventDefault();
       var data = new FormData();
-      data.append('access_token', 'abc');
+      data.append('access_token', localStorage.getItem('access_token'));
       data.append('storage_url', state.gdriveUrl);
+      console.log({
+        'access_token': localStorage.getItem('access_token'),
+        'storage_url': state.gdriveUrl
+      });
 
       var config = {
           method: 'post',
@@ -33,9 +38,11 @@ const SearchForm = ({ setQuery }) => {
       axios(config)
           .then(function (response) {
               console.log(response.data);
+              alert(response.data.message);
           })
           .catch(function (error) {
               console.log(error);
+              alert(error);
           });        
     }      
 

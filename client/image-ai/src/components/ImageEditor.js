@@ -9,6 +9,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { apiServer, apiKey } from "../api/config";
 import { base64ToImage } from "../utils/utils";
+import { Grid } from "@mui/material";
 
 const ImageEditor = () => {
     const { image, setImage, imageStack, setImageStack} = useContext(ImageContext);
@@ -190,8 +191,11 @@ const ImageEditor = () => {
             <MyContainer>
                 { processing && <ReactLoading type="bubbles" color="#0000FF" height={100} width={50}/> }
                 {image && <ClickableImage image={image} onClickCallback={segment} selectedPoints={selectedPoints} setSelectedPoints={setSelectedPoints}/>}
-                {(imageCaption !== "") && <Caption caption={imageCaption}/>}
             </MyContainer>
+            <Grid container direction="column" justifyContent="center" alignItems="center">
+                {(imageCaption !== "") && <Caption caption={imageCaption}/>}
+            </Grid>
+
             <div style={{margin: 2 + 'em'}}></div>
         </div>
     );
