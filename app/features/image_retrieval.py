@@ -40,8 +40,11 @@ def retrieve_image_by_text(email, query, page):
 
   if (ids is None): 
     text_embedded = ImageNTextEncoder().encode_text(query)
-    dists, ids = faiss_index.search(text_embedded, faiss_index.ntotal) 
-    ids = ids[0]
+    if (faiss_index.ntotal > 0): 
+      dists, ids = faiss_index.search(text_embedded, faiss_index.ntotal) 
+      ids = ids[0]
+    else: 
+      ids = []
 
     RedisHelper().save_search_result(email, query, ids)
   else: 
@@ -61,8 +64,12 @@ def retrieve_image_by_image(email, image_b64, page):
   if (ids is None): 
     image = base64_to_image(image_b64)
     image_embedded = np.array([ImageNTextEncoder().encode_image(image)], dtype=np.float64)
-    dists, ids = faiss_index.search(image_embedded, faiss_index.ntotal) 
-    ids = ids[0]
+
+    if (faiss_index.ntotal > 0): 
+      dists, ids = faiss_index.search(image_embedded, faiss_index.ntotal) 
+      ids = ids[0]
+    else: 
+      ids = []
 
     RedisHelper().save_search_result(email, image_b64, ids)
   else: 
