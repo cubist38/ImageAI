@@ -140,6 +140,7 @@ async def import_storage(request: ImportStorageRequest, response: Response):
 
     if (result):
         response.status_code = 200
+        RedisHelper().update_storage_version(email)
         return {"message": "Import storage completed"}
     else:
         response.status_code = 400
