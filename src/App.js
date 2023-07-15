@@ -29,6 +29,9 @@ function App() {
   const navigate = useNavigate();
   
   useEffect(() => { 
+    if (!localStorage.getItem('server_url'))  { 
+      navigate("/server-url");
+    } 
     if (!localStorage.getItem('access_token'))  { 
         navigate("/auth/login");
     } 

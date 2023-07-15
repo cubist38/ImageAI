@@ -15,7 +15,6 @@ import { useDispatch } from "react-redux";
 import { authActions } from "../../redux/slices/authSlice";
 import { Navigate, useNavigate } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
-import { apiServer } from "../../api/config";
 import axios from 'axios';
 
 const Login = () => {
@@ -34,6 +33,9 @@ const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => { 
+        if (!localStorage.getItem('server_url'))  { 
+            navigate("/server-url");
+        } 
         console.log(localStorage.getItem('access_token'))
         if (localStorage.getItem('access_token'))  { 
             navigate("/");
@@ -71,6 +73,8 @@ const Login = () => {
     };
 
     const handleSubmit = async (event) => {
+        let apiServer = localStorage.getItem("server_url");
+
         event.preventDefault();
 
         // Validate inputs

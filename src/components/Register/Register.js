@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,8 +13,8 @@ import MenuItem from "@mui/material/MenuItem";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Alert, AlertTitle } from "@mui/material";
 import useFetch from "../../hooks/useFetch";
-import { apiServer } from "../../api/config";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Register = () => {
     const DEFAULT_ACCOUNT_TYPE = "indi";
@@ -30,6 +30,17 @@ const Register = () => {
     const [registerSuccess, setRegisterSuccess] = useState(false);
     const [registering, setRegistering] = useState(false);
     const [errorMessage, setErrorMessage] = useState(''); 
+    const navigate = useNavigate();
+
+    useEffect(() => { 
+        if (!localStorage.getItem('server_url'))  { 
+            navigate("/server-url");
+        } 
+        console.log(localStorage.getItem('access_token'))
+        if (localStorage.getItem('access_token'))  { 
+            navigate("/");
+        }
+    }, [])
 
     const validateEmail = (email) => {
         if (!email || email.trim().length === 0) {
@@ -94,6 +105,8 @@ const Register = () => {
     };
 
     const handleSubmit = async (event) => {
+        let apiServer = localStorage.getItem("server_url");
+
         event.preventDefault();
 
         const validEmail = validateEmail(email);

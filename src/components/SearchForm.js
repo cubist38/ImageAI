@@ -4,7 +4,6 @@ import FileForm from "./FileForm";
 import styled from "styled-components";
 import axios from "axios";
 import { SearchResultContext } from "../context/SearchResultContext";
-import { apiServer, apiKey } from "../api/config";
 
 const SearchForm = ({ setQuery }) => {
     const { runVisualSearch } = useContext(SearchResultContext);
@@ -16,6 +15,8 @@ const SearchForm = ({ setQuery }) => {
       });
 
     const onSubmitStorage = (event) => {
+      let apiServer = localStorage.getItem("server_url");
+
       event.preventDefault();
       var data = new FormData();
       data.append('access_token', localStorage.getItem('access_token'));

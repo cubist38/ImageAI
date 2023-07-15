@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
+import APIServer from "./components/APIServer";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./constants/theme";
 import ImageContextProvider, { ImageContext } from './context/ImageContext';
@@ -23,7 +24,8 @@ root.render(
         <ThemeProvider theme={theme}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/*" element={
+                    <Route path="server-url" element={<APIServer/>} />
+                    <Route path="/*"  element={
                       <ImageContextProvider>
                         <App />
                       </ImageContextProvider>

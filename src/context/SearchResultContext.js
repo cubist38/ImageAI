@@ -1,6 +1,5 @@
 import React, { createContext, useState } from "react";
 import axios from "axios";
-import { apiServer, apiKey } from "../api/config";
 
 export const SearchResultContext = createContext();
 
@@ -10,6 +9,8 @@ const SearchResultContextProvider = props => {
     const [storageUrls, setStorageUrls] = useState([]);
     
     const getStorage = () => {
+        let apiServer = localStorage.getItem("server_url");
+
         var data = new FormData();
         data.append('access_token', localStorage.getItem('access_token'));
         
@@ -36,6 +37,8 @@ const SearchResultContextProvider = props => {
     }
 
     const getImages = (pageIndex) => {
+        let apiServer = localStorage.getItem("server_url");
+
         var storage = storageUrls[pageIndex];
         var data = new FormData();
         data.append('access_token', localStorage.getItem('access_token'));
@@ -62,6 +65,8 @@ const SearchResultContextProvider = props => {
     }
    
     const runSearch = (query) => {
+        let apiServer = localStorage.getItem("server_url");
+
         var data = new FormData();
         data.append('access_token', localStorage.getItem('access_token'));
         data.append('query', query);
@@ -89,6 +94,8 @@ const SearchResultContextProvider = props => {
     };
 
     const runVisualSearch = (imageBase64) => {
+        let apiServer = localStorage.getItem("server_url");
+
         var data = new FormData();
         data.append('access_token', localStorage.getItem('access_token'));
         data.append('image', imageBase64);

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { apiServer, apiKey } from "../api/config";
 
 const ClickableImage = ({ image, onClickCallback, selectedPoints, setSelectedPoints }) => {
     var ratio = 500 / image.height;

@@ -7,11 +7,13 @@ import ReactLoading from "react-loading";
 import { ServerStatusContext } from "../context/ServerStatusContext";
 import styled from "styled-components";
 import axios from "axios";
-import { apiServer, apiKey } from "../api/config";
 import { base64ToImage } from "../utils/utils";
 import { Grid } from "@mui/material";
+import { useEffect } from "react";
 
 const ImageEditor = () => {
+
+
     const { image, setImage, imageStack, setImageStack} = useContext(ImageContext);
     const {processing, setProcessing} = useContext(ServerStatusContext);
     
@@ -19,6 +21,8 @@ const ImageEditor = () => {
     const [imageCaption, setImageCaption] = useState("");
 
     const inpaint = () => {
+        let apiServer = localStorage.getItem("server_url");
+
         setProcessing(true);
         const endpoint = `${apiServer}/inpaint_selected_object`;
 
@@ -59,6 +63,8 @@ const ImageEditor = () => {
     }
 
     const highlight = () => {
+        let apiServer = localStorage.getItem("server_url");
+
         setProcessing(true);
         const endpoint = `${apiServer}/highlight_object`;
 
@@ -103,7 +109,7 @@ const ImageEditor = () => {
     }
 
     const segment = (x, y, allCircles) => {
-        
+        let apiServer = localStorage.getItem("server_url");
         
         var data = new FormData();
         data.append('image', imageStack[imageStack.length - 1].displayImage);
@@ -142,6 +148,8 @@ const ImageEditor = () => {
     }
 
     const caption = () => {
+        let apiServer = localStorage.getItem("server_url");
+
         console.log("Generating caption...");
         setImageCaption("Generating image description...");
         var data = new FormData();
